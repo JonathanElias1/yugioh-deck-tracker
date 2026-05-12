@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping List - Yu-Gi-Oh Collection</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="nav-links">
+                <a href="index.html" class="nav-btn">← Back to Decks</a>
+                <a href="inventory.html" class="nav-btn">📦 Card Inventory</a>
+            </div>
+            <h1>🛒 Shopping List</h1>
+            <p class="subtitle">Cards you need to complete your decks</p>
+            <div class="stats" id="shoppingStats">
+                <div class="stat-item">
+                    <span class="stat-label">Total Cards Needed:</span>
+                    <span class="stat-value" id="totalNeeded">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Unique Cards:</span>
+                    <span class="stat-value" id="uniqueCards">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Decks Incomplete:</span>
+                    <span class="stat-value" id="incompleteDecks">0</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="shopping-controls">
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">All Decks</button>
+                <button class="filter-btn" data-filter="S">S Tier</button>
+                <button class="filter-btn" data-filter="A">A Tier</button>
+                <button class="filter-btn" data-filter="B">B Tier</button>
+                <button class="filter-btn" data-filter="C">C Tier</button>
+                <button class="filter-btn" data-filter="priority">Priority Only</button>
+            </div>
+
+            <div class="export-section">
+                <button class="export-btn" id="copyTCGFormat">📋 Copy TCGPlayer Format</button>
+                <button class="export-btn" id="copySimpleList">📄 Copy Simple List</button>
+            </div>
+        </div>
+
+        <!-- TCG Format Preview -->
+        <div class="format-preview">
+            <h3>TCGPlayer Mass Entry Format</h3>
+            <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem; margin-bottom: 10px;">
+                Ready to paste directly into TCGPlayer's mass entry tool
+            </p>
+            <textarea id="tcgFormatOutput" readonly rows="8"></textarea>
+        </div>
+
+        <!-- Shopping List by Card -->
+        <div class="shopping-section">
+            <h2>Cards Needed (Aggregated)</h2>
+            <div class="shopping-list" id="shoppingList">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Shopping List by Deck -->
+        <div class="shopping-section">
+            <h2>Cards Needed by Deck</h2>
+            <div class="deck-shopping-list" id="deckShoppingList">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script src="decks.js"></script>
+    <script src="shopping-list.js"></script>
+</body>
+</html>

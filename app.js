@@ -41,6 +41,22 @@ class DeckTracker {
         });
     }
 
+    getDeckCompletionPercentage(deckId) {
+        const ownedCards = localStorage.getItem(`ownedCards_${deckId}`);
+        if (!ownedCards) return 0;
+
+        const deck = this.decks.find(d => d.id === deckId);
+        if (!deck) return 0;
+
+        const ownedCardsObj = JSON.parse(ownedCards);
+        const totalCards = (deck.mainDeck || []).length + (deck.extraDeck || []).length;
+
+        if (totalCards === 0) return 0;
+
+        const ownedCount = Object.values(ownedCardsObj).filter(v => v === true).length;
+        return Math.round((ownedCount / totalCards) * 100);
+    }
+
     filterDecks() {
         if (this.currentFilter === 'all') {
             return this.decks;
@@ -84,12 +100,20 @@ class DeckTracker {
                 deckClickHandler = `onclick="window.location.href='deck.html?id=${deck.id}'"`;
             }
 
+            const completionPercentage = deck.status !== 'consolidated' ? this.getDeckCompletionPercentage(deck.id) : 0;
+
             return `
                 <div class="deck-card ${tierClass} ${consolidatedClass} ${completedClass}" ${deckClickHandler}>
                     <div class="deck-number">Deck #${deck.id}</div>
                     <div class="deck-name">${deck.name}</div>
                     <div class="deck-tier tier-${deck.tier}">${deck.tier} Tier</div>
                     <div class="deck-strategy">${deck.strategy || 'Strategy details'}</div>
+                    ${deck.status !== 'consolidated' ? `
+                        <div class="completion-bar">
+                            <div class="completion-fill" style="width: ${completionPercentage}%"></div>
+                            <div class="completion-text">${completionPercentage}% Complete</div>
+                        </div>
+                    ` : ''}
                     ${statusBadges ? `<div class="deck-status">${statusBadges}</div>` : ''}
                     ${deck.status !== 'consolidated' ? `
                         <div class="checkbox-container" onclick="event.stopPropagation()">

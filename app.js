@@ -49,12 +49,27 @@ class DeckTracker {
         if (!deck) return 0;
 
         const ownedCardsObj = JSON.parse(ownedCards);
-        const totalCards = (deck.mainDeck || []).length + (deck.extraDeck || []).length;
+        const allCards = [...(deck.mainDeck || []), ...(deck.extraDeck || [])];
 
-        if (totalCards === 0) return 0;
+        if (allCards.length === 0) return 0;
 
-        const ownedCount = Object.values(ownedCardsObj).filter(v => v === true).length;
-        return Math.round((ownedCount / totalCards) * 100);
+        let totalNeeded = 0;
+        let totalOwned = 0;
+
+        allCards.forEach(cardEntry => {
+            const match = cardEntry.match(/^(\d+)\s+(.+)$/) || [null, 1, cardEntry];
+            const quantity = parseInt(match[1]);
+            totalNeeded += quantity;
+
+            const ownedValue = ownedCardsObj[cardEntry];
+            if (typeof ownedValue === 'number') {
+                totalOwned += ownedValue;
+            } else if (ownedValue === true) {
+                totalOwned += quantity; // Old format: true means all owned
+            }
+        });
+
+        return totalNeeded > 0 ? Math.round((totalOwned / totalNeeded) * 100) : 0;
     }
 
     filterDecks() {

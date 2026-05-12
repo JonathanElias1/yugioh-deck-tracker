@@ -394,6 +394,11 @@ h1 {
     border-left: 3px solid var(--secondary-color);
 }
 
+.card-item.partial {
+    background: rgba(251, 188, 4, 0.2);
+    border-left: 3px solid var(--warning-color);
+}
+
 .card-image-small {
     flex-shrink: 0;
     width: 40px;
@@ -433,6 +438,64 @@ h1 {
     height: 20px;
     cursor: pointer;
     accent-color: var(--secondary-color);
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 4px;
+    border-radius: 8px;
+}
+
+.qty-btn {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.qty-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.qty-btn:active {
+    transform: scale(0.95);
+}
+
+.quantity-display {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 50px;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.owned-qty {
+    color: var(--secondary-color);
+    font-size: 1.1rem;
+}
+
+.qty-separator {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+}
+
+.total-qty {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.95rem;
 }
 
 .delete-card-btn {

@@ -189,7 +189,10 @@ class DeckDetail {
     }
 
     renderCard(card, isOwned, isCustom, deckType) {
-        const ownedClass = isOwned ? 'owned' : '';
+        const parsed = card.match(/^(\d+)\s+(.+)$/) || [null, 1, card];
+        const totalQuantity = parseInt(parsed[1]);
+        const ownedQuantity = typeof isOwned === 'number' ? isOwned : (isOwned ? totalQuantity : 0);
+        const ownedClass = ownedQuantity >= totalQuantity ? 'owned' : (ownedQuantity > 0 ? 'partial' : '');
         const deleteBtn = isCustom ? `<button class="delete-card-btn" onclick="deckDetail.deleteCard('${card}', '${deckType}')">Delete</button>` : '';
         const cleanName = card.replace(/^\d+\s+/, '');
 
@@ -200,17 +203,46 @@ class DeckDetail {
                 </div>
                 <span class="card-item-text">${card}</span>
                 <div class="card-actions">
-                    <input type="checkbox"
-                           class="card-checkbox"
-                           ${isOwned ? 'checked' : ''}
-                           onchange="deckDetail.toggleCardOwnership('${card}')">
+                    <div class="quantity-control">
+                        <button class="qty-btn" onclick="deckDetail.decrementQuantity('${card}')">−</button>
+                        <div class="quantity-display">
+                            <span class="owned-qty">${ownedQuantity}</span>
+                            <span class="qty-separator">/</span>
+                            <span class="total-qty">${totalQuantity}</span>
+                        </div>
+                        <button class="qty-btn" onclick="deckDetail.incrementQuantity('${card}', ${totalQuantity})">+</button>
+                    </div>
                     ${deleteBtn}
                 </div>
             </div>
         `;
     }
 
+    incrementQuantity(card) {
+        const parsed = card.match(/^(\d+)\s+(.+)$/) || [null, 1, card];
+        const totalQuantity = parseInt(parsed[1]);
+        const currentQuantity = typeof this.ownedCards[card] === 'number' ? this.ownedCards[card] : (this.ownedCards[card] ? totalQuantity : 0);
+
+        if (currentQuantity < totalQuantity) {
+            this.ownedCards[card] = currentQuantity + 1;
+            this.saveOwnedCards();
+            this.renderCards();
+        }
+    }
+
+    decrementQuantity(card) {
+        const currentQuantity = typeof this.ownedCards[card] === 'number' ? this.ownedCards[card] : 0;
+
+        if (currentQuantity > 0) {
+            this.ownedCards[card] = currentQuantity - 1;
+            this.saveOwnedCards();
+            this.renderCards();
+        }
+    }
+
     toggleCardOwnership(card) {
+        const parsed = card.match(/^(\d+)\s+(.+)$/) || [null, 1, card];
+        const totalQuantity = parseInt(parsed[1]);
         this.ownedCards[card] = !this.ownedCards[card];
         this.saveOwnedCards();
         this.renderCards();

@@ -55,10 +55,19 @@ class ShoppingList {
                     const parsed = this.parseCardEntry(cardEntry);
                     const { quantity, name } = parsed;
 
-                    // Check if this card is NOT owned
-                    const isOwned = ownedCardsObj[cardEntry] === true;
+                    // Check how many are owned (support both old boolean and new number format)
+                    const ownedValue = ownedCardsObj[cardEntry];
+                    let ownedQuantity = 0;
 
-                    if (!isOwned) {
+                    if (typeof ownedValue === 'number') {
+                        ownedQuantity = ownedValue;
+                    } else if (ownedValue === true) {
+                        ownedQuantity = quantity; // Old format: true means all owned
+                    }
+
+                    const neededQuantity = quantity - ownedQuantity;
+
+                    if (neededQuantity > 0) {
                         // Add to aggregated list
                         if (!this.neededCards[name]) {
                             this.neededCards[name] = {
@@ -66,21 +75,25 @@ class ShoppingList {
                                 decks: []
                             };
                         }
-                        this.neededCards[name].quantity += quantity;
+                        this.neededCards[name].quantity += neededQuantity;
                         this.neededCards[name].decks.push({
                             id: deck.id,
                             name: deck.name,
                             tier: deck.tier,
-                            quantity: quantity
+                            quantity: neededQuantity,
+                            owned: ownedQuantity,
+                            total: quantity
                         });
 
                         // Add to deck-specific list
                         this.deckNeeds[deck.id].cards.push({
                             name: name,
-                            quantity: quantity,
+                            quantity: neededQuantity,
+                            owned: ownedQuantity,
+                            total: quantity,
                             originalEntry: cardEntry
                         });
-                        this.deckNeeds[deck.id].totalNeeded += quantity;
+                        this.deckNeeds[deck.id].totalNeeded += neededQuantity;
                     }
                 });
             };

@@ -6,6 +6,7 @@ class DeckDetail {
         this.currentPath = null;
         this.ownedCards = this.loadOwnedCards();
         this.customCards = this.loadCustomCards();
+        this.cardImages = {}; // Cache for card images
         this.init();
     }
 
@@ -107,6 +108,33 @@ class DeckDetail {
         });
     }
 
+    async fetchCardImage(cardName) {
+        // Extract just the card name without quantity prefix
+        const cleanName = cardName.replace(/^\d+\s+/, '');
+
+        // Check cache first
+        if (this.cardImages[cleanName]) {
+            return this.cardImages[cleanName];
+        }
+
+        try {
+            const response = await fetch(`https://db.ygoprodeck.com/api/v7/cardinfo.php?name=${encodeURIComponent(cleanName)}`);
+            const data = await response.json();
+
+            if (data.data && data.data[0] && data.data[0].card_images) {
+                const imageUrl = data.data[0].card_images[0].image_url_small;
+                this.cardImages[cleanName] = imageUrl;
+                return imageUrl;
+            }
+        } catch (error) {
+            console.log(`Could not fetch image for: ${cleanName}`);
+        }
+
+        // Return placeholder if image not found
+        this.cardImages[cleanName] = null;
+        return null;
+    }
+
     getCurrentDeckList() {
         if (this.deck.altPaths && this.currentPath && this.deck[this.currentPath]) {
             return {
@@ -120,7 +148,7 @@ class DeckDetail {
         };
     }
 
-    renderCards() {
+    async renderCards() {
         const deckList = this.getCurrentDeckList();
 
         // Render Main Deck
@@ -142,14 +170,34 @@ class DeckDetail {
                 return this.renderCard(card, isOwned, isCustom, 'extra');
             }).join('')
             : '<p style="color: rgba(255,255,255,0.6);">No Extra Deck cards</p>';
+
+        // Fetch images for all cards
+        [...allMainCards, ...allExtraCards].forEach(async (card) => {
+            const cleanName = card.replace(/^\d+\s+/, '');
+            const imageUrl = await this.fetchCardImage(cleanName);
+            const cardElements = document.querySelectorAll(`.card-item[data-card-name="${cleanName.replace(/"/g, '&quot;')}"]`);
+
+            cardElements.forEach(cardElement => {
+                const imageContainer = cardElement.querySelector('.card-image-small');
+                if (imageContainer && imageUrl) {
+                    imageContainer.innerHTML = `<img src="${imageUrl}" alt="${cleanName}">`;
+                } else if (imageContainer) {
+                    imageContainer.innerHTML = `<span>❓</span>`;
+                }
+            });
+        });
     }
 
     renderCard(card, isOwned, isCustom, deckType) {
         const ownedClass = isOwned ? 'owned' : '';
         const deleteBtn = isCustom ? `<button class="delete-card-btn" onclick="deckDetail.deleteCard('${card}', '${deckType}')">Delete</button>` : '';
+        const cleanName = card.replace(/^\d+\s+/, '');
 
         return `
-            <div class="card-item ${ownedClass}">
+            <div class="card-item ${ownedClass}" data-card-name="${cleanName.replace(/"/g, '&quot;')}">
+                <div class="card-image-small">
+                    <span>...</span>
+                </div>
                 <span class="card-item-text">${card}</span>
                 <div class="card-actions">
                     <input type="checkbox"
@@ -217,6 +265,47 @@ class DeckDetail {
         });
     }
 
+    getUnusedCards() {
+        // Load inventory from localStorage
+        const inventoryStr = localStorage.getItem('cardInventory');
+        if (!inventoryStr) return [];
+
+        const inventory = JSON.parse(inventoryStr);
+        const unusedCards = [];
+
+        // Check which cards are unused or have available copies
+        Object.keys(inventory).forEach(cardName => {
+            const owned = inventory[cardName].owned;
+            // Calculate how many are used across all decks
+            let totalUsed = 0;
+
+            decks.forEach(deck => {
+                if (deck.status === 'consolidated') return;
+
+                const ownedCards = localStorage.getItem(`ownedCards_${deck.id}`);
+                if (!ownedCards) return;
+
+                const ownedCardsObj = JSON.parse(ownedCards);
+                Object.keys(ownedCardsObj).forEach(key => {
+                    const parsed = key.match(/^(\d+)\s+(.+)$/) || [null, 1, key];
+                    const name = parsed[2];
+                    const qty = parseInt(parsed[1]);
+
+                    if (name === cardName && ownedCardsObj[key] === true) {
+                        totalUsed += qty;
+                    }
+                });
+            });
+
+            const available = owned - totalUsed;
+            if (available > 0) {
+                unusedCards.push({ name: cardName, available });
+            }
+        });
+
+        return unusedCards.sort((a, b) => a.name.localeCompare(b.name));
+    }
+
     showAddCardModal(deckType) {
         this.currentAddingTo = deckType;
         const modal = document.getElementById('addCardModal');
@@ -224,6 +313,67 @@ class DeckDetail {
         document.getElementById('cardName').value = '';
         document.getElementById('cardQuantity').value = '1';
         document.getElementById('cardName').focus();
+        this.setupAutocomplete();
+    }
+
+    setupAutocomplete() {
+        const input = document.getElementById('cardName');
+        const unusedCards = this.getUnusedCards();
+
+        // Remove existing autocomplete if any
+        const existingDropdown = document.getElementById('autocomplete-dropdown');
+        if (existingDropdown) {
+            existingDropdown.remove();
+        }
+
+        // Create autocomplete dropdown
+        const dropdown = document.createElement('div');
+        dropdown.id = 'autocomplete-dropdown';
+        dropdown.className = 'autocomplete-dropdown';
+        input.parentNode.insertBefore(dropdown, input.nextSibling);
+
+        input.addEventListener('input', (e) => {
+            const value = e.target.value.toLowerCase();
+            dropdown.innerHTML = '';
+
+            if (!value) {
+                dropdown.style.display = 'none';
+                return;
+            }
+
+            const matches = unusedCards.filter(card =>
+                card.name.toLowerCase().includes(value)
+            ).slice(0, 10); // Show max 10 suggestions
+
+            if (matches.length === 0) {
+                dropdown.style.display = 'none';
+                return;
+            }
+
+            dropdown.style.display = 'block';
+            dropdown.innerHTML = matches.map(card => `
+                <div class="autocomplete-item" data-name="${card.name.replace(/"/g, '&quot;')}">
+                    ${card.name}
+                    <span class="available-badge">${card.available} available</span>
+                </div>
+            `).join('');
+
+            // Add click handlers
+            dropdown.querySelectorAll('.autocomplete-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    input.value = item.dataset.name;
+                    dropdown.style.display = 'none';
+                    dropdown.innerHTML = '';
+                });
+            });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
     }
 
     addCard() {

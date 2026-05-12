@@ -350,7 +350,7 @@ h1 {
     padding: 12px 15px;
     border-radius: 10px;
     display: flex;
-    justify-content: space-between;
+    gap: 12px;
     align-items: center;
     transition: all 0.2s ease;
 }
@@ -364,9 +364,33 @@ h1 {
     border-left: 3px solid var(--secondary-color);
 }
 
+.card-image-small {
+    flex-shrink: 0;
+    width: 40px;
+    height: 58px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-image-small img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-image-small span {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
 .card-item-text {
     font-size: 1rem;
     color: white;
+    flex: 1;
 }
 
 .card-actions {
@@ -486,6 +510,48 @@ h1 {
     border-radius: 10px;
     font-size: 1rem;
     background: rgba(255, 255, 255, 0.9);
+}
+
+/* Autocomplete Dropdown */
+.autocomplete-dropdown {
+    display: none;
+    position: absolute;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    max-height: 300px;
+    overflow-y: auto;
+    width: calc(100% - 60px);
+    z-index: 1001;
+    margin-top: -10px;
+}
+
+.autocomplete-item {
+    padding: 12px 15px;
+    cursor: pointer;
+    color: #333;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s ease;
+}
+
+.autocomplete-item:last-child {
+    border-bottom: none;
+}
+
+.autocomplete-item:hover {
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.available-badge {
+    background: rgba(52, 168, 83, 0.2);
+    color: #34a853;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: bold;
 }
 
 .modal-content button {
@@ -619,11 +685,47 @@ h1 {
     border-radius: 12px;
     border-left: 4px solid rgba(255, 255, 255, 0.3);
     transition: all 0.3s ease;
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
 }
 
 .inventory-card:hover {
     background: rgba(255, 255, 255, 0.2);
     transform: translateX(5px);
+}
+
+.card-image-container {
+    flex-shrink: 0;
+    width: 80px;
+    height: 116px;
+    border-radius: 6px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+}
+
+.inventory-card-content {
+    flex: 1;
+    min-width: 0;
 }
 
 .inventory-card.status-unused {

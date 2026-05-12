@@ -6,6 +6,7 @@ class CardInventory {
         this.currentFilter = 'all';
         this.searchTerm = '';
         this.currentEditCard = null;
+        this.cardImages = {}; // Cache for card images
         this.init();
     }
 
@@ -292,6 +293,30 @@ class CardInventory {
         }
     }
 
+    async fetchCardImage(cardName) {
+        // Check cache first
+        if (this.cardImages[cardName]) {
+            return this.cardImages[cardName];
+        }
+
+        try {
+            const response = await fetch(`https://db.ygoprodeck.com/api/v7/cardinfo.php?name=${encodeURIComponent(cardName)}`);
+            const data = await response.json();
+
+            if (data.data && data.data[0] && data.data[0].card_images) {
+                const imageUrl = data.data[0].card_images[0].image_url_small;
+                this.cardImages[cardName] = imageUrl;
+                return imageUrl;
+            }
+        } catch (error) {
+            console.log(`Could not fetch image for: ${cardName}`);
+        }
+
+        // Return placeholder if image not found
+        this.cardImages[cardName] = null;
+        return null;
+    }
+
     filterCards() {
         let cards = Object.keys(this.inventory);
 
@@ -330,7 +355,7 @@ class CardInventory {
         return cards.sort();
     }
 
-    renderInventory() {
+    async renderInventory() {
         const list = document.getElementById('inventoryList');
         const cards = this.filterCards();
 
@@ -339,6 +364,7 @@ class CardInventory {
             return;
         }
 
+        // Initial render with placeholders
         list.innerHTML = cards.map(cardName => {
             const owned = this.inventory[cardName].owned;
             const { usage, totalUsed } = this.getCardUsage(cardName);
@@ -357,29 +383,51 @@ class CardInventory {
             const statusClass = isUnused ? 'status-unused' : (available > 0 ? 'status-available' : 'status-used');
 
             return `
-                <div class="inventory-card ${statusClass}">
-                    <div class="inventory-card-header">
-                        <div class="inventory-card-name">${cardName}</div>
-                        <button class="edit-inventory-btn" onclick="inventory.showEditModal('${cardName.replace(/'/g, "\\'")}')">
-                            Edit
-                        </button>
-                    </div>
-                    <div class="inventory-card-stats">
-                        <div class="stat-badge owned">Owned: ${owned}</div>
-                        <div class="stat-badge used">Used: ${totalUsed}</div>
-                        <div class="stat-badge available ${available > 0 ? 'positive' : ''}">
-                            Available: ${available}
+                <div class="inventory-card ${statusClass}" data-card-name="${cardName.replace(/"/g, '&quot;')}">
+                    <div class="card-image-container">
+                        <div class="card-image-placeholder">
+                            <span>Loading...</span>
                         </div>
                     </div>
-                    ${deckList ? `
-                        <div class="deck-usage-list">
-                            <div class="deck-usage-label">Used in:</div>
-                            ${deckList}
+                    <div class="inventory-card-content">
+                        <div class="inventory-card-header">
+                            <div class="inventory-card-name">${cardName}</div>
+                            <button class="edit-inventory-btn" onclick="inventory.showEditModal('${cardName.replace(/'/g, "\\'")}')">
+                                Edit
+                            </button>
                         </div>
-                    ` : '<div class="unused-notice">⚠️ Not used in any deck</div>'}
+                        <div class="inventory-card-stats">
+                            <div class="stat-badge owned">Owned: ${owned}</div>
+                            <div class="stat-badge used">Used: ${totalUsed}</div>
+                            <div class="stat-badge available ${available > 0 ? 'positive' : ''}">
+                                Available: ${available}
+                            </div>
+                        </div>
+                        ${deckList ? `
+                            <div class="deck-usage-list">
+                                <div class="deck-usage-label">Used in:</div>
+                                ${deckList}
+                            </div>
+                        ` : '<div class="unused-notice">⚠️ Not used in any deck</div>'}
+                    </div>
                 </div>
             `;
         }).join('');
+
+        // Fetch images asynchronously
+        cards.forEach(async (cardName) => {
+            const imageUrl = await this.fetchCardImage(cardName);
+            const cardElement = document.querySelector(`.inventory-card[data-card-name="${cardName.replace(/"/g, '&quot;')}"]`);
+
+            if (cardElement) {
+                const imageContainer = cardElement.querySelector('.card-image-container');
+                if (imageUrl) {
+                    imageContainer.innerHTML = `<img src="${imageUrl}" alt="${cardName}" class="card-image">`;
+                } else {
+                    imageContainer.innerHTML = `<div class="card-image-placeholder"><span>❓</span></div>`;
+                }
+            }
+        });
     }
 
     updateStats() {

@@ -422,7 +422,11 @@ class CardInventory {
             if (cardElement) {
                 const imageContainer = cardElement.querySelector('.card-image-container');
                 if (imageUrl) {
-                    imageContainer.innerHTML = `<img src="${imageUrl}" alt="${cardName}" class="card-image">`;
+                    imageContainer.innerHTML = `<img src="${imageUrl}" alt="${cardName}" class="inventory-card-image">`;
+                    // Make images clickable for lightbox
+                    if (typeof makeCardImagesClickable === 'function') {
+                        makeCardImagesClickable();
+                    }
                 } else {
                     imageContainer.innerHTML = `<div class="card-image-placeholder"><span>❓</span></div>`;
                 }

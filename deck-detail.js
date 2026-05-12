@@ -274,6 +274,10 @@ class DeckDetail {
                 const imageContainer = cardElement.querySelector('.card-image-small');
                 if (imageContainer && imageUrl) {
                     imageContainer.innerHTML = `<img src="${imageUrl}" alt="${cleanName}">`;
+                    // Make images clickable for lightbox
+                    if (typeof makeCardImagesClickable === 'function') {
+                        makeCardImagesClickable();
+                    }
                 } else if (imageContainer) {
                     imageContainer.innerHTML = `<span>❓</span>`;
                 }

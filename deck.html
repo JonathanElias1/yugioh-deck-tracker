@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deck Details - Yu-Gi-Oh Collection</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="deck-header">
+            <a href="index.html" class="back-btn">← Back to Collection</a>
+            <div class="deck-title-section" id="deckTitleSection">
+                <!-- Populated by JavaScript -->
+            </div>
+        </header>
+
+        <div class="deck-details" id="deckDetails">
+            <!-- Populated by JavaScript -->
+        </div>
+
+        <div class="card-list-section">
+            <h2>Main Deck</h2>
+            <div class="card-list editable" id="mainDeck">
+                <!-- Populated by JavaScript -->
+            </div>
+            <button class="add-card-btn" id="addMainCard">+ Add Card to Main Deck</button>
+        </div>
+
+        <div class="card-list-section">
+            <h2>Extra Deck</h2>
+            <div class="card-list editable" id="extraDeck">
+                <!-- Populated by JavaScript -->
+            </div>
+            <button class="add-card-btn" id="addExtraCard">+ Add Card to Extra Deck</button>
+        </div>
+
+        <div class="path-selector" id="pathSelector" style="display: none;">
+            <!-- Alt paths will be populated here if applicable -->
+        </div>
+    </div>
+
+    <!-- Add Card Modal -->
+    <div id="addCardModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add New Card</h2>
+            <input type="number" id="cardQuantity" placeholder="Quantity (e.g., 3)" min="1" max="3" value="1">
+            <input type="text" id="cardName" placeholder="Card Name">
+            <button id="confirmAddCard">Add Card</button>
+        </div>
+    </div>
+
+    <script src="decks.js"></script>
+    <script src="deck-detail.js"></script>
+</body>
+</html>

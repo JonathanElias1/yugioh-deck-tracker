@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yu-Gi-Oh Deck Collection</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚡ Yu-Gi-Oh Deck Collection</h1>
+            <p class="subtitle">Complete Collection - 56 Decks (41 Active + 8 Consolidated)</p>
+            <div class="stats" id="stats">
+                <div class="stat-item">
+                    <span class="stat-label">Total Decks:</span>
+                    <span class="stat-value" id="totalDecks">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Completed:</span>
+                    <span class="stat-value" id="completedDecks">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">In Progress:</span>
+                    <span class="stat-value" id="inProgressDecks">0</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">All Decks</button>
+            <button class="filter-btn" data-filter="S">S Tier</button>
+            <button class="filter-btn" data-filter="A">A Tier</button>
+            <button class="filter-btn" data-filter="B">B Tier</button>
+            <button class="filter-btn" data-filter="C">C Tier</button>
+            <button class="filter-btn" data-filter="active">Active Only</button>
+            <button class="filter-btn" data-filter="consolidated">Consolidated</button>
+        </div>
+
+        <div class="deck-grid" id="deckGrid">
+            <!-- Decks will be populated here by JavaScript -->
+        </div>
+    </div>
+
+    <script src="decks.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

@@ -3,18 +3,32 @@ class ShoppingList {
     constructor() {
         this.decks = decks || [];
         this.currentFilter = 'all';
+        this.selectedDeckId = 'all';
         this.neededCards = {};
         this.deckNeeds = {};
         this.init();
     }
 
     init() {
+        this.populateDeckSelector();
         this.calculateNeededCards();
         this.renderShoppingList();
         this.renderDeckShoppingList();
         this.updateTCGFormat();
         this.updateStats();
         this.setupEventListeners();
+    }
+
+    populateDeckSelector() {
+        const selector = document.getElementById('deckSelector');
+        const activeDecks = this.decks.filter(d => d.status === 'active').sort((a, b) => a.name.localeCompare(b.name));
+
+        activeDecks.forEach(deck => {
+            const option = document.createElement('option');
+            option.value = deck.id;
+            option.textContent = `${deck.name} (${deck.tier} Tier)`;
+            selector.appendChild(option);
+        });
     }
 
     parseCardEntry(entry) {
@@ -33,7 +47,12 @@ class ShoppingList {
         this.decks.forEach(deck => {
             if (deck.status === 'consolidated') return;
 
-            // Skip if filtered
+            // Skip if specific deck is selected
+            if (this.selectedDeckId !== 'all' && deck.id !== parseInt(this.selectedDeckId)) {
+                return;
+            }
+
+            // Skip if filtered by tier
             if (this.currentFilter !== 'all' && this.currentFilter !== 'priority') {
                 if (deck.tier !== this.currentFilter) return;
             }
@@ -147,6 +166,16 @@ class ShoppingList {
                 this.updateTCGFormat();
                 this.updateStats();
             });
+        });
+
+        // Deck selector
+        document.getElementById('deckSelector').addEventListener('change', (e) => {
+            this.selectedDeckId = e.target.value;
+            this.calculateNeededCards();
+            this.renderShoppingList();
+            this.renderDeckShoppingList();
+            this.updateTCGFormat();
+            this.updateStats();
         });
 
         // Copy TCG format

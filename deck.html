@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deck Details - Yu-Gi-Oh Collection</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="auth.js"></script>
 </head>
 <body>
@@ -16,6 +17,7 @@
                 <a href="shopping-list.html" class="back-btn" style="margin-bottom: 0;">🛒 Shopping List</a>
                 <button onclick="deckDetail.showExportModal()" class="back-btn" style="margin-bottom: 0; cursor: pointer;">📤 Export Deck</button>
                 <button onclick="deckDetail.showImportModal()" class="back-btn" style="margin-bottom: 0; cursor: pointer;">📥 Import Deck</button>
+                <button onclick="deckDetail.exportToPDF()" class="back-btn" style="margin-bottom: 0; cursor: pointer;">📑 Export PDF</button>
             </div>
             <div class="deck-title-section" id="deckTitleSection">
                 <!-- Populated by JavaScript -->

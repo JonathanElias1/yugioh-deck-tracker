@@ -783,6 +783,189 @@ class DeckDetail {
 
         return cards;
     }
+
+    exportToPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Title
+        doc.setFontSize(20);
+        doc.setFont(undefined, 'bold');
+        doc.text(`${this.deck.name}`, 105, 20, { align: 'center' });
+
+        // Tier and Status
+        doc.setFontSize(14);
+        doc.text(`${this.deck.tier} Tier`, 105, 30, { align: 'center' });
+
+        // Date
+        doc.setFontSize(10);
+        doc.setFont(undefined, 'normal');
+        const date = new Date().toLocaleDateString();
+        doc.text(`Generated: ${date}`, 105, 38, { align: 'center' });
+
+        let yPos = 50;
+
+        // Strategy
+        if (this.deck.strategy) {
+            doc.setFontSize(11);
+            doc.setFont(undefined, 'bold');
+            doc.text('Strategy:', 20, yPos);
+            yPos += 6;
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(10);
+            const strategyLines = doc.splitTextToSize(this.deck.strategy, 170);
+            doc.text(strategyLines, 20, yPos);
+            yPos += strategyLines.length * 5 + 10;
+        }
+
+        // Metadata
+        if (this.deckMetadata.tags && this.deckMetadata.tags.length > 0) {
+            doc.setFontSize(11);
+            doc.setFont(undefined, 'bold');
+            doc.text('Tags:', 20, yPos);
+            yPos += 6;
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(10);
+            doc.text(this.deckMetadata.tags.join(', '), 20, yPos);
+            yPos += 10;
+        }
+
+        if (this.deckMetadata.storageLocation) {
+            doc.setFontSize(11);
+            doc.setFont(undefined, 'bold');
+            doc.text('Storage:', 20, yPos);
+            yPos += 6;
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(10);
+            doc.text(this.deckMetadata.storageLocation, 20, yPos);
+            yPos += 10;
+        }
+
+        // Completion stats
+        const completion = this.calculateDeckCompletion();
+        doc.setFontSize(11);
+        doc.text(`Completion: ${completion}%`, 20, yPos);
+        yPos += 10;
+
+        // Main Deck
+        const deckList = this.getCurrentDeckList();
+        const allMainCards = [...deckList.mainDeck, ...this.customCards.main];
+
+        doc.setFontSize(14);
+        doc.setFont(undefined, 'bold');
+        doc.text(`Main Deck (${allMainCards.length} cards)`, 20, yPos);
+        yPos += 8;
+
+        doc.setFontSize(10);
+        doc.setFont(undefined, 'normal');
+
+        allMainCards.forEach(card => {
+            if (yPos > 270) {
+                doc.addPage();
+                yPos = 20;
+            }
+
+            const ownedValue = this.ownedCards[card];
+            const parsed = card.match(/^(\d+)\s+(.+)$/) || [null, 1, card];
+            const totalQuantity = parseInt(parsed[1]);
+            const ownedQuantity = typeof ownedValue === 'number' ? ownedValue : (ownedValue ? totalQuantity : 0);
+            const condition = this.cardConditions[card] || 'NM';
+
+            const status = ownedQuantity >= totalQuantity ? '✓' : ownedQuantity > 0 ? '○' : '✗';
+            const text = `${status} ${card} [${ownedQuantity}/${totalQuantity}] (${condition})`;
+
+            doc.text(text, 25, yPos);
+            yPos += 6;
+        });
+
+        // Extra Deck
+        const allExtraCards = [...deckList.extraDeck, ...this.customCards.extra];
+
+        if (allExtraCards.length > 0) {
+            yPos += 8;
+
+            if (yPos > 260) {
+                doc.addPage();
+                yPos = 20;
+            }
+
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text(`Extra Deck (${allExtraCards.length} cards)`, 20, yPos);
+            yPos += 8;
+
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'normal');
+
+            allExtraCards.forEach(card => {
+                if (yPos > 270) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+
+                const ownedValue = this.ownedCards[card];
+                const parsed = card.match(/^(\d+)\s+(.+)$/) || [null, 1, card];
+                const totalQuantity = parseInt(parsed[1]);
+                const ownedQuantity = typeof ownedValue === 'number' ? ownedValue : (ownedValue ? totalQuantity : 0);
+                const condition = this.cardConditions[card] || 'NM';
+
+                const status = ownedQuantity >= totalQuantity ? '✓' : ownedQuantity > 0 ? '○' : '✗';
+                const text = `${status} ${card} [${ownedQuantity}/${totalQuantity}] (${condition})`;
+
+                doc.text(text, 25, yPos);
+                yPos += 6;
+            });
+        }
+
+        // Notes
+        if (this.deckMetadata.customNotes) {
+            yPos += 10;
+
+            if (yPos > 240) {
+                doc.addPage();
+                yPos = 20;
+            }
+
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('Notes:', 20, yPos);
+            yPos += 8;
+
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(10);
+            const notesLines = doc.splitTextToSize(this.deckMetadata.customNotes, 170);
+            doc.text(notesLines, 20, yPos);
+        }
+
+        // Save PDF
+        const filename = `${this.deck.name.replace(/[^a-z0-9]/gi, '-')}-${date.replace(/\//g, '-')}.pdf`;
+        doc.save(filename);
+
+        alert('PDF exported successfully!');
+    }
+
+    calculateDeckCompletion() {
+        const deckList = this.getCurrentDeckList();
+        const allCards = [...deckList.mainDeck, ...this.customCards.main, ...deckList.extraDeck, ...this.customCards.extra];
+
+        let totalNeeded = 0;
+        let totalOwned = 0;
+
+        allCards.forEach(cardEntry => {
+            const parsed = cardEntry.match(/^(\d+)\s+(.+)$/) || [null, 1, cardEntry];
+            const quantity = parseInt(parsed[1]);
+            totalNeeded += quantity;
+
+            const ownedValue = this.ownedCards[cardEntry];
+            if (typeof ownedValue === 'number') {
+                totalOwned += ownedValue;
+            } else if (ownedValue === true) {
+                totalOwned += quantity;
+            }
+        });
+
+        return totalNeeded > 0 ? Math.round((totalOwned / totalNeeded) * 100) : 0;
+    }
 }
 
 // Initialize when DOM is ready

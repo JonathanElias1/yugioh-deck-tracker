@@ -209,6 +209,155 @@ class ShoppingList {
                 }, 2000);
             });
         });
+
+        // Export to PDF
+        document.getElementById('exportPDF').addEventListener('click', () => {
+            this.exportToPDF();
+        });
+    }
+
+    exportToPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Title
+        doc.setFontSize(20);
+        doc.setFont(undefined, 'bold');
+        doc.text('Yu-Gi-Oh Shopping List', 105, 20, { align: 'center' });
+
+        // Date
+        doc.setFontSize(10);
+        doc.setFont(undefined, 'normal');
+        const date = new Date().toLocaleDateString();
+        doc.text(`Generated: ${date}`, 105, 28, { align: 'center' });
+
+        // Stats
+        const totalNeeded = Object.values(this.neededCards).reduce((sum, card) => sum + card.quantity, 0);
+        const uniqueCards = Object.keys(this.neededCards).length;
+        const incompleteDecks = Object.keys(this.deckNeeds).filter(id => this.deckNeeds[id].cards.length > 0).length;
+
+        doc.setFontSize(11);
+        let yPos = 40;
+        doc.text(`Total Cards Needed: ${totalNeeded}`, 20, yPos);
+        yPos += 6;
+        doc.text(`Unique Cards: ${uniqueCards}`, 20, yPos);
+        yPos += 6;
+        doc.text(`Decks Incomplete: ${incompleteDecks}`, 20, yPos);
+        yPos += 10;
+
+        // Filter info
+        if (this.currentFilter !== 'all') {
+            doc.setFontSize(10);
+            doc.setTextColor(100);
+            doc.text(`Filter: ${this.currentFilter.toUpperCase()}`, 20, yPos);
+            yPos += 8;
+            doc.setTextColor(0);
+        }
+
+        if (this.selectedDeckId !== 'all') {
+            const selectedDeck = this.decks.find(d => d.id === parseInt(this.selectedDeckId));
+            if (selectedDeck) {
+                doc.setFontSize(10);
+                doc.setTextColor(100);
+                doc.text(`Deck: ${selectedDeck.name}`, 20, yPos);
+                yPos += 8;
+                doc.setTextColor(0);
+            }
+        }
+
+        // Cards list
+        doc.setFontSize(14);
+        doc.setFont(undefined, 'bold');
+        doc.text('Cards Needed:', 20, yPos);
+        yPos += 8;
+
+        doc.setFontSize(10);
+        doc.setFont(undefined, 'normal');
+
+        const cards = Object.keys(this.neededCards).sort();
+        cards.forEach((cardName, index) => {
+            const card = this.neededCards[cardName];
+            const text = `${card.quantity}x ${cardName}`;
+
+            // Check if we need a new page
+            if (yPos > 270) {
+                doc.addPage();
+                yPos = 20;
+            }
+
+            doc.text(text, 25, yPos);
+            yPos += 6;
+        });
+
+        // Deck breakdown section
+        if (Object.keys(this.deckNeeds).length > 0) {
+            yPos += 10;
+
+            // Check if we need a new page
+            if (yPos > 250) {
+                doc.addPage();
+                yPos = 20;
+            }
+
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('Needed by Deck:', 20, yPos);
+            yPos += 8;
+
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'normal');
+
+            const deckIds = Object.keys(this.deckNeeds).filter(id => {
+                return this.deckNeeds[id].cards.length > 0;
+            }).sort((a, b) => {
+                const deckA = this.deckNeeds[a];
+                const deckB = this.deckNeeds[b];
+                if (deckA.tier !== deckB.tier) {
+                    return deckA.tier.localeCompare(deckB.tier);
+                }
+                return deckA.deckName.localeCompare(deckB.deckName);
+            });
+
+            deckIds.forEach(deckId => {
+                const deck = this.deckNeeds[deckId];
+
+                // Check if we need a new page
+                if (yPos > 260) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+
+                doc.setFont(undefined, 'bold');
+                doc.text(`${deck.deckName} (${deck.tier} Tier) - ${deck.totalNeeded} cards`, 25, yPos);
+                yPos += 6;
+
+                doc.setFont(undefined, 'normal');
+                deck.cards.forEach(card => {
+                    // Check if we need a new page
+                    if (yPos > 270) {
+                        doc.addPage();
+                        yPos = 20;
+                    }
+
+                    doc.text(`  ${card.originalEntry}`, 30, yPos);
+                    yPos += 5;
+                });
+
+                yPos += 5;
+            });
+        }
+
+        // Save PDF
+        const filename = `yugioh-shopping-list-${date.replace(/\//g, '-')}.pdf`;
+        doc.save(filename);
+
+        // Visual feedback
+        const btn = document.getElementById('exportPDF');
+        const originalText = btn.textContent;
+        btn.textContent = '✅ PDF Downloaded!';
+        setTimeout(() => {
+            btn.textContent = originalText;
+        }, 2000);
     }
 
     updateTCGFormat() {

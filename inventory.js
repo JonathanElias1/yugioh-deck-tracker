@@ -194,12 +194,115 @@ class CardInventory {
             this.deleteCard();
         });
 
+        // Export to PDF
+        document.getElementById('exportInventoryPDF').addEventListener('click', () => {
+            this.exportToPDF();
+        });
+
         // Close modals on outside click
         window.onclick = (e) => {
             if (e.target.classList.contains('modal')) {
                 e.target.style.display = 'none';
             }
         };
+    }
+
+    exportToPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Title
+        doc.setFontSize(20);
+        doc.setFont(undefined, 'bold');
+        doc.text('Card Inventory', 105, 20, { align: 'center' });
+
+        // Date
+        doc.setFontSize(10);
+        doc.setFont(undefined, 'normal');
+        const date = new Date().toLocaleDateString();
+        doc.text(`Generated: ${date}`, 105, 28, { align: 'center' });
+
+        // Stats
+        const totalCards = Object.keys(this.inventory).length;
+        const usedCards = Object.keys(this.inventory).filter(name => {
+            const { totalUsed } = this.getCardUsage(name);
+            return totalUsed > 0;
+        }).length;
+        const unusedCards = totalCards - usedCards;
+        const totalQuantity = Object.values(this.inventory).reduce((sum, card) => sum + card.owned, 0);
+
+        doc.setFontSize(11);
+        let yPos = 40;
+        doc.text(`Total Unique Cards: ${totalCards}`, 20, yPos);
+        yPos += 6;
+        doc.text(`Total Quantity: ${totalQuantity}`, 20, yPos);
+        yPos += 6;
+        doc.text(`Used in Decks: ${usedCards}`, 20, yPos);
+        yPos += 6;
+        doc.text(`Unused: ${unusedCards}`, 20, yPos);
+        yPos += 12;
+
+        // Filter info
+        if (this.currentFilter !== 'all') {
+            doc.setFontSize(10);
+            doc.setTextColor(100);
+            doc.text(`Filter: ${this.currentFilter.toUpperCase()}`, 20, yPos);
+            yPos += 8;
+            doc.setTextColor(0);
+        }
+
+        // Cards list
+        doc.setFontSize(14);
+        doc.setFont(undefined, 'bold');
+        doc.text('Card List:', 20, yPos);
+        yPos += 8;
+
+        doc.setFontSize(9);
+        doc.setFont(undefined, 'normal');
+
+        const cards = this.filterCards();
+
+        cards.forEach((cardName, index) => {
+            const owned = this.inventory[cardName].owned;
+            const { usage, totalUsed } = this.getCardUsage(cardName);
+            const available = owned - totalUsed;
+
+            // Check if we need a new page
+            if (yPos > 265) {
+                doc.addPage();
+                yPos = 20;
+            }
+
+            // Card name and quantities
+            doc.setFont(undefined, 'bold');
+            doc.text(`${cardName}`, 25, yPos);
+            yPos += 5;
+
+            doc.setFont(undefined, 'normal');
+            doc.text(`  Owned: ${owned} | Used: ${totalUsed} | Available: ${available}`, 25, yPos);
+            yPos += 5;
+
+            // Deck usage
+            if (Object.keys(usage).length > 0) {
+                doc.setFontSize(8);
+                doc.setTextColor(100);
+                const deckNames = Object.keys(usage).map(key => usage[key].deckName).join(', ');
+                const usageText = `  Used in: ${deckNames}`;
+                const usageLines = doc.splitTextToSize(usageText, 160);
+                doc.text(usageLines, 25, yPos);
+                yPos += usageLines.length * 4;
+                doc.setTextColor(0);
+                doc.setFontSize(9);
+            }
+
+            yPos += 3;
+        });
+
+        // Save PDF
+        const filename = `yugioh-inventory-${date.replace(/\//g, '-')}.pdf`;
+        doc.save(filename);
+
+        alert('Inventory PDF exported successfully!');
     }
 
     showAddModal() {

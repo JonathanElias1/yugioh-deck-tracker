@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deck Comparison - Yu-Gi-Oh Collection</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="auth.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="nav-links">
+                <a href="index.html" class="nav-btn">← Back to Decks</a>
+                <a href="inventory.html" class="nav-btn">📦 Card Inventory</a>
+                <a href="shopping-list.html" class="nav-btn">🛒 Shopping List</a>
+            </div>
+            <h1>⚖️ Deck Comparison</h1>
+            <p class="subtitle">Compare two decks to see overlapping and unique cards</p>
+        </header>
+
+        <div class="comparison-selectors">
+            <div class="deck-selector-box">
+                <label for="deck1Selector">Deck 1:</label>
+                <select id="deck1Selector" class="deck-select">
+                    <option value="">Select a deck...</option>
+                    <!-- Populated by JavaScript -->
+                </select>
+            </div>
+
+            <div class="compare-icon">VS</div>
+
+            <div class="deck-selector-box">
+                <label for="deck2Selector">Deck 2:</label>
+                <select id="deck2Selector" class="deck-select">
+                    <option value="">Select a deck...</option>
+                    <!-- Populated by JavaScript -->
+                </select>
+            </div>
+        </div>
+
+        <div id="comparisonResults" class="comparison-results">
+            <!-- Populated by JavaScript -->
+        </div>
+    </div>
+
+    <script src="decks.js"></script>
+    <script src="compare.js"></script>
+</body>
+</html>

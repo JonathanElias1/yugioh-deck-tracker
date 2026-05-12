@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Inventory - Yu-Gi-Oh Collection</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="nav-links">
+                <a href="index.html" class="nav-btn">← Back to Decks</a>
+            </div>
+            <h1>📦 Card Inventory</h1>
+            <p class="subtitle">Track all your cards and see where they're used</p>
+            <div class="stats" id="inventoryStats">
+                <div class="stat-item">
+                    <span class="stat-label">Total Cards:</span>
+                    <span class="stat-value" id="totalCards">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Used in Decks:</span>
+                    <span class="stat-value" id="usedCards">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Unused:</span>
+                    <span class="stat-value" id="unusedCards">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Total Quantity:</span>
+                    <span class="stat-value" id="totalQuantity">0</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="inventory-controls">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search cards by name..." autocomplete="off">
+            </div>
+
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">All Cards</button>
+                <button class="filter-btn" data-filter="unused">Unused Cards</button>
+                <button class="filter-btn" data-filter="used">Used in Decks</button>
+                <button class="filter-btn" data-filter="available">Available (Extras)</button>
+            </div>
+
+            <button class="add-card-btn" id="addCardToInventory">+ Add Cards to Inventory</button>
+        </div>
+
+        <div class="inventory-section">
+            <h2>Your Card Collection</h2>
+            <div class="inventory-list" id="inventoryList">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Card to Inventory Modal -->
+    <div id="addInventoryModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add Cards to Inventory</h2>
+            <p style="color: rgba(255,255,255,0.8); margin-bottom: 15px;">Paste your card list (one per line or comma-separated)</p>
+            <textarea id="bulkCardInput" placeholder="3x Blue-Eyes White Dragon&#10;2x Dark Magician&#10;Pot of Greed&#10;or: Blue-Eyes White Dragon, Dark Magician, Pot of Greed" rows="10"></textarea>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button id="confirmBulkAdd" style="flex: 1;">Add Cards</button>
+                <button id="clearInventory" style="flex: 1; background: #ea4335;">Clear All Inventory</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Card Modal -->
+    <div id="editCardModal" class="modal">
+        <div class="modal-content">
+            <span class="close edit-close">&times;</span>
+            <h2>Edit Card Quantity</h2>
+            <p id="editCardName" style="color: white; font-size: 1.1rem; margin-bottom: 15px;"></p>
+            <input type="number" id="editCardQuantity" min="0" placeholder="Quantity owned">
+            <button id="confirmEditCard">Update Quantity</button>
+            <button id="deleteCardFromInventory" style="background: #ea4335; margin-top: 10px;">Delete Card</button>
+        </div>
+    </div>
+
+    <script src="decks.js"></script>
+    <script src="inventory.js"></script>
+</body>
+</html>

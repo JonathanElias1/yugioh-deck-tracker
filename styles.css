@@ -547,3 +547,218 @@ h1 {
 .hidden {
     display: none !important;
 }
+
+/* Navigation Links */
+.nav-links {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.nav-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateX(-5px);
+}
+
+/* Inventory Page Styles */
+.inventory-controls {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+}
+
+.search-bar {
+    margin-bottom: 20px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 15px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+}
+
+.search-bar input:focus {
+    outline: 2px solid white;
+}
+
+.inventory-section {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 25px;
+    border-radius: 15px;
+}
+
+.inventory-section h2 {
+    color: white;
+    margin-bottom: 20px;
+}
+
+.inventory-list {
+    display: grid;
+    gap: 15px;
+}
+
+.inventory-card {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 4px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.inventory-card:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(5px);
+}
+
+.inventory-card.status-unused {
+    border-left-color: var(--warning-color);
+    background: rgba(251, 188, 4, 0.15);
+}
+
+.inventory-card.status-used {
+    border-left-color: var(--secondary-color);
+}
+
+.inventory-card.status-available {
+    border-left-color: var(--tier-a);
+}
+
+.inventory-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.inventory-card-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+}
+
+.edit-inventory-btn {
+    padding: 8px 15px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.edit-inventory-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.inventory-card-stats {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.stat-badge {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.stat-badge.owned {
+    background: rgba(102, 126, 234, 0.6);
+}
+
+.stat-badge.used {
+    background: rgba(118, 75, 162, 0.6);
+}
+
+.stat-badge.available {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.stat-badge.available.positive {
+    background: rgba(52, 168, 83, 0.6);
+}
+
+.deck-usage-list {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.deck-usage-label {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 10px;
+}
+
+.deck-usage-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    margin-bottom: 5px;
+}
+
+.deck-usage-item a {
+    color: white;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.deck-usage-item a:hover {
+    color: var(--tier-a);
+}
+
+.usage-quantity {
+    font-weight: bold;
+    color: var(--tier-a);
+}
+
+.unused-notice {
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(251, 188, 4, 0.2);
+    border-radius: 8px;
+    color: var(--warning-color);
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+/* Modal textarea */
+.modal-content textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: inherit;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    resize: vertical;
+}
+
+.modal-content textarea:focus {
+    outline: 2px solid white;
+}

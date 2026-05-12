@@ -406,7 +406,7 @@ class DeckDetail {
             this.showAddCardModal('extra');
         });
 
-        // Modal close
+        // Modal close handlers
         const modal = document.getElementById('addCardModal');
         const closeBtn = document.querySelector('.close');
 
@@ -414,9 +414,33 @@ class DeckDetail {
             modal.style.display = 'none';
         };
 
+        // Export modal close
+        const exportModal = document.getElementById('exportModal');
+        const exportClose = document.querySelector('.export-close');
+        if (exportClose) {
+            exportClose.onclick = () => {
+                exportModal.style.display = 'none';
+            };
+        }
+
+        // Import modal close
+        const importModal = document.getElementById('importModal');
+        const importClose = document.querySelector('.import-close');
+        if (importClose) {
+            importClose.onclick = () => {
+                importModal.style.display = 'none';
+            };
+        }
+
         window.onclick = (e) => {
             if (e.target === modal) {
                 modal.style.display = 'none';
+            }
+            if (e.target === exportModal) {
+                exportModal.style.display = 'none';
+            }
+            if (e.target === importModal) {
+                importModal.style.display = 'none';
             }
         };
 
@@ -561,6 +585,203 @@ class DeckDetail {
 
         // Close modal
         document.getElementById('addCardModal').style.display = 'none';
+    }
+
+    showExportModal() {
+        const modal = document.getElementById('exportModal');
+        document.getElementById('exportOutput').style.display = 'none';
+        modal.style.display = 'block';
+    }
+
+    showImportModal() {
+        const modal = document.getElementById('importModal');
+        document.getElementById('importTextarea').value = '';
+        modal.style.display = 'block';
+    }
+
+    exportDeck(format) {
+        const deckList = this.getCurrentDeckList();
+        const allMainCards = [...deckList.mainDeck, ...this.customCards.main];
+        const allExtraCards = [...deckList.extraDeck, ...this.customCards.extra];
+
+        let output = '';
+
+        switch (format) {
+            case 'ygoprodeck':
+                output = this.exportYGOPRODECK(allMainCards, allExtraCards);
+                break;
+            case 'duelingbook':
+                output = this.exportDuelingBook(allMainCards, allExtraCards);
+                break;
+            case 'tcgplayer':
+                output = this.exportTCGPlayer(allMainCards, allExtraCards);
+                break;
+            case 'plain':
+                output = this.exportPlainText(allMainCards, allExtraCards);
+                break;
+        }
+
+        document.getElementById('exportTextarea').value = output;
+        document.getElementById('exportOutput').style.display = 'block';
+    }
+
+    exportYGOPRODECK(mainDeck, extraDeck) {
+        let output = '# Main Deck\n';
+        mainDeck.forEach(card => {
+            output += `${card}\n`;
+        });
+
+        if (extraDeck.length > 0) {
+            output += '\n# Extra Deck\n';
+            extraDeck.forEach(card => {
+                output += `${card}\n`;
+            });
+        }
+
+        return output;
+    }
+
+    exportDuelingBook(mainDeck, extraDeck) {
+        // Dueling Book format: card name without quantity prefix
+        let output = '';
+
+        mainDeck.forEach(card => {
+            const parsed = card.match(/^(\d+)\s+(.+)$/) || [null, 1, card];
+            const quantity = parseInt(parsed[1]);
+            const name = parsed[2];
+            for (let i = 0; i < quantity; i++) {
+                output += `${name}\n`;
+            }
+        });
+
+        if (extraDeck.length > 0) {
+            output += '\n';
+            extraDeck.forEach(card => {
+                const parsed = card.match(/^(\d+)\s+(.+)$/) || [null, 1, card];
+                const quantity = parseInt(parsed[1]);
+                const name = parsed[2];
+                for (let i = 0; i < quantity; i++) {
+                    output += `${name}\n`;
+                }
+            });
+        }
+
+        return output;
+    }
+
+    exportTCGPlayer(mainDeck, extraDeck) {
+        // TCGPlayer mass entry format: quantity + name
+        let output = '';
+
+        mainDeck.forEach(card => {
+            output += `${card}\n`;
+        });
+
+        if (extraDeck.length > 0) {
+            output += '\n';
+            extraDeck.forEach(card => {
+                output += `${card}\n`;
+            });
+        }
+
+        return output;
+    }
+
+    exportPlainText(mainDeck, extraDeck) {
+        let output = `${this.deck.name} - ${this.deck.tier} Tier\n\n`;
+        output += `Main Deck (${mainDeck.length} cards):\n`;
+        output += '─────────────────────────\n';
+
+        mainDeck.forEach(card => {
+            output += `${card}\n`;
+        });
+
+        if (extraDeck.length > 0) {
+            output += `\nExtra Deck (${extraDeck.length} cards):\n`;
+            output += '─────────────────────────\n';
+            extraDeck.forEach(card => {
+                output += `${card}\n`;
+            });
+        }
+
+        return output;
+    }
+
+    copyExport() {
+        const textarea = document.getElementById('exportTextarea');
+        textarea.select();
+        document.execCommand('copy');
+
+        const btn = event.target;
+        const originalText = btn.textContent;
+        btn.textContent = '✅ Copied!';
+        setTimeout(() => {
+            btn.textContent = originalText;
+        }, 2000);
+    }
+
+    importDeck(deckType) {
+        const input = document.getElementById('importTextarea').value;
+        if (!input.trim()) {
+            alert('Please paste a deck list');
+            return;
+        }
+
+        const cards = this.parseImportedDeck(input);
+
+        if (cards.length === 0) {
+            alert('No valid cards found in the import');
+            return;
+        }
+
+        // Add to custom cards
+        this.customCards[deckType].push(...cards);
+        this.saveCustomCards();
+        this.renderCards();
+
+        document.getElementById('importModal').style.display = 'none';
+        alert(`Successfully imported ${cards.length} card(s) to ${deckType} deck!`);
+    }
+
+    parseImportedDeck(input) {
+        const lines = input.split('\n').map(l => l.trim()).filter(l => l);
+        const cards = [];
+        const cardCounts = {};
+
+        lines.forEach(line => {
+            // Skip comments and section headers
+            if (line.startsWith('#') || line.startsWith('Main Deck') || line.startsWith('Extra Deck') || line.startsWith('─')) {
+                return;
+            }
+
+            // Try to parse quantity + name format (3 Blue-Eyes White Dragon)
+            const quantityMatch = line.match(/^(\d+)x?\s+(.+)$/i);
+            if (quantityMatch) {
+                const quantity = parseInt(quantityMatch[1]);
+                const name = quantityMatch[2].trim();
+                if (!cardCounts[name]) {
+                    cardCounts[name] = 0;
+                }
+                cardCounts[name] += quantity;
+            } else {
+                // Plain card name (count as 1)
+                const name = line.trim();
+                if (name) {
+                    if (!cardCounts[name]) {
+                        cardCounts[name] = 0;
+                    }
+                    cardCounts[name] += 1;
+                }
+            }
+        });
+
+        // Convert to card entries
+        Object.keys(cardCounts).forEach(name => {
+            const quantity = cardCounts[name];
+            cards.push(quantity > 1 ? `${quantity} ${name}` : `1 ${name}`);
+        });
+
+        return cards;
     }
 }
 

@@ -10,10 +10,12 @@
 <body>
     <div class="container">
         <header class="deck-header">
-            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+            <div style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
                 <a href="index.html" class="back-btn" style="margin-bottom: 0;">← Back to Collection</a>
                 <a href="inventory.html" class="back-btn" style="margin-bottom: 0;">📦 Card Inventory</a>
                 <a href="shopping-list.html" class="back-btn" style="margin-bottom: 0;">🛒 Shopping List</a>
+                <button onclick="deckDetail.showExportModal()" class="back-btn" style="margin-bottom: 0; cursor: pointer;">📤 Export Deck</button>
+                <button onclick="deckDetail.showImportModal()" class="back-btn" style="margin-bottom: 0; cursor: pointer;">📥 Import Deck</button>
             </div>
             <div class="deck-title-section" id="deckTitleSection">
                 <!-- Populated by JavaScript -->
@@ -53,6 +55,49 @@
             <input type="number" id="cardQuantity" placeholder="Quantity (e.g., 3)" min="1" max="3" value="1">
             <input type="text" id="cardName" placeholder="Card Name">
             <button id="confirmAddCard">Add Card</button>
+        </div>
+    </div>
+
+    <!-- Export Deck Modal -->
+    <div id="exportModal" class="modal">
+        <div class="modal-content">
+            <span class="close export-close">&times;</span>
+            <h2>Export Deck</h2>
+            <p style="color: rgba(255,255,255,0.8); margin-bottom: 15px;">Choose export format:</p>
+            <div class="export-format-buttons">
+                <button onclick="deckDetail.exportDeck('ygoprodeck')" class="export-format-btn">YGOPRODECK Format</button>
+                <button onclick="deckDetail.exportDeck('duelingbook')" class="export-format-btn">Dueling Book Format</button>
+                <button onclick="deckDetail.exportDeck('tcgplayer')" class="export-format-btn">TCGPlayer Format</button>
+                <button onclick="deckDetail.exportDeck('plain')" class="export-format-btn">Plain Text</button>
+            </div>
+            <div id="exportOutput" style="display: none; margin-top: 20px;">
+                <h3 style="color: white; margin-bottom: 10px;">Export Output:</h3>
+                <textarea id="exportTextarea" readonly rows="15" style="width: 100%; padding: 12px; font-family: monospace; font-size: 0.9rem;"></textarea>
+                <button onclick="deckDetail.copyExport()" class="export-copy-btn">📋 Copy to Clipboard</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Deck Modal -->
+    <div id="importModal" class="modal">
+        <div class="modal-content">
+            <span class="close import-close">&times;</span>
+            <h2>Import Deck</h2>
+            <p style="color: rgba(255,255,255,0.8); margin-bottom: 15px;">
+                Paste your deck list below. Supported formats:
+                <br>• YGOPRODECK (URLs or text)
+                <br>• Dueling Book format
+                <br>• TCGPlayer mass entry
+                <br>• Plain text (one card per line, with or without quantities)
+            </p>
+            <textarea id="importTextarea" placeholder="Paste deck list here..." rows="15" style="width: 100%; padding: 12px; font-family: monospace; font-size: 0.9rem;"></textarea>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button onclick="deckDetail.importDeck('main')" class="import-btn">Import to Main Deck</button>
+                <button onclick="deckDetail.importDeck('extra')" class="import-btn">Import to Extra Deck</button>
+            </div>
+            <p style="color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-top: 10px;">
+                Note: This will add cards to your custom deck list. Original deck cards will not be affected.
+            </p>
         </div>
     </div>
 

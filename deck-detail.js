@@ -6,6 +6,7 @@ class DeckDetail {
         this.currentPath = null;
         this.ownedCards = this.loadOwnedCards();
         this.customCards = this.loadCustomCards();
+        this.removedCards = this.loadRemovedCards(); // Cards removed from deck
         this.cardImages = {}; // Cache for card images
         this.deckMetadata = this.loadDeckMetadata(); // Tags, notes, storage
         this.cardConditions = this.loadCardConditions(); // Card conditions
@@ -37,6 +38,15 @@ class DeckDetail {
 
     saveCustomCards() {
         localStorage.setItem(`customCards_${this.deckId}`, JSON.stringify(this.customCards));
+    }
+
+    loadRemovedCards() {
+        const saved = localStorage.getItem(`removedCards_${this.deckId}`);
+        return saved ? JSON.parse(saved) : [];
+    }
+
+    saveRemovedCards(removedCards) {
+        localStorage.setItem(`removedCards_${this.deckId}`, JSON.stringify(removedCards));
     }
 
     loadDeckMetadata() {
@@ -214,15 +224,20 @@ class DeckDetail {
     }
 
     getCurrentDeckList() {
+        let mainDeck, extraDeck;
+
         if (this.deck.altPaths && this.currentPath && this.deck[this.currentPath]) {
-            return {
-                mainDeck: this.deck[this.currentPath].mainDeck || [],
-                extraDeck: this.deck[this.currentPath].extraDeck || []
-            };
+            mainDeck = this.deck[this.currentPath].mainDeck || [];
+            extraDeck = this.deck[this.currentPath].extraDeck || [];
+        } else {
+            mainDeck = this.deck.mainDeck || [];
+            extraDeck = this.deck.extraDeck || [];
         }
+
+        // Filter out removed cards
         return {
-            mainDeck: this.deck.mainDeck || [],
-            extraDeck: this.deck.extraDeck || []
+            mainDeck: mainDeck.filter(card => !this.removedCards.includes(card)),
+            extraDeck: extraDeck.filter(card => !this.removedCards.includes(card))
         };
     }
 
@@ -271,7 +286,7 @@ class DeckDetail {
         const totalQuantity = parseInt(parsed[1]);
         const ownedQuantity = typeof isOwned === 'number' ? isOwned : (isOwned ? totalQuantity : 0);
         const ownedClass = ownedQuantity >= totalQuantity ? 'owned' : (ownedQuantity > 0 ? 'partial' : '');
-        const deleteBtn = isCustom ? `<button class="delete-card-btn" onclick="deckDetail.deleteCard('${card}', '${deckType}')">Delete</button>` : '';
+        const deleteBtn = `<button class="delete-card-btn" onclick="deckDetail.deleteCard('${card.replace(/'/g, "\\'")}', '${deckType}', ${isCustom})">🗑️</button>`;
         const cleanName = card.replace(/^\d+\s+/, '');
         const cardCondition = this.cardConditions[card] || 'NM';
 
@@ -343,15 +358,37 @@ class DeckDetail {
         this.renderCards();
     }
 
-    deleteCard(card, deckType) {
-        if (!confirm(`Delete "${card}" from deck?`)) return;
+    deleteCard(card, deckType, isCustom) {
+        if (!confirm(`Remove "${card}" from deck? This will also remove ownership data for this card.`)) return;
 
-        const index = this.customCards[deckType].indexOf(card);
-        if (index > -1) {
-            this.customCards[deckType].splice(index, 1);
-            this.saveCustomCards();
-            this.renderCards();
+        if (isCustom) {
+            // Remove from custom cards
+            const index = this.customCards[deckType].indexOf(card);
+            if (index > -1) {
+                this.customCards[deckType].splice(index, 1);
+                this.saveCustomCards();
+            }
+        } else {
+            // Add to removed cards list (for original deck cards)
+            if (!this.removedCards.includes(card)) {
+                this.removedCards.push(card);
+                this.saveRemovedCards(this.removedCards);
+            }
         }
+
+        // Remove ownership data
+        if (this.ownedCards[card]) {
+            delete this.ownedCards[card];
+            this.saveOwnedCards();
+        }
+
+        // Remove condition data
+        if (this.cardConditions[card]) {
+            delete this.cardConditions[card];
+            this.saveCardConditions();
+        }
+
+        this.renderCards();
     }
 
     setupEventListeners() {

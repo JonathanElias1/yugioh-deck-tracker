@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collection Stats - Yu-Gi-Oh Collection</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="auth.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="nav-links">
+                <a href="index.html" class="nav-btn">← Back to Decks</a>
+                <a href="inventory.html" class="nav-btn">📦 Card Inventory</a>
+                <a href="shopping-list.html" class="nav-btn">🛒 Shopping List</a>
+                <a href="compare.html" class="nav-btn">⚖️ Compare</a>
+            </div>
+            <h1>📊 Collection Statistics</h1>
+            <p class="subtitle">Visual overview of your Yu-Gi-Oh deck collection</p>
+        </header>
+
+        <!-- Summary Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">🃏</div>
+                <div class="stat-value" id="totalDecksCount">0</div>
+                <div class="stat-label">Total Decks</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">✅</div>
+                <div class="stat-value" id="completedDecksCount">0</div>
+                <div class="stat-label">Completed Decks</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📈</div>
+                <div class="stat-value" id="avgCompletion">0%</div>
+                <div class="stat-label">Avg Completion</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🎴</div>
+                <div class="stat-value" id="uniqueCardsCount">0</div>
+                <div class="stat-label">Unique Cards</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <div class="stat-value" id="totalCardsNeeded">0</div>
+                <div class="stat-label">Cards Needed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🏆</div>
+                <div class="stat-value" id="topTierCount">0</div>
+                <div class="stat-label">S/A Tier Decks</div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>Deck Completion Status</h3>
+                <canvas id="completionChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Decks by Tier</h3>
+                <canvas id="tierChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Completion by Tier</h3>
+                <canvas id="tierCompletionChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Collection Progress</h3>
+                <canvas id="progressChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="leaderboard-section">
+            <div class="leaderboard-card">
+                <h3>🏆 Most Complete Decks</h3>
+                <div id="topDecks" class="leaderboard-list">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+            <div class="leaderboard-card">
+                <h3>🚧 Least Complete Decks</h3>
+                <div id="bottomDecks" class="leaderboard-list">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Most Needed Cards -->
+        <div class="needed-cards-section">
+            <h3>🎯 Most Needed Cards</h3>
+            <p style="color: rgba(255,255,255,0.7); margin-bottom: 15px;">Cards that appear in multiple decks and are still needed</p>
+            <div id="mostNeededCards" class="needed-cards-list">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script src="decks.js"></script>
+    <script src="stats.js"></script>
+</body>
+</html>

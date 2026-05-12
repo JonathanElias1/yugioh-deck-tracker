@@ -1398,3 +1398,173 @@ h1 {
         flex-wrap: wrap;
     }
 }
+
+
+/* Deck Metadata Styles (Tags, Notes, Storage) */
+.deck-metadata-section {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    display: grid;
+    gap: 20px;
+}
+
+.metadata-item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.metadata-item strong {
+    color: white;
+    font-size: 1rem;
+}
+
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.deck-tag {
+    background: var(--tier-a);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tag-remove {
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    color: white;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.tag-remove:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.add-tag-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px dashed rgba(255, 255, 255, 0.4);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.add-tag-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.metadata-item textarea {
+    width: 100%;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    color: white;
+    font-family: inherit;
+    font-size: 0.95rem;
+    resize: vertical;
+}
+
+.metadata-item textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.metadata-item input {
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    color: white;
+    font-size: 0.95rem;
+}
+
+.metadata-item input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.save-notes-btn,
+.save-storage-btn {
+    padding: 10px 20px;
+    background: var(--secondary-color);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    align-self: flex-start;
+}
+
+.save-notes-btn:hover,
+.save-storage-btn:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+}
+
+.deck-info-section {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.deck-info-section p {
+    margin-bottom: 10px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Card Condition Selector */
+.card-info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+}
+
+.condition-select {
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    color: white;
+    font-size: 0.85rem;
+    cursor: pointer;
+    max-width: 200px;
+}
+
+.condition-select option {
+    background: #667eea;
+    color: white;
+}
+
+.card-item .card-info-section {
+    flex: 1;
+}
+
+.card-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+

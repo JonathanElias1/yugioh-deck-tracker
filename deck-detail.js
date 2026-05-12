@@ -7,6 +7,8 @@ class DeckDetail {
         this.ownedCards = this.loadOwnedCards();
         this.customCards = this.loadCustomCards();
         this.cardImages = {}; // Cache for card images
+        this.deckMetadata = this.loadDeckMetadata(); // Tags, notes, storage
+        this.cardConditions = this.loadCardConditions(); // Card conditions
         this.init();
     }
 
@@ -37,6 +39,28 @@ class DeckDetail {
         localStorage.setItem(`customCards_${this.deckId}`, JSON.stringify(this.customCards));
     }
 
+    loadDeckMetadata() {
+        const saved = localStorage.getItem(`deckMetadata_${this.deckId}`);
+        return saved ? JSON.parse(saved) : {
+            tags: [],
+            customNotes: '',
+            storageLocation: ''
+        };
+    }
+
+    saveDeckMetadata() {
+        localStorage.setItem(`deckMetadata_${this.deckId}`, JSON.stringify(this.deckMetadata));
+    }
+
+    loadCardConditions() {
+        const saved = localStorage.getItem(`cardConditions_${this.deckId}`);
+        return saved ? JSON.parse(saved) : {};
+    }
+
+    saveCardConditions() {
+        localStorage.setItem(`cardConditions_${this.deckId}`, JSON.stringify(this.cardConditions));
+    }
+
     init() {
         if (!this.deck) {
             document.body.innerHTML = '<div style="text-align: center; color: white; padding: 50px;"><h1>Deck not found</h1><a href="index.html" style="color: white;">← Back to Collection</a></div>';
@@ -57,20 +81,74 @@ class DeckDetail {
         `;
 
         const detailsSection = document.getElementById('deckDetails');
+
+        // Render tags
+        const tagsHTML = this.deckMetadata.tags.length > 0
+            ? this.deckMetadata.tags.map(tag => `<span class="deck-tag">${tag} <button class="tag-remove" onclick="deckDetail.removeTag('${tag}')">×</button></span>`).join('')
+            : '<span style="color: rgba(255,255,255,0.6);">No tags</span>';
+
         let detailsHTML = `
-            <p><strong>Strategy:</strong> ${this.deck.strategy}</p>
-            <p><strong>Status:</strong> ${this.deck.status}</p>
+            <div class="deck-metadata-section">
+                <div class="metadata-item">
+                    <strong>Tags:</strong>
+                    <div class="tags-container">
+                        ${tagsHTML}
+                        <button class="add-tag-btn" onclick="deckDetail.showAddTagModal()">+ Add Tag</button>
+                    </div>
+                </div>
+
+                <div class="metadata-item">
+                    <strong>Custom Notes:</strong>
+                    <textarea id="customNotes" placeholder="Add your notes, combo explanations, sideboard strategy, etc..." rows="4">${this.deckMetadata.customNotes}</textarea>
+                    <button class="save-notes-btn" onclick="deckDetail.saveNotes()">Save Notes</button>
+                </div>
+
+                <div class="metadata-item">
+                    <strong>Storage Location:</strong>
+                    <input type="text" id="storageLocation" placeholder="e.g., Binder 1, Deck Box A, etc." value="${this.deckMetadata.storageLocation}">
+                    <button class="save-storage-btn" onclick="deckDetail.saveStorage()">Save Location</button>
+                </div>
+            </div>
+
+            <div class="deck-info-section">
+                <p><strong>Strategy:</strong> ${this.deck.strategy}</p>
+                <p><strong>Status:</strong> ${this.deck.status}</p>
+                ${this.deck.note ? `<p><strong>Note:</strong> ${this.deck.note}</p>` : ''}
+                ${this.deck.consolidatedInto ? `<p><strong>⚠️ Consolidated into:</strong> <a href="deck.html?id=${this.deck.consolidatedInto}" style="color: white; text-decoration: underline;">Deck #${this.deck.consolidatedInto}</a></p>` : ''}
+            </div>
         `;
 
-        if (this.deck.note) {
-            detailsHTML += `<p><strong>Note:</strong> ${this.deck.note}</p>`;
-        }
-
-        if (this.deck.consolidatedInto) {
-            detailsHTML += `<p><strong>⚠️ Consolidated into:</strong> <a href="deck.html?id=${this.deck.consolidatedInto}" style="color: white; text-decoration: underline;">Deck #${this.deck.consolidatedInto}</a></p>`;
-        }
-
         detailsSection.innerHTML = detailsHTML;
+    }
+
+    showAddTagModal() {
+        const tag = prompt('Enter a tag name (e.g., Budget, Competitive, Fun):');
+        if (tag && tag.trim()) {
+            const trimmedTag = tag.trim();
+            if (!this.deckMetadata.tags.includes(trimmedTag)) {
+                this.deckMetadata.tags.push(trimmedTag);
+                this.saveDeckMetadata();
+                this.renderDeckInfo();
+            }
+        }
+    }
+
+    removeTag(tag) {
+        this.deckMetadata.tags = this.deckMetadata.tags.filter(t => t !== tag);
+        this.saveDeckMetadata();
+        this.renderDeckInfo();
+    }
+
+    saveNotes() {
+        this.deckMetadata.customNotes = document.getElementById('customNotes').value;
+        this.saveDeckMetadata();
+        alert('Notes saved!');
+    }
+
+    saveStorage() {
+        this.deckMetadata.storageLocation = document.getElementById('storageLocation').value;
+        this.saveDeckMetadata();
+        alert('Storage location saved!');
     }
 
     renderPathSelector() {
@@ -195,13 +273,25 @@ class DeckDetail {
         const ownedClass = ownedQuantity >= totalQuantity ? 'owned' : (ownedQuantity > 0 ? 'partial' : '');
         const deleteBtn = isCustom ? `<button class="delete-card-btn" onclick="deckDetail.deleteCard('${card}', '${deckType}')">Delete</button>` : '';
         const cleanName = card.replace(/^\d+\s+/, '');
+        const cardCondition = this.cardConditions[card] || 'NM';
 
         return `
             <div class="card-item ${ownedClass}" data-card-name="${cleanName.replace(/"/g, '&quot;')}">
                 <div class="card-image-small">
                     <span>...</span>
                 </div>
-                <span class="card-item-text">${card}</span>
+                <div class="card-info-section">
+                    <span class="card-item-text">${card}</span>
+                    ${ownedQuantity > 0 ? `
+                        <select class="condition-select" onchange="deckDetail.setCardCondition('${card}', this.value)">
+                            <option value="NM" ${cardCondition === 'NM' ? 'selected' : ''}>NM - Near Mint</option>
+                            <option value="LP" ${cardCondition === 'LP' ? 'selected' : ''}>LP - Lightly Played</option>
+                            <option value="MP" ${cardCondition === 'MP' ? 'selected' : ''}>MP - Moderately Played</option>
+                            <option value="HP" ${cardCondition === 'HP' ? 'selected' : ''}>HP - Heavily Played</option>
+                            <option value="DMG" ${cardCondition === 'DMG' ? 'selected' : ''}>DMG - Damaged</option>
+                        </select>
+                    ` : ''}
+                </div>
                 <div class="card-actions">
                     <div class="quantity-control">
                         <button class="qty-btn" onclick="deckDetail.decrementQuantity('${card}')">−</button>
@@ -216,6 +306,11 @@ class DeckDetail {
                 </div>
             </div>
         `;
+    }
+
+    setCardCondition(card, condition) {
+        this.cardConditions[card] = condition;
+        this.saveCardConditions();
     }
 
     incrementQuantity(card) {

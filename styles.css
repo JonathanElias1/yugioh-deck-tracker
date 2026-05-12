@@ -1203,3 +1203,198 @@ h1 {
         flex-direction: column;
     }
 }
+
+/* Global Search Styles */
+.search-controls {
+    margin-bottom: 30px;
+}
+
+.search-bar-large {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-bar-large input {
+    width: 100%;
+    padding: 20px 60px 20px 20px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+    font-size: 1.2rem;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.search-bar-large input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.search-bar-large input:focus {
+    outline: none;
+    border-color: white;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.search-bar-large button {
+    position: absolute;
+    right: 15px;
+    width: 35px;
+    height: 35px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.2s ease;
+}
+
+.search-bar-large button:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.search-summary {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.search-summary h2 {
+    color: white;
+    margin-bottom: 10px;
+}
+
+.search-results-list {
+    display: grid;
+    gap: 20px;
+}
+
+.search-deck-result {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 20px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.search-deck-result:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(5px);
+}
+
+.search-deck-header {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.search-deck-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.search-deck-name {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+}
+
+.search-deck-name:hover {
+    color: var(--tier-a);
+}
+
+.match-count {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.search-deck-cards {
+    display: grid;
+    gap: 10px;
+}
+
+.search-card-match {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 12px 15px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+.search-card-match:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.search-card-match.owned {
+    border-left-color: var(--secondary-color);
+    background: rgba(52, 168, 83, 0.2);
+}
+
+.search-card-match.partial {
+    border-left-color: var(--warning-color);
+    background: rgba(251, 188, 4, 0.15);
+}
+
+.search-card-match.needed {
+    border-left-color: var(--danger-color);
+    background: rgba(234, 67, 53, 0.15);
+}
+
+.match-card-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.match-status {
+    font-size: 1.1rem;
+}
+
+.match-card-name {
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.match-deck-type {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.85rem;
+}
+
+.match-ownership {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ownership-text {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .search-card-match {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .match-card-info {
+        flex-wrap: wrap;
+    }
+}

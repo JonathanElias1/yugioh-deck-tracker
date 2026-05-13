@@ -26,7 +26,7 @@ class ShoppingList {
         activeDecks.forEach(deck => {
             const option = document.createElement('option');
             option.value = deck.id;
-            option.textContent = `${deck.name} (${deck.tier} Tier)`;
+            option.textContent = `Deck #${deck.id} - ${deck.name} (${deck.tier} Tier)`;
             selector.appendChild(option);
         });
     }
@@ -400,7 +400,7 @@ class ShoppingList {
                     <div class="needed-deck-item">
                         <a href="deck.html?id=${deck.id}" target="_blank">
                             <span class="tier-badge-small" style="background: ${tierColors[deck.tier]}">${deck.tier}</span>
-                            ${deck.name}
+                            <span style="opacity: 0.7; font-weight: normal;">Deck #${deck.id}</span> - ${deck.name}
                         </a>
                         <span class="need-quantity">×${deck.quantity}</span>
                     </div>
@@ -460,7 +460,9 @@ class ShoppingList {
                     <div class="deck-shopping-header">
                         <div>
                             <span class="tier-badge" style="background: ${tierColors[deck.tier]}">${deck.tier}</span>
-                            <a href="deck.html?id=${deckId}" target="_blank" class="deck-shopping-name">${deck.deckName}</a>
+                            <a href="deck.html?id=${deckId}" target="_blank" class="deck-shopping-name">
+                                <span style="opacity: 0.7; font-weight: normal;">Deck #${deckId}</span> - ${deck.deckName}
+                            </a>
                         </div>
                         <div class="deck-total-badge">${deck.totalNeeded} cards needed</div>
                     </div>

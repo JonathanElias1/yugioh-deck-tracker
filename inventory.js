@@ -477,8 +477,11 @@ class CardInventory {
             // Build deck list
             const deckList = Object.keys(usage).map(deckKey => {
                 const deck = usage[deckKey];
+                const deckId = deckKey.split('-')[0];
                 return `<div class="deck-usage-item">
-                    <a href="deck.html?id=${deckKey.split('-')[0]}" target="_blank">${deck.deckName}</a>
+                    <a href="deck.html?id=${deckId}" target="_blank">
+                        <span style="opacity: 0.7; font-weight: normal;">Deck #${deckId}</span> - ${deck.deckName}
+                    </a>
                     <span class="usage-quantity">×${deck.quantity}</span>
                 </div>`;
             }).join('');

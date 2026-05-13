@@ -162,7 +162,9 @@ class GlobalSearch {
                 <div class="search-deck-header">
                     <div class="search-deck-title">
                         <span class="tier-badge" style="background: ${tierColors[result.deck.tier]}">${result.deck.tier}</span>
-                        <a href="deck.html?id=${result.deck.id}" class="search-deck-name">${result.deck.name}</a>
+                        <a href="deck.html?id=${result.deck.id}" class="search-deck-name">
+                            <span style="opacity: 0.7; font-weight: normal;">Deck #${result.deck.id}</span> - ${result.deck.name}
+                        </a>
                         <span class="match-count">${result.matches.length} match${result.matches.length !== 1 ? 'es' : ''}</span>
                     </div>
                 </div>

@@ -1580,12 +1580,14 @@ function loadOwnedCards() {
         localStorage.setItem(`ownedCards_${deck.id}`, JSON.stringify(ownedCardsObj));
     });
 
-    console.log(`✅ Owned cards loaded automatically: ${totalUpdated} card entries marked`);
+    console.log(`✅ Owned cards loaded: ${totalUpdated} card entries marked`);
 }
 
-// Auto-execute when page loads
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadOwnedCards);
-} else {
-    loadOwnedCards();
-}
+// NOTE: Auto-load is disabled. You can manually check off cards as you organize them.
+// To enable auto-load in the future, uncomment the lines below:
+//
+// if (document.readyState === 'loading') {
+//     document.addEventListener('DOMContentLoaded', loadOwnedCards);
+// } else {
+//     loadOwnedCards();
+// }

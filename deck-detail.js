@@ -29,6 +29,10 @@ class DeckDetail {
 
     saveOwnedCards() {
         localStorage.setItem(`ownedCards_${this.deckId}`, JSON.stringify(this.ownedCards));
+        // Trigger Supabase sync
+        if (window.deckSync) {
+            window.deckSync.scheduleSyncDeck(this.deckId);
+        }
     }
 
     loadCustomCards() {
@@ -38,6 +42,10 @@ class DeckDetail {
 
     saveCustomCards() {
         localStorage.setItem(`customCards_${this.deckId}`, JSON.stringify(this.customCards));
+        // Trigger Supabase sync
+        if (window.deckSync) {
+            window.deckSync.scheduleSyncDeck(this.deckId);
+        }
     }
 
     loadRemovedCards() {
@@ -47,6 +55,10 @@ class DeckDetail {
 
     saveRemovedCards(removedCards) {
         localStorage.setItem(`removedCards_${this.deckId}`, JSON.stringify(removedCards));
+        // Trigger Supabase sync
+        if (window.deckSync) {
+            window.deckSync.scheduleSyncDeck(this.deckId);
+        }
     }
 
     loadDeckMetadata() {

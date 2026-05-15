@@ -32,7 +32,7 @@ const decks = [
       "2 Soul Absorption",
       "1 Dimensional Fissure",
       "1 Chaos Form",
-      "3 Black Luster Ritual"
+      "3 Black Luster Ritual",
     ],
     extraDeck: [
       "1 Black Luster Soldier - Soldier of Chaos",
@@ -41,7 +41,7 @@ const decks = [
       "1 Castel the Skyblaster Musketeer",
       "1 Tornado Dragon",
       "1 Photon Strike Bounzer",
-      "1 Constellar Pleiades"
+      "1 Constellar Pleiades",
     ],
     toolkitSuggestions: [
       "Mind Crush",
@@ -51,7 +51,7 @@ const decks = [
       "Heavy Storm",
       "Snatch Steal",
       "Solemn Judgment",
-      "Foolish Burial"
+      "Foolish Burial",
     ]
   },
   {
@@ -94,7 +94,7 @@ const decks = [
       "1 Black Magic Ritual",
       "1 Magical Hats",
       "1 Mystic Box",
-      "1 Eye of Timaeus"
+      "1 Eye of Timaeus",
     ],
     extraDeck: [
       "1 Gaia the Dragon Champion",
@@ -104,7 +104,7 @@ const decks = [
       "1 Number 39: Utopia",
       "1 Heroic Champion - Excalibur",
       "1 Quintet Magician",
-      "1 Ebon Illusion Magician"
+      "1 Ebon Illusion Magician",
     ],
     toolkitSuggestions: [
       "Dark Hole",
@@ -114,7 +114,7 @@ const decks = [
       "Pot of Greed",
       "Card Destruction",
       "Magical Hats",
-      "Sakuretsu Armor"
+      "Sakuretsu Armor",
     ]
   },
   {
@@ -143,7 +143,7 @@ const decks = [
       "3 Pikeru's Second Sight",
       "3 Ordeal of a Traveler",
       "2 Chain Healing",
-      "1 Solemn Wishes"
+      "1 Solemn Wishes",
     ],
     extraDeck: [
     ],
@@ -156,7 +156,7 @@ const decks = [
       "Skill Drain",
       "Pot of Greed",
       "Sakuretsu Armor",
-      "Reckless Greed"
+      "Reckless Greed",
     ]
   },
   {
@@ -187,7 +187,7 @@ const decks = [
       "2 Rising Energy",
       "2 Icarus Attack",
       "3 Mystical Refpanel",
-      "3 Negate Attack"
+      "3 Negate Attack",
     ],
     extraDeck: [
       "1 Cyber Slash Harpie Lady",
@@ -196,7 +196,7 @@ const decks = [
       "1 Number 39: Utopia",
       "1 Number 95: Galaxy-Eyes Dark Matter Dragon",
       "1 Pilica, Descendant of Gusto",
-      "1 Daigusto Phoenix"
+      "1 Daigusto Phoenix",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -206,7 +206,7 @@ const decks = [
       "Compulsory Evacuation Device",
       "Monster Reborn",
       "Magic Cylinder",
-      "Reckless Greed"
+      "Reckless Greed",
     ]
   },
   {
@@ -234,14 +234,14 @@ const decks = [
       "2 Soul-Absorbing Bone Tower",
       "3 Mystic Plasma Zone",
       "2 Beckoning Light",
-      "2 Hand Destruction"
+      "2 Hand Destruction",
     ],
     extraDeck: [
       "1 Number 39: Utopia",
       "1 Castel the Skyblaster Musketeer",
       "1 Tornado Dragon",
       "1 Inzektor Exa-Beetle",
-      "1 Photon Strike Bounzer"
+      "1 Photon Strike Bounzer",
     ],
     toolkitSuggestions: [
       "Foolish Burial",
@@ -251,7 +251,7 @@ const decks = [
       "Pot of Greed",
       "Heavy Storm",
       "Reckless Greed",
-      "Soul Charge"
+      "Soul Charge",
     ]
   },
   {
@@ -285,7 +285,7 @@ const decks = [
       "2 Reinforcement of the Army",
       "2 Mask Change II",
       "1 Fusion Recovery",
-      "1 Fusion Sage"
+      "1 Fusion Sage",
     ],
     extraDeck: [
       "1 Elemental HERO Sunrise",
@@ -301,7 +301,7 @@ const decks = [
       "1 Elemental HERO Mariner",
       "1 Elemental HERO Steam Healer",
       "1 Masked HERO Dark Law",
-      "1 Elemental HERO Absolute Zero"
+      "1 Elemental HERO Absolute Zero",
     ],
     toolkitSuggestions: [
       "Foolish Burial",
@@ -311,7 +311,7 @@ const decks = [
       "Lightning Vortex",
       "Compulsory Evacuation Device",
       "Mind Crush",
-      "Snatch Steal"
+      "Snatch Steal",
     ]
   },
   {
@@ -345,13 +345,13 @@ const decks = [
       "1 Ancient Gear Castle",
       "2 Photon Generator Unit",
       "2 Terraforming",
-      "2 Mystical Space Typhoon"
+      "2 Mystical Space Typhoon",
     ],
     extraDeck: [
       "1 Ancient Gear Golem - Ultimate Pound",
       "1 Ancient Gear Chaos Giant",
       "4 Chaos Ancient Gear Giant",
-      "1 Ancient Gear Howitzer"
+      "1 Ancient Gear Howitzer",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -360,7 +360,7 @@ const decks = [
       "Pot of Greed",
       "Soul Exchange",
       "Lightning Vortex",
-      "Compulsory Evacuation Device"
+      "Compulsory Evacuation Device",
     ]
   },
   {
@@ -391,14 +391,14 @@ const decks = [
       "3 Dark World Brainwashing",
       "2 Dragged Down into the Grave",
       "2 Allure of Darkness",
-      "3 Card Destruction"
+      "3 Card Destruction",
     ],
     extraDeck: [
       "1 Beatrice, Lady of the Eternal",
       "1 Dingirsu, the Orcust of the Evening Star",
       "1 Number 39: Utopia",
       "1 Number S39: Utopia the Lightning",
-      "1 Tornado Dragon"
+      "1 Tornado Dragon",
     ],
     toolkitSuggestions: [
       "Card Destruction",
@@ -408,7 +408,7 @@ const decks = [
       "Foolish Burial",
       "Monster Reborn",
       "Mind Crush",
-      "Snatch Steal"
+      "Snatch Steal",
     ]
   },
   {
@@ -462,12 +462,12 @@ const decks = [
       "2 Cauldron of the Old Man",
       "1 Restructer Revolution",
       "1 Reckoned Power",
-      "1 Just Desserts             — already in count"
+      "1 Just Desserts             — already in count",
     ],
     extraDeck: [
       "1 Inferno Hammer",
       "1 Hieratic Sky Dragon Overlord of Heliopolis",
-      "1 Castel the Skyblaster Musketeer"
+      "1 Castel the Skyblaster Musketeer",
     ],
     toolkitSuggestions: [
       "Magic Cylinder",
@@ -478,7 +478,7 @@ const decks = [
       "Pot of Greed",
       "Reckless Greed",
       "Reload",
-      "Lightning Vortex"
+      "Lightning Vortex",
     ]
   },
   {
@@ -486,7 +486,7 @@ const decks = [
     name: "Equip Warrior Beatdown",
     tier: "B",
     status: "active",
-    strategy: "Combined Warrior build with 3 different play patterns. **You own a HUGE Warrior pool** — this becomes the 60-card "Warrior toolbox" deck running multiple win conditions.",
+    strategy: "Combined Warrior build with 3 different play patterns. **You own a HUGE Warrior pool** — this becomes the 60-card \"Warrior toolbox\" deck running multiple win conditions.",
     mainDeck: [
       "3 Marauding Captain",
       "3 Gearfried the Iron Knight",
@@ -518,14 +518,14 @@ const decks = [
       "1 Sword of Deep-Seated",
       "2 United We Stand",
       "1 Riryoku",
-      "1 Smashing Ground"
+      "1 Smashing Ground",
     ],
     extraDeck: [
       "1 Heroic Champion - Excalibur",
       "1 Number 39: Utopia",
       "1 Castel the Skyblaster Musketeer",
       "1 Number 86: Heroic Champion - Rhongomyniad",
-      "1 Daigusto Emeral"
+      "1 Daigusto Emeral",
     ],
     toolkitSuggestions: [
       "Monster Reborn",
@@ -535,7 +535,7 @@ const decks = [
       "Reload",
       "Sakuretsu Armor",
       "Compulsory Evacuation Device",
-      "Lightning Vortex"
+      "Lightning Vortex",
     ]
   },
   {
@@ -570,12 +570,12 @@ const decks = [
       "4 Soul Exchange",
       "2 Cost Down",
       "1 Trade-In",
-      "1 Foolish Burial Goods"
+      "1 Foolish Burial Goods",
     ],
     extraDeck: [
       "1 Number 11: Big Eye",
       "1 Number 39: Utopia",
-      "1 Constellar Pleiades"
+      "1 Constellar Pleiades",
     ],
     toolkitSuggestions: [
       "Monster Reborn",
@@ -584,7 +584,7 @@ const decks = [
       "Reckless Greed",
       "Heavy Storm",
       "Compulsory Evacuation Device",
-      "Snatch Steal"
+      "Snatch Steal",
     ]
   },
   {
@@ -616,13 +616,13 @@ const decks = [
       "1 Ojamandala",
       "1 Hieratic Seal of Banishment",
       "2 Pot of Avarice",
-      "3 Foolish Burial"
+      "3 Foolish Burial",
     ],
     extraDeck: [
       "3 Ojama King",
       "2 Ojama Knight",
       "1 Number 39: Utopia",
-      "1 Castel the Skyblaster Musketeer"
+      "1 Castel the Skyblaster Musketeer",
     ],
     toolkitSuggestions: [
       "Foolish Burial",
@@ -632,7 +632,7 @@ const decks = [
       "Reload",
       "Heavy Storm",
       "Compulsory Evacuation Device",
-      "Snatch Steal"
+      "Snatch Steal",
     ]
   },
   {
@@ -665,7 +665,7 @@ const decks = [
       "1 Reinforcement of the Army",
       "2 Pre-Preparation of Rites",
       "3 Awakening of the Possessed                      —",
-      "2 DNA Transplant"
+      "2 DNA Transplant",
     ],
     extraDeck: [
       "1 Aussa the Earth Charmer, Immovable",
@@ -674,7 +674,7 @@ const decks = [
       "1 Dharc the Dark Charmer, Gloomy",
       "1 Wynn the Wind Charmer, Verdant",
       "1 Eria the Water Charmer, Gentle",
-      "1 Linkuriboh"
+      "1 Linkuriboh",
     ],
     toolkitSuggestions: [
       "Monster Reborn",
@@ -684,7 +684,7 @@ const decks = [
       "Effect Veiler",
       "Ash Blossom & Joyous Spring",
       "Foolish Burial",
-      "Snatch Steal"
+      "Snatch Steal",
     ]
   },
   {
@@ -720,14 +720,14 @@ const decks = [
       "3 Pot of Avarice",
       "1 Spiral Spear Strike",
       "1 Reckless Greed",
-      "3 Tribute to the Doomed"
+      "3 Tribute to the Doomed",
     ],
     extraDeck: [
       "1 Bahamut Shark",
       "1 Number 39: Utopia",
       "1 Castel the Skyblaster Musketeer",
       "1 Tornado Dragon",
-      "1 Toadally Awesome"
+      "1 Toadally Awesome",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -737,7 +737,7 @@ const decks = [
       "Snatch Steal",
       "Lightning Vortex",
       "Reckless Greed",
-      "Mind Crush"
+      "Mind Crush",
     ]
   },
   {
@@ -773,12 +773,12 @@ const decks = [
       "3 Forsaken Necropolis",
       "1 Allure of Darkness",
       "1 Pot of Duality",
-      "3 Imperial Iron Wall"
+      "3 Imperial Iron Wall",
     ],
     extraDeck: [
       "1 Number 39: Utopia",
       "1 Photon Strike Bounzer",
-      "1 Number 11: Big Eye"
+      "1 Number 11: Big Eye",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -788,7 +788,7 @@ const decks = [
       "Trap Dustshoot",
       "Compulsory Evacuation Device",
       "Solemn Judgment",
-      "Imperial Order"
+      "Imperial Order",
     ]
   },
   {
@@ -823,12 +823,12 @@ const decks = [
       "2 Comic Hand",
       "3 Shadow Toon",
       "1 Mimicat",
-      "2 Toon Bookmark"
+      "2 Toon Bookmark",
     ],
     extraDeck: [
       "1 Number 39: Utopia",
       "1 Castel the Skyblaster Musketeer",
-      "1 Number 38: Hope Harbinger Dragon Titanic Galaxy"
+      "1 Number 38: Hope Harbinger Dragon Titanic Galaxy",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -838,7 +838,7 @@ const decks = [
       "Premature Burial",
       "Snatch Steal",
       "Reckless Greed",
-      "Compulsory Evacuation Device"
+      "Compulsory Evacuation Device",
     ]
   },
   {
@@ -846,7 +846,7 @@ const decks = [
     name: "Cyber Skater",
     tier: "B",
     status: "active",
-    strategy: "You have a decent Cyber Girl/Skater core (Etoile Cyber x6, Blade Skater x2, Cyber Blader x1, Cyber Gymnast x1, Cyber Harpie Lady x1). **However, you're missing the modern Cyber Angel Ritual line entirely** — Benten, Idaten, Dakini are the strongest "Cyber" archetype cards.",
+    strategy: "You have a decent Cyber Girl/Skater core (Etoile Cyber x6, Blade Skater x2, Cyber Blader x1, Cyber Gymnast x1, Cyber Harpie Lady x1). **However, you're missing the modern Cyber Angel Ritual line entirely** — Benten, Idaten, Dakini are the strongest \"Cyber\" archetype cards.",
     mainDeck: [
       "3 Etoile Cyber",
       "3 Blade Skater",
@@ -862,7 +862,7 @@ const decks = [
       "3 Fusion Sage",
       "3 E - Emergency Call",
       "1 Hysteric Sign",
-      "2 Honest"
+      "2 Honest",
     ],
     extraDeck: [
       "1 Cyber Blader",
@@ -870,7 +870,7 @@ const decks = [
       "1 Number 39: Utopia",
       "1 Daigusto Emeral",
       "1 Photon Strike Bounzer",
-      "1 Number 86: Heroic Champion - Rhongomyniad"
+      "1 Number 86: Heroic Champion - Rhongomyniad",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -879,7 +879,7 @@ const decks = [
       "Reinforcement of the Army",
       "Compulsory Evacuation Device",
       "Lightning Vortex",
-      "Snatch Steal"
+      "Snatch Steal",
     ]
   },
   {
@@ -944,7 +944,7 @@ const decks = [
       "3 Draining Shield",
       "3 Gift of The Mystical Elf",
       "3 Pikeru's Second Sight",
-      "1 White Magician Pikeru"
+      "1 White Magician Pikeru",
     ],
     extraDeck: [
       "1 Linkuriboh",
@@ -956,7 +956,7 @@ const decks = [
       "1 Aromaseraphy Rosemary",
       "1 Aromaseraphy Angelica",
       "1 Number 39: Utopia",
-      "1 Daigusto Emeral"
+      "1 Daigusto Emeral",
     ],
     toolkitSuggestions: [
       "Monster Reborn",
@@ -979,7 +979,7 @@ const decks = [
       "Compulsory Evacuation Device",
       "Waboku",
       "Threatening Roar",
-      "Reckless Greed"
+      "Reckless Greed",
     ]
   },
   {
@@ -1014,7 +1014,7 @@ const decks = [
       "2 Card of Demise",
       "2 Cyber Repair Plant",
       "2 Iron Call",
-      "2 Power Bond"
+      "2 Power Bond",
     ],
     extraDeck: [
       "1 Cyber Twin Dragon",
@@ -1022,7 +1022,7 @@ const decks = [
       "1 Cyber Laser Dragon",
       "1 Chimeratech Fortress Dragon",
       "1 Cyber Dragon Nova",
-      "1 Cyber Dragon Infinity"
+      "1 Cyber Dragon Infinity",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -1032,7 +1032,7 @@ const decks = [
       "Monster Reborn",
       "Snatch Steal",
       "Compulsory Evacuation Device",
-      "Reckless Greed"
+      "Reckless Greed",
     ]
   },
   {
@@ -1068,7 +1068,7 @@ const decks = [
       "1 Return of the Dragon Lords",
       "1 Polymerization",
       "1 Bingo Machine, Go!!!",
-      "1 Pot of Greed"
+      "1 Pot of Greed",
     ],
     extraDeck: [
       "1 Blue-Eyes Ultimate Dragon",
@@ -1078,7 +1078,7 @@ const decks = [
       "1 Stardust Spark Dragon",
       "1 Crystal Wing Synchro Dragon",
       "1 Borreload Savage Dragon",
-      "1 Trishula, Dragon of the Ice Barrier"
+      "1 Trishula, Dragon of the Ice Barrier",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -1088,7 +1088,7 @@ const decks = [
       "Pot of Greed",
       "Snatch Steal",
       "Compulsory Evacuation Device",
-      "Mind Crush"
+      "Mind Crush",
     ]
   },
   {
@@ -1127,7 +1127,7 @@ const decks = [
       "2 Dark Magic Curtain",
       "1 Dark Magic Attack",
       "1 Thousand Knives",
-      "1 Illusion of Chaos"
+      "1 Illusion of Chaos",
     ],
     extraDeck: [
       "1 The Dark Magicians",
@@ -1137,7 +1137,7 @@ const decks = [
       "1 Quintet Magician",
       "1 Ebon Illusion Magician",
       "1 Ebon High Magician",
-      "1 Number 39: Utopia"
+      "1 Number 39: Utopia",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -1147,7 +1147,7 @@ const decks = [
       "Magical Stone Excavation",
       "Lightning Vortex",
       "Compulsory Evacuation Device",
-      "Reckless Greed"
+      "Reckless Greed",
     ]
   },
   {
@@ -1178,7 +1178,7 @@ const decks = [
       "3 Dark Magical Circle",
       "3 Eternal Soul",
       "1 Bond Between Teacher and Student",
-      "1 Fusion Sage"
+      "1 Fusion Sage",
     ],
     extraDeck: [
       "2 Dark Paladin",
@@ -1187,7 +1187,7 @@ const decks = [
       "1 Buster Dragon",
       "1 Dragon Master Knight",
       "1 The Dark Magicians",
-      "1 Number 39: Utopia"
+      "1 Number 39: Utopia",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -1201,7 +1201,7 @@ const decks = [
       "#23 Blue-Eyes",
       "#24 Dark Magician + Spell Burn",
       "#25 Dark Paladin",
-      "#21 Aroma (Cody)"
+      "#21 Aroma (Cody)",
     ]
   },
   {
@@ -1233,7 +1233,7 @@ const decks = [
       "2 Polymerization",
       "1 Fusion Sage",
       "2 Mound of the Bound Creator",
-      "2 Quick-Play Fusion / Bonding - DEF / etc."
+      "2 Quick-Play Fusion / Bonding - DEF / etc.",
     ],
     extraDeck: [
       "1 Red-Eyes Dark Dragoon",
@@ -1245,7 +1245,7 @@ const decks = [
       "1 Predaplant Verte Anaconda",
       "1 Black Skull Dragon",
       "1 Number 39: Utopia",
-      "1 Borreload Savage Dragon"
+      "1 Borreload Savage Dragon",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -1255,7 +1255,7 @@ const decks = [
       "Foolish Burial",
       "Snatch Steal",
       "Compulsory Evacuation Device",
-      "Lightning Vortex"
+      "Lightning Vortex",
     ]
   },
   {
@@ -1289,7 +1289,7 @@ const decks = [
       "1 Black Pendant",
       "2 Magic Cylinder",
       "2 Effect Veiler",
-      "2 Threatening Roar"
+      "2 Threatening Roar",
     ],
     extraDeck: [
       "1 Thousand-Eyes Restrict",
@@ -1297,7 +1297,7 @@ const decks = [
       "1 Number 39: Utopia",
       "1 Number S39: Utopia the Lightning",
       "1 Castel the Skyblaster Musketeer",
-      "1 Constellar Pleiades"
+      "1 Constellar Pleiades",
     ],
     toolkitSuggestions: [
       "Snatch Steal",
@@ -1307,7 +1307,7 @@ const decks = [
       "Premature Burial",
       "Pot of Greed",
       "Threatening Roar",
-      "Effect Veiler"
+      "Effect Veiler",
     ]
   },
   {
@@ -1339,7 +1339,7 @@ const decks = [
       "1 Evolution Burst",
       "2 Overload Fusion",
       "2 Cyber Network",
-      "2 Magnet Circle LV2"
+      "2 Magnet Circle LV2",
     ],
     extraDeck: [
       "1 Cyber End Dragon",
@@ -1351,7 +1351,7 @@ const decks = [
       "1 Chimeratech Megafleet Dragon",
       "1 Chimeratech Overdragon",
       "1 Cyber Eltanin",
-      "1 Cyber Dragon Sieger"
+      "1 Cyber Dragon Sieger",
     ],
     toolkitSuggestions: [
       "Pot of Greed",
@@ -1361,7 +1361,7 @@ const decks = [
       "Lightning Storm",
       "Compulsory Evacuation Device",
       "Reckless Greed",
-      "Mind Crush"
+      "Mind Crush",
     ]
   },
   {
@@ -1395,14 +1395,14 @@ const decks = [
       "1 Just Desserts",
       "1 Magic Cylinder",
       "2 Tour Guide From the Underworld",
-      "2 Tour Bus From the Underworld"
+      "2 Tour Bus From the Underworld",
     ],
     extraDeck: [
       "1 Leviair the Sea Dragon",
       "1 Wind-Up Zenmaines",
       "1 Number 70: Malevolent Sin",
       "1 Number 39: Utopia",
-      "1 Photon Strike Bounzer"
+      "1 Photon Strike Bounzer",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -1412,7 +1412,7 @@ const decks = [
       "Soul Exchange",
       "Snatch Steal",
       "Foolish Burial",
-      "Compulsory Evacuation Device"
+      "Compulsory Evacuation Device",
     ]
   },
   {
@@ -1451,14 +1451,14 @@ const decks = [
       "2 Polymerization",
       "2 Pre-Preparation of Rites",
       "1 Preparation of Rites",
-      "2 Sun God Dragon"
+      "2 Sun God Dragon",
     ],
     extraDeck: [
       "1 Number 39: Utopia",
       "1 Number S39: Utopia the Lightning",
       "1 Hieratic Sky Dragon Overlord of Heliopolis",
       "1 Predaplant Verte Anaconda",
-      "1 Number 38: Hope Harbinger Dragon Titanic Galaxy"
+      "1 Number 38: Hope Harbinger Dragon Titanic Galaxy",
     ],
     toolkitSuggestions: [
       "Soul Exchange",
@@ -1472,7 +1472,7 @@ const decks = [
       "#28 Cyber Dragon",
       "#26 Red-Eyes",
       "#30 Egyptian Gods",
-      "#29 Archfiend"
+      "#29 Archfiend",
     ]
   },
   {
@@ -1500,14 +1500,14 @@ const decks = [
       "2 Token Stampede",
       "3 Heroic Chance",
       "2 Honest",
-      "3 Sakuretsu Armor"
+      "3 Sakuretsu Armor",
     ],
     extraDeck: [
       "1 Heroic Champion - Excalibur",
       "1 Number 86: Heroic Champion - Rhongomyniad",
       "1 Number 39: Utopia",
       "1 Number S39: Utopia the Lightning",
-      "1 Castel the Skyblaster Musketeer"
+      "1 Castel the Skyblaster Musketeer",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -1517,7 +1517,7 @@ const decks = [
       "Sakuretsu Armor",
       "Compulsory Evacuation Device",
       "Snatch Steal",
-      "Soul Charge"
+      "Soul Charge",
     ]
   },
   {
@@ -1525,7 +1525,7 @@ const decks = [
     name: "Destiny Board / FINAL Alt-Win",
     tier: "C",
     status: "active",
-    strategy: "Spirit Message I-N-A-L spell out "FINAL" → instant win condition. The classic "Marik joke deck" that's surprisingly resilient when built correctly.",
+    strategy: "Spirit Message I-N-A-L spell out \"FINAL\" → instant win condition. The classic \"Marik joke deck\" that's surprisingly resilient when built correctly.",
     mainDeck: [
       "3 Dark Necrofear",
       "3 Headless Knight",
@@ -1534,21 +1534,21 @@ const decks = [
       "2 A Cat of Ill Omen",
       "3 Spirit Reaper",
       "3 Destiny Board",
-      "3 Spirit Message "I"",
-      "3 Spirit Message "N"",
-      "3 Spirit Message "A"",
-      "3 Spirit Message "L"",
+      "3 Spirit Message \"I\"",
+      "3 Spirit Message \"N\"",
+      "3 Spirit Message \"A\"",
+      "3 Spirit Message \"L\"",
       "2 Dark Spirit of the Silent",
       "1 Ouija Board",
       "2 Coffin Seller",
       "3 Just Desserts",
       "3 Threatening Roar",
-      "3 Waboku"
+      "3 Waboku",
     ],
     extraDeck: [
       "1 Number 39: Utopia",
       "1 Castel the Skyblaster Musketeer",
-      "1 Photon Strike Bounzer"
+      "1 Photon Strike Bounzer",
     ],
     toolkitSuggestions: [
       "Magic Cylinder",
@@ -1559,7 +1559,7 @@ const decks = [
       "Torrential Tribute",
       "Sakuretsu Armor",
       "Solemn Judgment",
-      "Pot of Greed"
+      "Pot of Greed",
     ]
   },
   {
@@ -1595,7 +1595,7 @@ const decks = [
       "2 Burst Stream of Destruction",
       "2 Return of the Dragon Lords",
       "1 Mound of the Bound Creator",
-      "2 Polymerization"
+      "2 Polymerization",
     ],
     extraDeck: [
       "1 Five-Headed Dragon",
@@ -1605,7 +1605,7 @@ const decks = [
       "1 Crystal Wing Synchro Dragon",
       "1 Stardust Dragon",
       "1 Number 38: Hope Harbinger Dragon Titanic Galaxy",
-      "1 Trishula, Dragon of the Ice Barrier"
+      "1 Trishula, Dragon of the Ice Barrier",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -1618,7 +1618,7 @@ const decks = [
       "Reckless Greed",
       "#34 Generic Dragon is severely undervalued in earlier reviews.",
       "#32 Destiny Board needs ~$25-40 investment for what is essentially a meme deck.",
-      "#31 Warrior Path B Amazoness is a "from scratch" build"
+      "#31 Warrior Path B Amazoness is a \"from scratch\" build",
     ]
   },
   {
@@ -1652,12 +1652,12 @@ const decks = [
       "2 Dawn of the Herald",
       "1 Hardened Armed Dragon",
       "2 Foolish Burial Goods",
-      "3 Pot of Avarice"
+      "3 Pot of Avarice",
     ],
     extraDeck: [
       "1 Number 39: Utopia",
       "1 Number S39: Utopia the Lightning",
-      "1 Photon Strike Bounzer"
+      "1 Photon Strike Bounzer",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -1667,7 +1667,7 @@ const decks = [
       "Card Destruction",
       "Compulsory Evacuation Device",
       "Mind Crush",
-      "Reckless Greed"
+      "Reckless Greed",
     ]
   },
   {
@@ -1731,7 +1731,7 @@ const decks = [
       "2 Generation Force",
       "2 Tail Swipe",
       "2 Black Stego",
-      "3 Polymerization"
+      "3 Polymerization",
     ],
     extraDeck: [
       "1 Naturia Beast",
@@ -1745,7 +1745,7 @@ const decks = [
       "1 Evolzar Dolkka",
       "1 Number 39: Utopia",
       "1 Castel the Skyblaster Musketeer",
-      "1 Naturia Beast"
+      "1 Naturia Beast",
     ],
     toolkitSuggestions: [
       "Foolish Burial",
@@ -1767,7 +1767,7 @@ const decks = [
       "Foolish Burial",
       "Compulsory Evacuation Device",
       "Lightning Vortex",
-      "Reckless Greed"
+      "Reckless Greed",
     ]
   },
   {
@@ -1793,12 +1793,12 @@ const decks = [
       "2 Fusion Recovery",
       "2 Card Destruction",
       "2 Hand Destruction",
-      "2 Foolish Burial"
+      "2 Foolish Burial",
     ],
     extraDeck: [
       "1 Thunder Dragon Colossus",
       "1 Thunder Dragon Titan",
-      "1 Number 39: Utopia"
+      "1 Number 39: Utopia",
     ],
     toolkitSuggestions: [
       "Card Destruction",
@@ -1811,7 +1811,7 @@ const decks = [
       "Reckless Greed",
       "#38 Modern Dinosaur",
       "#36 BLS Multi-Ritual",
-      "#40 Thunder Dragon"
+      "#40 Thunder Dragon",
     ]
   },
   {
@@ -1845,7 +1845,7 @@ const decks = [
       "2 Foolish Burial",
       "3 Polymerization",
       "1 Fusion Sage",
-      "2 Reinforcement of the Army"
+      "2 Reinforcement of the Army",
     ],
     extraDeck: [
       "2 Buster Blader, the Dragon Destroyer Swordsman",
@@ -1855,7 +1855,7 @@ const decks = [
       "1 Black Luster Soldier - Soldier of Chaos",
       "1 Number 39: Utopia",
       "1 Stardust Spark Dragon",
-      "1 Trishula, Dragon of the Ice Barrier"
+      "1 Trishula, Dragon of the Ice Barrier",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -1865,7 +1865,7 @@ const decks = [
       "Foolish Burial",
       "Compulsory Evacuation Device",
       "Mind Crush",
-      "Snatch Steal"
+      "Snatch Steal",
     ]
   },
   {
@@ -1900,12 +1900,12 @@ const decks = [
       "2 Pre-Preparation of Rites",
       "1 Soul Charge",
       "2 Foolish Burial",
-      "3 Beckoning Light"
+      "3 Beckoning Light",
     ],
     extraDeck: [
       "1 Voltanis the Adjudicator",
       "1 Athena",
-      "1 Number 39: Utopia"
+      "1 Number 39: Utopia",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -1914,7 +1914,7 @@ const decks = [
       "Solemn Wishes",
       "Compulsory Evacuation Device",
       "Snatch Steal",
-      "Reckless Greed"
+      "Reckless Greed",
     ]
   },
   {
@@ -1922,7 +1922,7 @@ const decks = [
     name: "Vehicroid Fusion",
     tier: "B",
     status: "active",
-    strategy: "Syrus Truesdale's Vehicroid Fusion deck from GX. Power Bond + Vehicroid Connection Zone fuses your "roid" Machines into Super Vehicroids for OTK power.",
+    strategy: "Syrus Truesdale's Vehicroid Fusion deck from GX. Power Bond + Vehicroid Connection Zone fuses your \"roid\" Machines into Super Vehicroids for OTK power.",
     mainDeck: [
       "3 Gyroid",
       "2 Cycroid",
@@ -1947,7 +1947,7 @@ const decks = [
       "3 Limiter Removal",
       "2 Heavy Mech Support Platform",
       "2 Fusion Recovery",
-      "2 Cybernetic Fusion Support"
+      "2 Cybernetic Fusion Support",
     ],
     extraDeck: [
       "2 Super Vehicroid - Jumbo Drill",
@@ -1958,7 +1958,7 @@ const decks = [
       "1 Cyber End Dragon",
       "1 Cyber Twin Dragon",
       "1 Number 39: Utopia",
-      "1 Castel the Skyblaster Musketeer"
+      "1 Castel the Skyblaster Musketeer",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -1968,7 +1968,7 @@ const decks = [
       "Compulsory Evacuation Device",
       "Snatch Steal",
       "Lightning Vortex",
-      "Reckless Greed"
+      "Reckless Greed",
     ]
   },
   {
@@ -1976,7 +1976,7 @@ const decks = [
     name: "B.E.S. Boss Rush",
     tier: "C",
     status: "active",
-    strategy: "Niche "Big Core Series" Machine archetype. Each B.E.S. has 3 counters; remove a counter on targeting/destruction effects to negate. Boss Rush Field Spell recruits B.E.S. from deck on battle destruction.",
+    strategy: "Niche \"Big Core Series\" Machine archetype. Each B.E.S. has 3 counters; remove a counter on targeting/destruction effects to negate. Boss Rush Field Spell recruits B.E.S. from deck on battle destruction.",
     mainDeck: [
       "2 B.E.S. Big Core",
       "2 B.E.S. Big Core MK-2",
@@ -1996,12 +1996,12 @@ const decks = [
       "3 Soul Exchange",
       "2 Heavy Mech Support Platform",
       "1 Limiter Removal — already counted in monsters area",
-      "3 Fusion Recovery"
+      "3 Fusion Recovery",
     ],
     extraDeck: [
       "1 Number 39: Utopia",
       "1 Photon Strike Bounzer",
-      "1 Number 11: Big Eye"
+      "1 Number 11: Big Eye",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -2013,7 +2013,7 @@ const decks = [
       "Reckless Greed",
       "#41 Buster Blader Anti-Dragon is undervalued",
       "#43 Vehicroid is the surprise of Phase 9",
-      "#42 Fairy and #44 B.E.S."
+      "#42 Fairy and #44 B.E.S.",
     ]
   },
   {
@@ -2049,7 +2049,7 @@ const decks = [
       "1 Foolish Burial",
       "2 Pot of Avarice",
       "2 Fire Formation - Tenki",
-      "1 Solidarity"
+      "1 Solidarity",
     ],
     extraDeck: [
       "2 Legendary Six Samurai - Shi En",
@@ -2057,7 +2057,7 @@ const decks = [
       "1 Naturia Barkion",
       "1 Shi En, the Pyromancer Legend",
       "1 Number 39: Utopia",
-      "1 Castel the Skyblaster Musketeer"
+      "1 Castel the Skyblaster Musketeer",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -2067,7 +2067,7 @@ const decks = [
       "Reload",
       "Compulsory Evacuation Device",
       "Soul Charge",
-      "Reckless Greed"
+      "Reckless Greed",
     ]
   },
   {
@@ -2095,7 +2095,7 @@ const decks = [
       "2 Lair of Darkness",
       "2 Pot of Avarice",
       "1 Beast Soul Swap",
-      "2 Beast Strike"
+      "2 Beast Strike",
     ],
     extraDeck: [
       "1 Tri-Brigade Shuraig the Ominous Omen",
@@ -2104,7 +2104,7 @@ const decks = [
       "1 Bujintei Susanowo",
       "1 Number 41: Bagooska the Terribly Tired Tapir",
       "1 Number 39: Utopia",
-      "1 Daigusto Emeral"
+      "1 Daigusto Emeral",
     ],
     toolkitSuggestions: [
       "Foolish Burial",
@@ -2113,7 +2113,7 @@ const decks = [
       "Heavy Storm",
       "Compulsory Evacuation Device",
       "Snatch Steal",
-      "Reckless Greed"
+      "Reckless Greed",
     ]
   },
   {
@@ -2151,14 +2151,14 @@ const decks = [
       "1 Smashing Ground",
       "2 Solidarity",
       "2 Pot of Avarice",
-      "1 Magic Cylinder"
+      "1 Magic Cylinder",
     ],
     extraDeck: [
       "1 Number 39: Utopia",
       "1 Castel the Skyblaster Musketeer",
       "1 Tornado Dragon",
       "1 Diamond Dire Wolf",
-      "1 Daigusto Emeral"
+      "1 Daigusto Emeral",
     ],
     toolkitSuggestions: [
       "Pot of Greed",
@@ -2168,7 +2168,7 @@ const decks = [
       "Compulsory Evacuation Device",
       "Reload",
       "Lightning Vortex",
-      "Sakuretsu Armor"
+      "Sakuretsu Armor",
     ]
   },
   {
@@ -2200,14 +2200,14 @@ const decks = [
       "2 Fusion Recovery",
       "1 Iron Call",
       "3 Pot of Avarice",
-      "3 Stamping Destruction"
+      "3 Stamping Destruction",
     ],
     extraDeck: [
       "1 Berserkion the Electromagna Warrior",
       "1 Valkyrion the Magna Warrior",
       "1 Naturia Beast",
       "1 Naturia Barkion",
-      "1 Number 41: Bagooska the Terribly Tired Tapir"
+      "1 Number 41: Bagooska the Terribly Tired Tapir",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -2220,7 +2220,7 @@ const decks = [
       "Reckless Greed",
       "#49 Vintage Beatdown is GENUINELY FREE",
       "Magnet Circle LV2 correction",
-      "#46 Six Samurai and #48 Tri-Brigade are both "full builds""
+      "#46 Six Samurai and #48 Tri-Brigade are both \"full builds\"",
     ]
   },
   {
@@ -2257,14 +2257,14 @@ const decks = [
       "3 Giant Rat",
       "3 Pot of Avarice",
       "2 Stamping Destruction",
-      "2 Reckless Greed"
+      "2 Reckless Greed",
     ],
     extraDeck: [
       "1 Inzektor Exa-Beetle",
       "1 Number 70: Malevolent Sin",
       "1 Number 39: Utopia",
       "1 Castel the Skyblaster Musketeer",
-      "1 Diamond Dire Wolf"
+      "1 Diamond Dire Wolf",
     ],
     toolkitSuggestions: [
       "Pot of Greed",
@@ -2274,7 +2274,7 @@ const decks = [
       "Foolish Burial",
       "Compulsory Evacuation Device",
       "Reckless Greed",
-      "Snatch Steal"
+      "Snatch Steal",
     ]
   },
   {
@@ -2306,14 +2306,14 @@ const decks = [
       "2 Hammer Shot",
       "2 Smashing Ground",
       "3 Foolish Burial",
-      "2 Pot of Avarice"
+      "2 Pot of Avarice",
     ],
     extraDeck: [
       "1 Rainbow Dragon Overdrive",
       "1 Number 39: Utopia",
       "1 Daigusto Phoenix",
       "1 Castel the Skyblaster Musketeer",
-      "1 Diamond Dire Wolf"
+      "1 Diamond Dire Wolf",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -2323,7 +2323,7 @@ const decks = [
       "Foolish Burial",
       "Snatch Steal",
       "Card Destruction",
-      "Soul Charge"
+      "Soul Charge",
     ]
   },
   {
@@ -2353,12 +2353,12 @@ const decks = [
       "2 Foolish Burial",
       "3 Pot of Avarice",
       "2 Trade-In",
-      "2 Reckless Greed"
+      "2 Reckless Greed",
     ],
     extraDeck: [
       "1 Number 39: Utopia",
       "1 Castel the Skyblaster Musketeer",
-      "1 Photon Strike Bounzer"
+      "1 Photon Strike Bounzer",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -2367,7 +2367,7 @@ const decks = [
       "Foolish Burial",
       "Compulsory Evacuation Device",
       "Snatch Steal",
-      "Reckless Greed"
+      "Reckless Greed",
     ]
   },
   {
@@ -2393,12 +2393,12 @@ const decks = [
       "3 Waboku",
       "3 Just Desserts",
       "3 Magic Cylinder",
-      "3 Stealth Bird"
+      "3 Stealth Bird",
     ],
     extraDeck: [
       "1 Number 39: Utopia",
       "1 Castel the Skyblaster Musketeer",
-      "1 Number 60: Dugares the Timeless"
+      "1 Number 60: Dugares the Timeless",
     ],
     toolkitSuggestions: [
       "Magic Cylinder",
@@ -2408,7 +2408,7 @@ const decks = [
       "Mirror Force",
       "Pot of Greed",
       "Sakuretsu Armor",
-      "Solemn Judgment"
+      "Solemn Judgment",
     ]
   },
   {
@@ -2438,14 +2438,14 @@ const decks = [
       "3 Threatening Roar",
       "2 Waboku",
       "3 Reckless Greed",
-      "2 Hand Destruction"
+      "2 Hand Destruction",
     ],
     extraDeck: [
       "1 Toadally Awesome",
       "1 Bahamut Shark",
       "1 Daigusto Phoenix",
       "1 Number 39: Utopia",
-      "1 Number 70: Malevolent Sin"
+      "1 Number 70: Malevolent Sin",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -2455,7 +2455,7 @@ const decks = [
       "Salvage",
       "Compulsory Evacuation Device",
       "Reckless Greed",
-      "Soul Charge"
+      "Soul Charge",
     ]
   },
   {
@@ -2512,7 +2512,7 @@ const decks = [
       "2 Power Bond",
       "3 Limiter Removal",
       "2 Fusion Recovery",
-      "1 Cybernetic Fusion Support"
+      "1 Cybernetic Fusion Support",
     ],
     extraDeck: [
       "1 Vision HERO Trinity",
@@ -2539,7 +2539,7 @@ const decks = [
       "1 VWXYZ-Dragon Catapult Cannon",
       "1 ABC-Dragon Buster",
       "1 Chimeratech Megafleet Dragon",
-      "1 Number 39: Utopia"
+      "1 Number 39: Utopia",
     ],
     toolkitSuggestions: [
       "Heavy Storm",
@@ -2562,7 +2562,7 @@ const decks = [
       "Foolish Burial",
       "Compulsory Evacuation Device",
       "Snatch Steal",
-      "Lightning Vortex"
+      "Lightning Vortex",
     ]
   }
 ];

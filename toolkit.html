@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toolkit Pool - Yu-Gi-Oh Collection</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="nav-links">
+                <a href="index.html" class="nav-btn">← Back to Decks</a>
+                <a href="inventory.html" class="nav-btn">📦 Card Inventory</a>
+                <a href="shopping-list.html" class="nav-btn">🛒 Shopping List</a>
+                <a href="search.html" class="nav-btn">🔍 Search</a>
+                <a href="compare.html" class="nav-btn">⚖️ Compare</a>
+                <a href="stats.html" class="nav-btn">📊 Stats</a>
+            </div>
+            <h1>🛠️ Toolkit Pool</h1>
+            <p class="subtitle">Generic Staples Shared Across All Decks</p>
+            <div class="toolkit-explanation">
+                <h3>📋 How It Works:</h3>
+                <p><strong>Before each match:</strong> Pick 6-10 cards from this toolkit pool to add to your deck.</p>
+                <p><strong>Total deck size:</strong> 46-60 cards (40-50 core strategy + 6-10 toolkit picks)</p>
+                <p><strong>Limit rule:</strong> "Too Powerful" cards (like Pot of Greed, Mirror Force) are limited to <strong>1 per match</strong>.</p>
+            </div>
+        </header>
+
+        <div class="toolkit-stats">
+            <div class="stat-item">
+                <span class="stat-label">Too Powerful Cards:</span>
+                <span class="stat-value" id="tooPowerfulCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Standard Toolkit:</span>
+                <span class="stat-value" id="standardCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Total Toolkit Cards:</span>
+                <span class="stat-value" id="totalCount">0</span>
+            </div>
+        </div>
+
+        <div class="toolkit-sections">
+            <!-- Too Powerful Section -->
+            <div class="toolkit-section">
+                <h2 class="toolkit-section-title">⚡ "Too Powerful" — Limit 1 Per Match</h2>
+                <p class="toolkit-section-desc">These cards are extremely strong. Only pick ONE of these per match to keep games balanced.</p>
+                <div class="toolkit-grid" id="tooPowerfulGrid">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Standard Toolkit Section -->
+            <div class="toolkit-section">
+                <h2 class="toolkit-section-title">🛠️ Standard Toolkit — Generally Free to Pick</h2>
+                <p class="toolkit-section-desc">Pick 6-10 of these cards based on your deck strategy and matchup.</p>
+
+                <div class="toolkit-subsection">
+                    <h3>Mass / Spot Removal</h3>
+                    <div class="toolkit-grid" id="removalGrid"></div>
+                </div>
+
+                <div class="toolkit-subsection">
+                    <h3>Monster Control</h3>
+                    <div class="toolkit-grid" id="controlGrid"></div>
+                </div>
+
+                <div class="toolkit-subsection">
+                    <h3>Revival</h3>
+                    <div class="toolkit-grid" id="revivalGrid"></div>
+                </div>
+
+                <div class="toolkit-subsection">
+                    <h3>Draw / Hand Fixing</h3>
+                    <div class="toolkit-grid" id="drawGrid"></div>
+                </div>
+
+                <div class="toolkit-subsection">
+                    <h3>Negation</h3>
+                    <div class="toolkit-grid" id="negationGrid"></div>
+                </div>
+
+                <div class="toolkit-subsection">
+                    <h3>Hand Traps</h3>
+                    <div class="toolkit-grid" id="handTrapGrid"></div>
+                </div>
+
+                <div class="toolkit-subsection">
+                    <h3>Attack Control / Stall</h3>
+                    <div class="toolkit-grid" id="stallGrid"></div>
+                </div>
+
+                <div class="toolkit-subsection">
+                    <h3>Grave-Fill</h3>
+                    <div class="toolkit-grid" id="graveFillGrid"></div>
+                </div>
+            </div>
+
+            <!-- Suggested Picks by Strategy -->
+            <div class="toolkit-section">
+                <h2 class="toolkit-section-title">📋 Suggested Toolkit Picks by Deck Style</h2>
+
+                <div class="strategy-suggestions">
+                    <div class="strategy-card">
+                        <h3>⚔️ Aggro / Beatdown Decks</h3>
+                        <p class="strategy-goal">Goal: OTK / Quick Wins</p>
+                        <ul class="strategy-picks">
+                            <li>Lightning Vortex</li>
+                            <li>Heavy Storm</li>
+                            <li>Snatch Steal</li>
+                            <li>Pot of Greed</li>
+                            <li>Reload</li>
+                            <li>Sakuretsu Armor</li>
+                            <li>Reckless Greed</li>
+                            <li>Compulsory Evacuation Device</li>
+                        </ul>
+                    </div>
+
+                    <div class="strategy-card">
+                        <h3>🛡️ Control Decks</h3>
+                        <p class="strategy-goal">Goal: Negate / Control Board</p>
+                        <ul class="strategy-picks">
+                            <li>Mirror Force</li>
+                            <li>Torrential Tribute</li>
+                            <li>Solemn Judgment</li>
+                            <li>Seven Tools of the Bandit</li>
+                            <li>Magic Drain</li>
+                            <li>Mind Crush</li>
+                            <li>Compulsory Evacuation Device</li>
+                            <li>Trap Dustshoot</li>
+                        </ul>
+                    </div>
+
+                    <div class="strategy-card">
+                        <h3>🔥 Stall / Burn Decks</h3>
+                        <p class="strategy-goal">Goal: Survive / Burn Damage</p>
+                        <ul class="strategy-picks">
+                            <li>Waboku</li>
+                            <li>Threatening Roar</li>
+                            <li>Magic Cylinder</li>
+                            <li>Mirror Wall</li>
+                            <li>Skill Drain</li>
+                            <li>Pot of Greed</li>
+                            <li>Reckless Greed</li>
+                        </ul>
+                    </div>
+
+                    <div class="strategy-card">
+                        <h3>🎲 Combo Decks</h3>
+                        <p class="strategy-goal">Goal: Assemble Combo Pieces</p>
+                        <ul class="strategy-picks">
+                            <li>Reload</li>
+                            <li>Card Destruction</li>
+                            <li>Pot of Greed</li>
+                            <li>Magical Mallet</li>
+                            <li>Foolish Burial</li>
+                            <li>Monster Reborn</li>
+                            <li>Reckless Greed</li>
+                        </ul>
+                    </div>
+
+                    <div class="strategy-card">
+                        <h3>🖐️ Hand-Trap Heavy</h3>
+                        <p class="strategy-goal">Goal: Disrupt Opponent</p>
+                        <ul class="strategy-picks">
+                            <li>Ash Blossom & Joyous Spring</li>
+                            <li>Effect Veiler</li>
+                            <li>Infinite Impermanence</li>
+                            <li>Ghost Belle & Haunted Mansion</li>
+                            <li>Mind Crush</li>
+                            <li>Trap Dustshoot</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="toolkit-data.js"></script>
+    <script src="supabase-client.js"></script>
+    <script src="deck-sync.js"></script>
+    <script src="auth-ui.js"></script>
+    <script src="toolkit.js"></script>
+</body>
+</html>

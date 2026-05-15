@@ -2554,3 +2554,32 @@ h1 {
 .strategy-picks li:hover {
     background: rgba(255, 255, 255, 0.15);
 }
+
+/* Toolkit Notice Banner */
+.toolkit-notice {
+    background: linear-gradient(135deg, rgba(78, 205, 196, 0.2) 0%, rgba(69, 183, 209, 0.2) 100%);
+    border: 2px solid rgba(78, 205, 196, 0.5);
+    border-radius: 15px;
+    padding: 20px 25px;
+    margin: 20px 0;
+}
+
+.toolkit-notice h3 {
+    margin: 0 0 10px 0;
+    color: white;
+    font-size: 1.3rem;
+}
+
+.toolkit-notice p {
+    margin: 8px 0;
+    color: rgba(255, 255, 255, 0.95);
+    line-height: 1.6;
+}
+
+.toolkit-notice a {
+    text-decoration: underline;
+}
+
+.toolkit-notice a:hover {
+    color: #51cf66 !important;
+}

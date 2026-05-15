@@ -198,8 +198,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     await initAuth();
 
     if (isAuthenticated()) {
-        console.log('✅ User is authenticated - pulling latest data from Supabase');
-        await window.deckSync.pullFromSupabase();
+        console.log('✅ User is authenticated - sync ready');
+        // Disabled auto-pull to prevent refresh loops
+        // await window.deckSync.pullFromSupabase();
     } else {
         console.log('ℹ️ Not authenticated - using localStorage only');
     }

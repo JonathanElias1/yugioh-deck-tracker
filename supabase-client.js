@@ -52,10 +52,10 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
         currentUser = session.user;
         console.log('✅ User signed in:', currentUser.email);
 
-        // Trigger sync when user signs in
-        if (window.deckSync) {
-            window.deckSync.syncAllDecks();
-        }
+        // Disabled auto-sync to prevent loops
+        // if (window.deckSync) {
+        //     window.deckSync.syncAllDecks();
+        // }
     } else {
         currentUser = null;
         console.log('ℹ️ User signed out');
@@ -138,9 +138,9 @@ function isAuthenticated() {
     return currentUser !== null;
 }
 
-// Auto-initialize on page load
-if (typeof window !== 'undefined') {
-    window.addEventListener('DOMContentLoaded', () => {
-        initAuth();
-    });
-}
+// Auto-initialize disabled - called from deck-sync.js instead
+// if (typeof window !== 'undefined') {
+//     window.addEventListener('DOMContentLoaded', () => {
+//         initAuth();
+//     });
+// }

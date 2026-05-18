@@ -982,6 +982,16 @@ class DeckDetail {
 
 // Initialize when DOM is ready
 let deckDetail;
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // Wait for auth and pull deck progress from Supabase
+    if (typeof initAuth === 'function') {
+        await initAuth();
+    }
+
+    if (window.deckSync && typeof isAuthenticated === 'function' && isAuthenticated()) {
+        console.log('📥 Pulling deck progress before loading deck page...');
+        await window.deckSync.pullFromSupabase();
+    }
+
     deckDetail = new DeckDetail();
 });

@@ -79,7 +79,7 @@ class CardInventory {
         this.decks.forEach(deck => {
             if (deck.status === 'consolidated') return;
 
-            const processDeck = (deckList, deckId, deckName) => {
+            const processDeck = (deckList, deckId, deckName, deckTier) => {
                 if (!deckList) return;
 
                 deckList.forEach(cardEntry => {
@@ -95,6 +95,7 @@ class CardInventory {
                     if (!this.cardDatabase[name][deckId]) {
                         this.cardDatabase[name][deckId] = {
                             deckName: deckName,
+                            deckTier: deckTier,
                             quantity: 0
                         };
                     }
@@ -105,32 +106,32 @@ class CardInventory {
 
             // Process main deck
             if (deck.mainDeck) {
-                processDeck(deck.mainDeck, deck.id, deck.name);
+                processDeck(deck.mainDeck, deck.id, deck.name, deck.tier);
             }
 
             // Process extra deck
             if (deck.extraDeck) {
-                processDeck(deck.extraDeck, deck.id, deck.name);
+                processDeck(deck.extraDeck, deck.id, deck.name, deck.tier);
             }
 
             // Process alt paths
             if (deck.pathA && deck.pathA.mainDeck) {
-                processDeck(deck.pathA.mainDeck, `${deck.id}-pathA`, `${deck.name} (Path A)`);
+                processDeck(deck.pathA.mainDeck, `${deck.id}-pathA`, `${deck.name} (Path A)`, deck.tier);
             }
             if (deck.pathA && deck.pathA.extraDeck) {
-                processDeck(deck.pathA.extraDeck, `${deck.id}-pathA`, `${deck.name} (Path A)`);
+                processDeck(deck.pathA.extraDeck, `${deck.id}-pathA`, `${deck.name} (Path A)`, deck.tier);
             }
             if (deck.pathB && deck.pathB.mainDeck) {
-                processDeck(deck.pathB.mainDeck, `${deck.id}-pathB`, `${deck.name} (Path B)`);
+                processDeck(deck.pathB.mainDeck, `${deck.id}-pathB`, `${deck.name} (Path B)`, deck.tier);
             }
             if (deck.pathB && deck.pathB.extraDeck) {
-                processDeck(deck.pathB.extraDeck, `${deck.id}-pathB`, `${deck.name} (Path B)`);
+                processDeck(deck.pathB.extraDeck, `${deck.id}-pathB`, `${deck.name} (Path B)`, deck.tier);
             }
             if (deck.pathC && deck.pathC.mainDeck) {
-                processDeck(deck.pathC.mainDeck, `${deck.id}-pathC`, `${deck.name} (Path C)`);
+                processDeck(deck.pathC.mainDeck, `${deck.id}-pathC`, `${deck.name} (Path C)`, deck.tier);
             }
             if (deck.pathC && deck.pathC.extraDeck) {
-                processDeck(deck.pathC.extraDeck, `${deck.id}-pathC`, `${deck.name} (Path C)`);
+                processDeck(deck.pathC.extraDeck, `${deck.id}-pathC`, `${deck.name} (Path C)`, deck.tier);
             }
         });
     }
@@ -538,7 +539,7 @@ class CardInventory {
                 const deckId = deckKey.split('-')[0];
                 return `<div class="deck-usage-item">
                     <a href="deck.html?id=${deckId}" target="_blank">
-                        <span style="opacity: 0.7; font-weight: normal;">Deck #${deckId}</span> - ${deck.deckName}
+                        <strong>Deck #${deckId}</strong> <span style="opacity: 0.6; font-size: 0.9em;">(${deck.deckTier || '?'} Tier)</span> - ${deck.deckName}
                     </a>
                     <span class="usage-quantity">×${deck.quantity}</span>
                 </div>`;

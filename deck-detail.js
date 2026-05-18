@@ -24,7 +24,15 @@ class DeckDetail {
 
     loadOwnedCards() {
         const saved = localStorage.getItem(`ownedCards_${this.deckId}`);
-        return saved ? JSON.parse(saved) : {};
+        if (!saved) return {};
+
+        try {
+            const parsed = JSON.parse(saved);
+            return typeof parsed === 'object' && parsed !== null ? parsed : {};
+        } catch (e) {
+            console.error('Error parsing ownedCards:', e);
+            return {};
+        }
     }
 
     saveOwnedCards() {
@@ -37,7 +45,19 @@ class DeckDetail {
 
     loadCustomCards() {
         const saved = localStorage.getItem(`customCards_${this.deckId}`);
-        return saved ? JSON.parse(saved) : { main: [], extra: [] };
+        if (!saved) return { main: [], extra: [] };
+
+        try {
+            const parsed = JSON.parse(saved);
+            // Ensure the structure is correct
+            return {
+                main: Array.isArray(parsed?.main) ? parsed.main : [],
+                extra: Array.isArray(parsed?.extra) ? parsed.extra : []
+            };
+        } catch (e) {
+            console.error('Error parsing customCards:', e);
+            return { main: [], extra: [] };
+        }
     }
 
     saveCustomCards() {
@@ -50,7 +70,15 @@ class DeckDetail {
 
     loadRemovedCards() {
         const saved = localStorage.getItem(`removedCards_${this.deckId}`);
-        return saved ? JSON.parse(saved) : [];
+        if (!saved) return [];
+
+        try {
+            const parsed = JSON.parse(saved);
+            return Array.isArray(parsed) ? parsed : [];
+        } catch (e) {
+            console.error('Error parsing removedCards:', e);
+            return [];
+        }
     }
 
     saveRemovedCards(removedCards) {

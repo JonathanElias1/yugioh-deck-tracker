@@ -173,14 +173,26 @@ class CardInventory {
             this.addBulkCards();
         });
 
-        // Clear inventory
+        // Clear inventory (modal button)
         document.getElementById('clearInventory').addEventListener('click', () => {
-            if (confirm('Are you sure you want to clear your entire inventory? This cannot be undone.')) {
+            if (confirm('⚠️ Are you sure you want to clear your ENTIRE inventory?\n\nThis will delete ALL cards and CANNOT be undone!')) {
                 this.inventory = {};
                 this.saveInventory();
                 this.renderInventory();
                 this.updateStats();
                 document.getElementById('addInventoryModal').style.display = 'none';
+                alert('✅ Inventory cleared successfully');
+            }
+        });
+
+        // Clear all inventory (main button)
+        document.getElementById('clearAllInventory').addEventListener('click', () => {
+            if (confirm('⚠️ Are you sure you want to clear your ENTIRE inventory?\n\nThis will delete ALL cards and CANNOT be undone!')) {
+                this.inventory = {};
+                this.saveInventory();
+                this.renderInventory();
+                this.updateStats();
+                alert('✅ Inventory cleared successfully');
             }
         });
 

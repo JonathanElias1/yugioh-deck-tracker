@@ -52,10 +52,11 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
         currentUser = session.user;
         console.log('✅ User signed in:', currentUser.email);
 
-        // Disabled auto-sync to prevent loops
-        // if (window.deckSync) {
-        //     window.deckSync.syncAllDecks();
-        // }
+        // Sync local data to Supabase when user signs in
+        // Only syncs if there's local data to push (doesn't reload page)
+        if (window.deckSync && event === 'SIGNED_IN') {
+            window.deckSync.syncAllDecks();
+        }
     } else {
         currentUser = null;
         console.log('ℹ️ User signed out');

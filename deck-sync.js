@@ -155,9 +155,10 @@ class DeckSync {
 
             console.log(`✅ Pulled ${loaded} decks from Supabase`);
 
-            // Reload page to reflect changes
-            if (loaded > 0) {
-                location.reload();
+            // Trigger UI update without reloading page
+            if (loaded > 0 && window.tracker && typeof window.tracker.renderDecks === 'function') {
+                window.tracker.renderDecks();
+                window.tracker.updateStats();
             }
         } catch (error) {
             console.error('Error pulling from Supabase:', error);
@@ -198,9 +199,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     await initAuth();
 
     if (isAuthenticated()) {
-        console.log('✅ User is authenticated - sync ready');
-        // Disabled auto-pull to prevent refresh loops
-        // await window.deckSync.pullFromSupabase();
+        console.log('✅ User is authenticated - pulling latest data from Supabase');
+        await window.deckSync.pullFromSupabase();
     } else {
         console.log('ℹ️ Not authenticated - using localStorage only');
     }

@@ -10,7 +10,13 @@ class CardInventory {
         this.init();
     }
 
-    init() {
+    async init() {
+        // Pull inventory from Supabase first
+        const pulled = await this.pullInventoryFromSupabase();
+        if (pulled) {
+            console.log('Inventory loaded from Supabase');
+        }
+
         this.buildCardDatabase();
         this.renderInventory();
         this.updateStats();
@@ -22,8 +28,48 @@ class CardInventory {
         return saved ? JSON.parse(saved) : {};
     }
 
-    saveInventory() {
+    async saveInventory() {
+        // Save to localStorage
         localStorage.setItem('cardInventory', JSON.stringify(this.inventory));
+
+        // Sync to Supabase if authenticated
+        if (typeof isAuthenticated === 'function' && isAuthenticated()) {
+            try {
+                const user = getCurrentUser();
+                await supabaseClient
+                    .from('user_profiles')
+                    .update({ card_inventory: this.inventory })
+                    .eq('id', user.id);
+                console.log('✅ Inventory synced to Supabase');
+            } catch (error) {
+                console.error('Error syncing inventory to Supabase:', error);
+            }
+        }
+    }
+
+    async pullInventoryFromSupabase() {
+        if (typeof isAuthenticated === 'function' && isAuthenticated()) {
+            try {
+                const user = getCurrentUser();
+                const { data, error } = await supabaseClient
+                    .from('user_profiles')
+                    .select('card_inventory')
+                    .eq('id', user.id)
+                    .single();
+
+                if (error) throw error;
+
+                if (data && data.card_inventory && Object.keys(data.card_inventory).length > 0) {
+                    this.inventory = data.card_inventory;
+                    localStorage.setItem('cardInventory', JSON.stringify(this.inventory));
+                    console.log('✅ Pulled inventory from Supabase');
+                    return true;
+                }
+            } catch (error) {
+                console.error('Error pulling inventory from Supabase:', error);
+            }
+        }
+        return false;
     }
 
     // Build a database of which cards appear in which decks
@@ -570,6 +616,11 @@ class CardInventory {
 
 // Initialize when DOM is ready
 let inventory;
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // Wait for auth to initialize
+    if (typeof initAuth === 'function') {
+        await initAuth();
+    }
+
     inventory = new CardInventory();
 });

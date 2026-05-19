@@ -342,7 +342,7 @@ class DeckDetail {
                 <div class="card-info-section">
                     <span class="card-item-text">${card}</span>
                     ${ownedQuantity > 0 ? `
-                        <select class="condition-select" onchange="deckDetail.setCardCondition('${card}', this.value)">
+                        <select class="condition-select" onchange="deckDetail.setCardCondition('${card.replace(/'/g, "\\'")}', this.value)">
                             <option value="NM" ${cardCondition === 'NM' ? 'selected' : ''}>NM - Near Mint</option>
                             <option value="LP" ${cardCondition === 'LP' ? 'selected' : ''}>LP - Lightly Played</option>
                             <option value="MP" ${cardCondition === 'MP' ? 'selected' : ''}>MP - Moderately Played</option>
@@ -353,13 +353,13 @@ class DeckDetail {
                 </div>
                 <div class="card-actions">
                     <div class="quantity-control">
-                        <button class="qty-btn" onclick="deckDetail.decrementQuantity('${card}')">−</button>
+                        <button class="qty-btn" onclick="deckDetail.decrementQuantity('${card.replace(/'/g, "\\'")}')">−</button>
                         <div class="quantity-display">
                             <span class="owned-qty">${ownedQuantity}</span>
                             <span class="qty-separator">/</span>
                             <span class="total-qty">${totalQuantity}</span>
                         </div>
-                        <button class="qty-btn" onclick="deckDetail.incrementQuantity('${card}', ${totalQuantity})">+</button>
+                        <button class="qty-btn" onclick="deckDetail.incrementQuantity('${card.replace(/'/g, "\\'")}', ${totalQuantity})">+</button>
                     </div>
                     ${deleteBtn}
                 </div>

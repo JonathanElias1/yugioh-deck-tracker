@@ -2,6 +2,10 @@
 const SUPABASE_URL = 'https://bfkkxpprhzysupqitspt.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJma2t4cHByaHp5c3VwcWl0c3B0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNjQ3NzEsImV4cCI6MjA5Mzc0MDc3MX0.GrTg6injuBsbYWuq62nz0P0GYW8uSTl6PygF1RZVBpg';
 
+// Make globally accessible for keepalive sync
+window.SUPABASE_URL = SUPABASE_URL;
+window.SUPABASE_ANON_KEY = SUPABASE_ANON_KEY;
+
 // Auto-login credentials
 const AUTO_LOGIN_EMAIL = 'jonathanelias3223@gmail.com';
 const AUTO_LOGIN_PASSWORD = 'admin12345';

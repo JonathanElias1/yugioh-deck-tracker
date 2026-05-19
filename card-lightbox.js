@@ -222,14 +222,29 @@ class CardLightbox {
 
     async fetchCardImage(cardName) {
         try {
-            const response = await fetch(`https://db.ygoprodeck.com/api/v7/cardinfo.php?name=${encodeURIComponent(cardName)}`);
+            // Try exact match first
+            let response = await fetch(`https://db.ygoprodeck.com/api/v7/cardinfo.php?name=${encodeURIComponent(cardName)}`);
+
+            // If 400 error, try with special characters removed
+            if (response.status === 400) {
+                console.log(`API returned 400 for "${cardName}", trying with cleaned name...`);
+                // Remove special characters and extra spaces, keep only alphanumeric and basic punctuation
+                const cleanedName = cardName.replace(/[^\w\s'-]/g, '').replace(/\s+/g, ' ').trim();
+                response = await fetch(`https://db.ygoprodeck.com/api/v7/cardinfo.php?name=${encodeURIComponent(cleanedName)}`);
+            }
+
+            if (!response.ok) {
+                console.log(`API error ${response.status} for: ${cardName}`);
+                return null;
+            }
+
             const data = await response.json();
 
             if (data.data && data.data[0] && data.data[0].card_images) {
                 return data.data[0].card_images[0].image_url;
             }
         } catch (error) {
-            console.log(`Could not fetch image for: ${cardName}`);
+            console.log(`Could not fetch image for: ${cardName}`, error.message);
         }
         return null;
     }

@@ -181,6 +181,16 @@ class DeckTracker {
 
 // Initialize when DOM is ready
 let tracker;
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // Wait for auth and pull deck progress from Supabase before rendering
+    if (typeof initAuth === 'function') {
+        await initAuth();
+    }
+
+    if (window.deckSync && typeof isAuthenticated === 'function' && isAuthenticated()) {
+        console.log('📥 Pulling deck progress from Supabase before rendering deck list...');
+        await window.deckSync.pullFromSupabase();
+    }
+
     tracker = new DeckTracker();
 });

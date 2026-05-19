@@ -340,7 +340,7 @@ class DeckDetail {
                     <span>...</span>
                 </div>
                 <div class="card-info-section">
-                    <span class="card-item-text">${card}</span>
+                    <span class="card-item-text">${cleanName}</span>
                     ${ownedQuantity > 0 ? `
                         <select class="condition-select" onchange="deckDetail.setCardCondition('${card.replace(/'/g, "\\'")}', this.value)">
                             <option value="NM" ${cardCondition === 'NM' ? 'selected' : ''}>NM - Near Mint</option>

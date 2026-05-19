@@ -21,7 +21,7 @@ class ShoppingList {
 
     populateDeckSelector() {
         const selector = document.getElementById('deckSelector');
-        const activeDecks = this.decks.filter(d => d.status === 'active').sort((a, b) => a.name.localeCompare(b.name));
+        const activeDecks = this.decks.filter(d => d.status === 'active').sort((a, b) => a.id - b.id);
 
         activeDecks.forEach(deck => {
             const option = document.createElement('option');
@@ -94,13 +94,7 @@ class ShoppingList {
                         cardEntry: cardEntry
                     });
 
-                    // Add to deck-specific needs (show all cards the deck needs)
-                    this.deckNeeds[deck.id].cards.push({
-                        name: name,
-                        quantity: quantity,
-                        cardEntry: cardEntry
-                    });
-                    this.deckNeeds[deck.id].totalNeeded += quantity;
+                    // Don't add to deck needs yet - will calculate after inventory check
                 });
             };
 
@@ -132,6 +126,24 @@ class ShoppingList {
                     owned: ownedInInventory,
                     decks: cardData.decks
                 };
+            }
+
+            // Add to deck-specific needs - show what each deck needs to BUY
+            // Distribute the "stillNeeded" across decks proportionally
+            if (stillNeeded > 0) {
+                cardData.decks.forEach(deckInfo => {
+                    const deckQuantity = deckInfo.quantity;
+                    const needToBuy = Math.min(deckQuantity, stillNeeded);
+
+                    if (needToBuy > 0 && this.deckNeeds[deckInfo.id]) {
+                        this.deckNeeds[deckInfo.id].cards.push({
+                            name: cardName,
+                            quantity: needToBuy,
+                            cardEntry: `${needToBuy} ${cardName}`
+                        });
+                        this.deckNeeds[deckInfo.id].totalNeeded += needToBuy;
+                    }
+                });
             }
         });
 

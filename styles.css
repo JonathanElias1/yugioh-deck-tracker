@@ -1024,6 +1024,29 @@ h1 {
     border-bottom: 2px solid rgba(255, 255, 255, 0.2);
 }
 
+.collapsible-header {
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.collapsible-header:hover {
+    color: rgba(78, 205, 196, 0.9) !important;
+}
+
+.collapse-icon {
+    font-size: 0.8em;
+    transition: transform 0.2s ease;
+}
+
+.collapsible-content {
+    display: block;
+    transition: all 0.3s ease;
+}
+
 .shopping-list {
     display: grid;
     gap: 15px;

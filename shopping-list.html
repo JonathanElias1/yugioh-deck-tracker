@@ -76,19 +76,29 @@
             <textarea id="tcgFormatOutput" readonly rows="8"></textarea>
         </div>
 
-        <!-- Shopping List by Card -->
+        <!-- Shopping List by Deck -->
         <div class="shopping-section">
-            <h2>Cards Needed (Aggregated)</h2>
-            <div class="shopping-list" id="shoppingList">
-                <!-- Populated by JavaScript -->
+            <h2 class="collapsible-header" onclick="toggleSection('deckShoppingList')">
+                <span class="collapse-icon" id="deckShoppingListIcon">▼</span>
+                Cards Needed by Deck (What to Buy)
+            </h2>
+            <div class="collapsible-content" id="deckShoppingListContent">
+                <div class="deck-shopping-list" id="deckShoppingList">
+                    <!-- Populated by JavaScript -->
+                </div>
             </div>
         </div>
 
-        <!-- Shopping List by Deck -->
+        <!-- Shopping List by Card -->
         <div class="shopping-section">
-            <h2>Cards Needed by Deck</h2>
-            <div class="deck-shopping-list" id="deckShoppingList">
-                <!-- Populated by JavaScript -->
+            <h2 class="collapsible-header" onclick="toggleSection('shoppingList')">
+                <span class="collapse-icon" id="shoppingListIcon">▼</span>
+                Cards Needed (Aggregated)
+            </h2>
+            <div class="collapsible-content" id="shoppingListContent">
+                <div class="shopping-list" id="shoppingList">
+                    <!-- Populated by JavaScript -->
+                </div>
             </div>
         </div>
     </div>
@@ -98,5 +108,20 @@
     <script src="supabase-client.js"></script>
     <script src="deck-sync.js"></script>
     <script src="shopping-list.js"></script>
+    <script>
+        // Toggle collapsible sections
+        function toggleSection(sectionId) {
+            const content = document.getElementById(sectionId + 'Content');
+            const icon = document.getElementById(sectionId + 'Icon');
+
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                icon.textContent = '▼';
+            } else {
+                content.style.display = 'none';
+                icon.textContent = '▶';
+            }
+        }
+    </script>
 </body>
 </html>

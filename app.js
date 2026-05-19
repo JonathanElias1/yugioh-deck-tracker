@@ -3,6 +3,7 @@ class DeckTracker {
     constructor() {
         this.decks = decks || [];
         this.currentFilter = 'all';
+        this.searchTerm = '';
         this.completedDecks = this.loadCompletedDecks();
         this.init();
     }
@@ -39,6 +40,15 @@ class DeckTracker {
                 this.renderDecks();
             });
         });
+
+        // Search input
+        const searchInput = document.getElementById('deckSearchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                this.searchTerm = e.target.value.toLowerCase().trim();
+                this.renderDecks();
+            });
+        }
     }
 
     getDeckCompletionPercentage(deckId) {
@@ -73,16 +83,30 @@ class DeckTracker {
     }
 
     filterDecks() {
+        let filtered = this.decks;
+
+        // Apply tier/status filter
         if (this.currentFilter === 'all') {
-            return this.decks;
+            filtered = this.decks;
         } else if (this.currentFilter === 'active') {
-            return this.decks.filter(d => d.status === 'active');
+            filtered = this.decks.filter(d => d.status === 'active');
         } else if (this.currentFilter === 'consolidated') {
-            return this.decks.filter(d => d.status === 'consolidated');
+            filtered = this.decks.filter(d => d.status === 'consolidated');
         } else {
             // Tier filter
-            return this.decks.filter(d => d.tier === this.currentFilter);
+            filtered = this.decks.filter(d => d.tier === this.currentFilter);
         }
+
+        // Apply search filter
+        if (this.searchTerm) {
+            filtered = filtered.filter(deck => {
+                const deckIdStr = deck.id.toString();
+                const deckName = deck.name.toLowerCase();
+                return deckIdStr.includes(this.searchTerm) || deckName.includes(this.searchTerm);
+            });
+        }
+
+        return filtered;
     }
 
     renderDecks() {

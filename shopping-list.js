@@ -90,8 +90,17 @@ class ShoppingList {
                         id: deck.id,
                         name: deck.name,
                         tier: deck.tier,
-                        quantity: quantity
+                        quantity: quantity,
+                        cardEntry: cardEntry
                     });
+
+                    // Add to deck-specific needs (show all cards the deck needs)
+                    this.deckNeeds[deck.id].cards.push({
+                        name: name,
+                        quantity: quantity,
+                        cardEntry: cardEntry
+                    });
+                    this.deckNeeds[deck.id].totalNeeded += quantity;
                 });
             };
 
@@ -116,27 +125,13 @@ class ShoppingList {
             const stillNeeded = Math.max(0, totalNeeded - ownedInInventory);
 
             if (stillNeeded > 0) {
-                // Add to shopping list
+                // Add to shopping list (aggregated view)
                 this.neededCards[cardName] = {
                     quantity: stillNeeded,
                     totalNeeded: totalNeeded,
                     owned: ownedInInventory,
                     decks: cardData.decks
                 };
-
-                // Add to deck-specific needs
-                cardData.decks.forEach(deckInfo => {
-                    if (this.deckNeeds[deckInfo.id]) {
-                        this.deckNeeds[deckInfo.id].cards.push({
-                            name: cardName,
-                            quantity: deckInfo.quantity,
-                            owned: ownedInInventory,
-                            total: totalNeeded,
-                            stillNeeded: stillNeeded
-                        });
-                        this.deckNeeds[deckInfo.id].totalNeeded += deckInfo.quantity;
-                    }
-                });
             }
         });
 
@@ -465,7 +460,7 @@ class ShoppingList {
             };
 
             const cardList = deck.cards.map(card => {
-                return `<div class="deck-need-item">${card.originalEntry}</div>`;
+                return `<div class="deck-need-item">${card.cardEntry}</div>`;
             }).join('');
 
             return `

@@ -11,7 +11,7 @@
 <body>
     <div class="container">
         <header class="deck-header">
-            <div style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
+            <div style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; align-items: center;">
                 <a href="index.html" class="back-btn" style="margin-bottom: 0;">← Back to Decks</a>
                 <a href="toolkit.html" class="back-btn" style="margin-bottom: 0;">🛠️ Toolkit Pool</a>
                 <a href="search.html" class="back-btn" style="margin-bottom: 0;">🔍 Search Cards</a>
@@ -20,6 +20,9 @@
                 <button onclick="deckDetail.showExportModal()" class="back-btn" style="margin-bottom: 0; cursor: pointer;">📤 Export Deck</button>
                 <button onclick="deckDetail.showImportModal()" class="back-btn" style="margin-bottom: 0; cursor: pointer;">📥 Import Deck</button>
                 <button onclick="deckDetail.exportToPDF()" class="back-btn" style="margin-bottom: 0; cursor: pointer;">📑 Export PDF</button>
+                <button onclick="deckDetail.forceRefreshFromCloud()" class="back-btn" style="margin-bottom: 0; cursor: pointer; background: rgba(78, 205, 196, 0.8);">☁️ Refresh from Cloud</button>
+                <div id="syncStatus" style="margin-bottom: 0; padding: 8px 12px; border-radius: 8px; font-size: 0.85rem; display: none; background: rgba(255,255,255,0.1); color: white;"></div>
+                <div id="lastSyncTime" style="margin-bottom: 0; padding: 8px 12px; border-radius: 8px; font-size: 0.75rem; background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.6);"></div>
             </div>
             <div class="deck-title-section" id="deckTitleSection">
                 <!-- Populated by JavaScript -->

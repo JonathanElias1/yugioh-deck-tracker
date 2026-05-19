@@ -14,6 +14,7 @@ class DeckSync {
     async saveDeckProgress(deckId, ownedCards, removedCards, customCards) {
         if (!isAuthenticated()) {
             console.log('❌ Not authenticated - saving to localStorage only');
+            this.showSyncStatus('⚠️ Not syncing - offline mode', 'warning');
             return { success: true, localOnly: true };
         }
 
@@ -26,6 +27,8 @@ class DeckSync {
                 customCardsCount: Object.keys(customCards || {}).length
             });
 
+            this.showSyncStatus('☁️ Syncing to cloud...', 'syncing');
+
             const { data, error } = await supabaseClient
                 .from('user_deck_progress')
                 .upsert({
@@ -33,7 +36,8 @@ class DeckSync {
                     deck_id: deckId,
                     owned_cards: ownedCards || {},
                     removed_cards: removedCards || [],
-                    custom_cards: customCards || {}
+                    custom_cards: customCards || {},
+                    updated_at: new Date().toISOString()
                 }, {
                     onConflict: 'user_id,deck_id'
                 })
@@ -44,11 +48,41 @@ class DeckSync {
 
             console.log(`✅ Successfully synced deck #${deckId} to Supabase`);
             this.lastSyncTime = new Date();
+            this.showSyncStatus('✅ Synced!', 'success');
 
             return { success: true, data };
         } catch (error) {
             console.error(`❌ Error saving deck #${deckId}:`, error);
+            this.showSyncStatus('❌ Sync failed', 'error');
             return { success: false, error: error.message };
+        }
+    }
+
+    // Show sync status in UI
+    showSyncStatus(message, type) {
+        const statusDiv = document.getElementById('syncStatus');
+        if (!statusDiv) return;
+
+        statusDiv.style.display = 'block';
+        statusDiv.textContent = message;
+
+        const colors = {
+            syncing: 'rgba(78, 205, 196, 0.3)',
+            success: 'rgba(76, 175, 80, 0.6)',
+            error: 'rgba(234, 67, 53, 0.6)',
+            warning: 'rgba(251, 188, 4, 0.6)'
+        };
+
+        statusDiv.style.background = colors[type] || colors.syncing;
+
+        if (type === 'success') {
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 2000);
+        } else if (type === 'error') {
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
         }
     }
 
@@ -165,16 +199,27 @@ class DeckSync {
 
             data.forEach(progress => {
                 const ownedCount = Object.keys(progress.owned_cards || {}).length;
-                console.log(`  📥 Deck #${progress.deck_id}: ${ownedCount} owned cards`);
+                const removedCount = (progress.removed_cards || []).length;
+                const customCount = Object.keys(progress.custom_cards || {}).length;
+
+                console.log(`  📥 Deck #${progress.deck_id}:`, {
+                    owned: ownedCount,
+                    removed: removedCount,
+                    custom: customCount,
+                    lastUpdated: progress.updated_at
+                });
 
                 // Update localStorage with Supabase data
-                localStorage.setItem(`ownedCards_${progress.deck_id}`, JSON.stringify(progress.owned_cards));
-                localStorage.setItem(`removedCards_${progress.deck_id}`, JSON.stringify(progress.removed_cards));
-                localStorage.setItem(`customCards_${progress.deck_id}`, JSON.stringify(progress.custom_cards));
+                localStorage.setItem(`ownedCards_${progress.deck_id}`, JSON.stringify(progress.owned_cards || {}));
+                localStorage.setItem(`removedCards_${progress.deck_id}`, JSON.stringify(progress.removed_cards || []));
+                localStorage.setItem(`customCards_${progress.deck_id}`, JSON.stringify(progress.custom_cards || {}));
                 loaded++;
             });
 
             console.log(`✅ Pulled ${loaded} decks from Supabase and updated localStorage`);
+
+            // Store last sync time
+            localStorage.setItem('lastSyncTime', new Date().toISOString());
 
             // Trigger UI update without reloading page
             if (loaded > 0 && window.tracker && typeof window.tracker.renderDecks === 'function') {

@@ -1006,20 +1006,138 @@ class DeckDetail {
 
         return totalNeeded > 0 ? Math.round((totalOwned / totalNeeded) * 100) : 0;
     }
+
+    async forceRefreshFromCloud() {
+        if (!window.deckSync || !isAuthenticated()) {
+            alert('Not authenticated. Please refresh the page.');
+            return;
+        }
+
+        const statusDiv = document.getElementById('syncStatus');
+        if (statusDiv) {
+            statusDiv.style.display = 'block';
+            statusDiv.textContent = '☁️ Refreshing from cloud...';
+            statusDiv.style.background = 'rgba(78, 205, 196, 0.3)';
+        }
+
+        try {
+            console.log('🔄 Manual refresh from cloud requested...');
+            await window.deckSync.pullFromSupabase();
+
+            // Reload the page data
+            this.ownedCards = this.loadOwnedCards();
+            this.removedCards = this.loadRemovedCards();
+            this.customCards = this.loadCustomCards();
+            this.renderCards();
+
+            if (statusDiv) {
+                statusDiv.textContent = '✅ Refreshed successfully!';
+                statusDiv.style.background = 'rgba(76, 175, 80, 0.6)';
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 3000);
+            }
+
+            // Update last sync time display
+            updateLastSyncTimeDisplay();
+
+            console.log('✅ Manual refresh completed');
+        } catch (error) {
+            console.error('❌ Manual refresh failed:', error);
+            if (statusDiv) {
+                statusDiv.textContent = '❌ Refresh failed';
+                statusDiv.style.background = 'rgba(234, 67, 53, 0.6)';
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 5000);
+            }
+        }
+    }
 }
 
 // Initialize when DOM is ready
 let deckDetail;
 document.addEventListener('DOMContentLoaded', async () => {
-    // Wait for auth and pull deck progress from Supabase
-    if (typeof initAuth === 'function') {
-        await initAuth();
-    }
+    const statusDiv = document.getElementById('syncStatus');
 
-    if (window.deckSync && typeof isAuthenticated === 'function' && isAuthenticated()) {
-        console.log('📥 Pulling deck progress before loading deck page...');
-        await window.deckSync.pullFromSupabase();
-    }
+    try {
+        // Wait for auth
+        if (statusDiv) {
+            statusDiv.style.display = 'block';
+            statusDiv.textContent = '🔐 Authenticating...';
+            statusDiv.style.background = 'rgba(78, 205, 196, 0.3)';
+        }
 
-    deckDetail = new DeckDetail();
+        if (typeof initAuth === 'function') {
+            await initAuth();
+        }
+
+        // Pull from Supabase
+        if (window.deckSync && typeof isAuthenticated === 'function' && isAuthenticated()) {
+            if (statusDiv) {
+                statusDiv.textContent = '☁️ Loading from cloud...';
+            }
+            console.log('📥 Pulling deck progress before loading deck page...');
+            await window.deckSync.pullFromSupabase();
+
+            if (statusDiv) {
+                statusDiv.textContent = '✅ Loaded from cloud';
+                statusDiv.style.background = 'rgba(76, 175, 80, 0.6)';
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 2000);
+            }
+        } else {
+            if (statusDiv) {
+                statusDiv.textContent = '⚠️ Offline mode';
+                statusDiv.style.background = 'rgba(251, 188, 4, 0.6)';
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        deckDetail = new DeckDetail();
+
+        // Update last sync time display
+        updateLastSyncTimeDisplay();
+    } catch (error) {
+        console.error('❌ Initialization error:', error);
+        if (statusDiv) {
+            statusDiv.textContent = '❌ Failed to load';
+            statusDiv.style.background = 'rgba(234, 67, 53, 0.6)';
+        }
+    }
 });
+
+// Update last sync time display
+function updateLastSyncTimeDisplay() {
+    const lastSyncTimeDiv = document.getElementById('lastSyncTime');
+    if (!lastSyncTimeDiv) return;
+
+    const lastSyncTime = localStorage.getItem('lastSyncTime');
+    if (!lastSyncTime) {
+        lastSyncTimeDiv.textContent = 'Never synced';
+        return;
+    }
+
+    const lastSync = new Date(lastSyncTime);
+    const now = new Date();
+    const diffMs = now - lastSync;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    let timeAgo;
+    if (diffMins < 1) {
+        timeAgo = 'Just now';
+    } else if (diffMins < 60) {
+        timeAgo = `${diffMins}m ago`;
+    } else if (diffHours < 24) {
+        timeAgo = `${diffHours}h ago`;
+    } else {
+        timeAgo = `${diffDays}d ago`;
+    }
+
+    lastSyncTimeDiv.textContent = `Last synced: ${timeAgo}`;
+}

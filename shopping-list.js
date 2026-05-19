@@ -44,6 +44,13 @@ class ShoppingList {
         this.neededCards = {};
         this.deckNeeds = {};
 
+        // Load global inventory
+        const inventoryData = localStorage.getItem('cardInventory');
+        const inventory = inventoryData ? JSON.parse(inventoryData) : {};
+
+        // First pass: Calculate total needed for each card across all decks
+        const totalNeededByCard = {}; // { "cardName": { total: number, decks: [...] } }
+
         this.decks.forEach(deck => {
             if (deck.status === 'consolidated') return;
 
@@ -56,9 +63,6 @@ class ShoppingList {
             if (this.currentFilter !== 'all' && this.currentFilter !== 'priority') {
                 if (deck.tier !== this.currentFilter) return;
             }
-
-            const ownedCards = localStorage.getItem(`ownedCards_${deck.id}`);
-            const ownedCardsObj = ownedCards ? JSON.parse(ownedCards) : {};
 
             this.deckNeeds[deck.id] = {
                 deckName: deck.name,
@@ -74,46 +78,20 @@ class ShoppingList {
                     const parsed = this.parseCardEntry(cardEntry);
                     const { quantity, name } = parsed;
 
-                    // Check how many are owned (support both old boolean and new number format)
-                    const ownedValue = ownedCardsObj[cardEntry];
-                    let ownedQuantity = 0;
-
-                    if (typeof ownedValue === 'number') {
-                        ownedQuantity = ownedValue;
-                    } else if (ownedValue === true) {
-                        ownedQuantity = quantity; // Old format: true means all owned
+                    // Track total needed for this card
+                    if (!totalNeededByCard[name]) {
+                        totalNeededByCard[name] = {
+                            total: 0,
+                            decks: []
+                        };
                     }
-
-                    const neededQuantity = quantity - ownedQuantity;
-
-                    if (neededQuantity > 0) {
-                        // Add to aggregated list
-                        if (!this.neededCards[name]) {
-                            this.neededCards[name] = {
-                                quantity: 0,
-                                decks: []
-                            };
-                        }
-                        this.neededCards[name].quantity += neededQuantity;
-                        this.neededCards[name].decks.push({
-                            id: deck.id,
-                            name: deck.name,
-                            tier: deck.tier,
-                            quantity: neededQuantity,
-                            owned: ownedQuantity,
-                            total: quantity
-                        });
-
-                        // Add to deck-specific list
-                        this.deckNeeds[deck.id].cards.push({
-                            name: name,
-                            quantity: neededQuantity,
-                            owned: ownedQuantity,
-                            total: quantity,
-                            originalEntry: cardEntry
-                        });
-                        this.deckNeeds[deck.id].totalNeeded += neededQuantity;
-                    }
+                    totalNeededByCard[name].total += quantity;
+                    totalNeededByCard[name].decks.push({
+                        id: deck.id,
+                        name: deck.name,
+                        tier: deck.tier,
+                        quantity: quantity
+                    });
                 });
             };
 
@@ -127,6 +105,38 @@ class ShoppingList {
                 const customCardsObj = JSON.parse(customCards);
                 processCards(customCardsObj.main || []);
                 processCards(customCardsObj.extra || []);
+            }
+        });
+
+        // Second pass: Compare with inventory to determine what needs to be purchased
+        Object.keys(totalNeededByCard).forEach(cardName => {
+            const cardData = totalNeededByCard[cardName];
+            const totalNeeded = cardData.total;
+            const ownedInInventory = inventory[cardName]?.owned || 0;
+            const stillNeeded = Math.max(0, totalNeeded - ownedInInventory);
+
+            if (stillNeeded > 0) {
+                // Add to shopping list
+                this.neededCards[cardName] = {
+                    quantity: stillNeeded,
+                    totalNeeded: totalNeeded,
+                    owned: ownedInInventory,
+                    decks: cardData.decks
+                };
+
+                // Add to deck-specific needs
+                cardData.decks.forEach(deckInfo => {
+                    if (this.deckNeeds[deckInfo.id]) {
+                        this.deckNeeds[deckInfo.id].cards.push({
+                            name: cardName,
+                            quantity: deckInfo.quantity,
+                            owned: ownedInInventory,
+                            total: totalNeeded,
+                            stillNeeded: stillNeeded
+                        });
+                        this.deckNeeds[deckInfo.id].totalNeeded += deckInfo.quantity;
+                    }
+                });
             }
         });
 
@@ -411,7 +421,10 @@ class ShoppingList {
                 <div class="shopping-card">
                     <div class="shopping-card-header">
                         <div class="shopping-card-name">${cardName}</div>
-                        <div class="total-needed-badge">Need: ${card.quantity}</div>
+                        <div class="inventory-info">
+                            <span style="opacity: 0.7;">Own: ${card.owned || 0} | Need: ${card.totalNeeded || 0}</span>
+                        </div>
+                        <div class="total-needed-badge">Buy: ${card.quantity}</div>
                     </div>
                     <div class="needed-for-decks">
                         <div class="needed-label">Needed for:</div>
@@ -487,6 +500,36 @@ class ShoppingList {
 
 // Initialize when DOM is ready
 let shoppingList;
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // Wait for auth and pull inventory from Supabase
+    if (typeof initAuth === 'function') {
+        await initAuth();
+    }
+
+    if (typeof isAuthenticated === 'function' && isAuthenticated()) {
+        console.log('📥 Pulling inventory from Supabase before generating shopping list...');
+
+        // Pull inventory from user_profiles table
+        try {
+            const user = getCurrentUser();
+            const { data, error } = await supabaseClient
+                .from('user_profiles')
+                .select('card_inventory')
+                .eq('id', user.id)
+                .single();
+
+            if (error) throw error;
+
+            if (data && data.card_inventory && Object.keys(data.card_inventory).length > 0) {
+                localStorage.setItem('cardInventory', JSON.stringify(data.card_inventory));
+                console.log('✅ Pulled inventory from Supabase');
+            } else {
+                console.log('ℹ️ No inventory found in Supabase');
+            }
+        } catch (error) {
+            console.error('Error pulling inventory:', error);
+        }
+    }
+
     shoppingList = new ShoppingList();
 });

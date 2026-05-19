@@ -2583,3 +2583,121 @@ h1 {
 .toolkit-notice a:hover {
     color: #51cf66 !important;
 }
+
+/* Spell & Trap Organizer */
+.category-section {
+    margin: 30px 0;
+}
+
+.category-header {
+    font-size: 1.4rem;
+    margin: 20px 0 15px 0;
+    color: white;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, rgba(78, 205, 196, 0.3) 0%, rgba(78, 205, 196, 0.1) 100%);
+    border-left: 4px solid rgba(78, 205, 196, 0.8);
+    border-radius: 8px;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.spell-trap-card {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 15px;
+    transition: all 0.2s ease;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.spell-trap-card:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.spell-trap-card.too-powerful {
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.3) 0%, rgba(255, 50, 50, 0.2) 100%);
+    border: 2px solid rgba(255, 107, 107, 0.5);
+}
+
+.spell-trap-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.spell-trap-card-name {
+    font-weight: 600;
+    font-size: 1rem;
+    color: white;
+    flex: 1;
+}
+
+.power-badge {
+    background: rgba(255, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: 10px;
+}
+
+.spell-trap-card-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.spell-trap-owned-badge {
+    background: rgba(76, 175, 80, 0.6);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.spell-trap-owned-badge.need-buy {
+    background: rgba(251, 188, 4, 0.7);
+    color: #1a1a2e;
+}
+
+/* Deck Search */
+.search-filter-container {
+    margin: 20px 0;
+}
+
+.deck-search-bar {
+    margin-bottom: 15px;
+}
+
+.deck-search-bar input {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.deck-search-bar input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.deck-search-bar input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(78, 205, 196, 0.8);
+    box-shadow: 0 0 15px rgba(78, 205, 196, 0.3);
+}

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spell & Trap Organizer - Yu-Gi-Oh Collection</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="nav-links">
+                <a href="index.html" class="nav-btn">← Back to Decks</a>
+                <a href="toolkit.html" class="nav-btn">🛠️ Toolkit Pool</a>
+                <a href="inventory.html" class="nav-btn">📦 Card Inventory</a>
+            </div>
+            <h1>📋 Spell & Trap Organizer</h1>
+            <p class="subtitle">Browse generic spells and traps by function</p>
+        </header>
+
+        <!-- Board Wipes -->
+        <div class="category-section">
+            <h2 class="category-header">💥 Board Wipes / Mass Removal</h2>
+            <div class="category-grid" id="boardWipesGrid"></div>
+        </div>
+
+        <!-- Draw/Search -->
+        <div class="category-section">
+            <h2 class="category-header">🎴 Draw / Search Cards</h2>
+            <div class="category-grid" id="drawSearchGrid"></div>
+        </div>
+
+        <!-- Single Target Removal -->
+        <div class="category-section">
+            <h2 class="category-header">🎯 Single Target Removal</h2>
+            <div class="category-grid" id="removalGrid"></div>
+        </div>
+
+        <!-- Control/Steal -->
+        <div class="category-section">
+            <h2 class="category-header">🎮 Control / Steal Effects</h2>
+            <div class="category-grid" id="controlGrid"></div>
+        </div>
+
+        <!-- Revival/Recursion -->
+        <div class="category-section">
+            <h2 class="category-header">♻️ Revival / Recursion</h2>
+            <div class="category-grid" id="revivalGrid"></div>
+        </div>
+
+        <!-- Negation -->
+        <div class="category-section">
+            <h2 class="category-header">🚫 Negation / Counter</h2>
+            <div class="category-grid" id="negationGrid"></div>
+        </div>
+
+        <!-- Hand Traps -->
+        <div class="category-section">
+            <h2 class="category-header">✋ Hand Traps</h2>
+            <div class="category-grid" id="handTrapGrid"></div>
+        </div>
+
+        <!-- Stall/Defense -->
+        <div class="category-section">
+            <h2 class="category-header">🛡️ Stall / Defense</h2>
+            <div class="category-grid" id="stallGrid"></div>
+        </div>
+
+        <!-- Graveyard Setup -->
+        <div class="category-section">
+            <h2 class="category-header">⚰️ Graveyard Setup</h2>
+            <div class="category-grid" id="graveyardGrid"></div>
+        </div>
+    </div>
+
+    <script src="toolkit-data.js"></script>
+    <script src="spells-traps.js"></script>
+</body>
+</html>

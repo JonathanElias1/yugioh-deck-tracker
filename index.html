@@ -12,6 +12,7 @@
         <header>
             <div class="nav-links">
                 <a href="toolkit.html" class="nav-btn">🛠️ Toolkit Pool</a>
+                <a href="spells-traps.html" class="nav-btn">📋 Spells & Traps</a>
                 <a href="inventory.html" class="nav-btn">📦 Card Inventory</a>
                 <a href="shopping-list.html" class="nav-btn">🛒 Shopping List</a>
                 <a href="search.html" class="nav-btn">🔍 Search</a>
@@ -45,14 +46,20 @@
             </div>
         </header>
 
-        <div class="filters">
-            <button class="filter-btn active" data-filter="all">All Decks</button>
-            <button class="filter-btn" data-filter="S">S Tier</button>
-            <button class="filter-btn" data-filter="A">A Tier</button>
-            <button class="filter-btn" data-filter="B">B Tier</button>
-            <button class="filter-btn" data-filter="C">C Tier</button>
-            <button class="filter-btn" data-filter="active">Active Only</button>
-            <button class="filter-btn" data-filter="consolidated">Consolidated</button>
+        <div class="search-filter-container">
+            <div class="deck-search-bar">
+                <input type="text" id="deckSearchInput" placeholder="Search decks by number or name..." autocomplete="off">
+            </div>
+
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">All Decks</button>
+                <button class="filter-btn" data-filter="S">S Tier</button>
+                <button class="filter-btn" data-filter="A">A Tier</button>
+                <button class="filter-btn" data-filter="B">B Tier</button>
+                <button class="filter-btn" data-filter="C">C Tier</button>
+                <button class="filter-btn" data-filter="active">Active Only</button>
+                <button class="filter-btn" data-filter="consolidated">Consolidated</button>
+            </div>
         </div>
 
         <div class="deck-grid" id="deckGrid">

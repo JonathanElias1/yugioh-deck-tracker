@@ -7,17 +7,24 @@ class DeckSync {
         this.lastSyncTime = null;
         this.autoSyncEnabled = true;
         this.syncDebounceTimer = null;
+        this.pendingSyncDeckId = null; // Track which deck needs syncing
     }
 
     // Save deck progress to Supabase
     async saveDeckProgress(deckId, ownedCards, removedCards, customCards) {
         if (!isAuthenticated()) {
-            console.log('Not authenticated - saving to localStorage only');
+            console.log('❌ Not authenticated - saving to localStorage only');
             return { success: true, localOnly: true };
         }
 
         try {
             const user = getCurrentUser();
+
+            console.log(`💾 Saving deck #${deckId} to Supabase...`, {
+                ownedCardsCount: Object.keys(ownedCards || {}).length,
+                removedCardsCount: (removedCards || []).length,
+                customCardsCount: Object.keys(customCards || {}).length
+            });
 
             const { data, error } = await supabaseClient
                 .from('user_deck_progress')
@@ -35,12 +42,12 @@ class DeckSync {
 
             if (error) throw error;
 
-            console.log(`✅ Synced deck #${deckId} to Supabase`);
+            console.log(`✅ Successfully synced deck #${deckId} to Supabase`);
             this.lastSyncTime = new Date();
 
             return { success: true, data };
         } catch (error) {
-            console.error('Error saving deck progress:', error);
+            console.error(`❌ Error saving deck #${deckId}:`, error);
             return { success: false, error: error.message };
         }
     }
@@ -80,6 +87,8 @@ class DeckSync {
 
     // Sync a single deck (localStorage -> Supabase)
     async syncDeck(deckId) {
+        console.log(`🔄 Syncing deck #${deckId} from localStorage to Supabase...`);
+
         const ownedCards = localStorage.getItem(`ownedCards_${deckId}`);
         const removedCards = localStorage.getItem(`removedCards_${deckId}`);
         const customCards = localStorage.getItem(`customCards_${deckId}`);
@@ -87,6 +96,12 @@ class DeckSync {
         const ownedCardsObj = ownedCards ? JSON.parse(ownedCards) : {};
         const removedCardsArr = removedCards ? JSON.parse(removedCards) : [];
         const customCardsObj = customCards ? JSON.parse(customCards) : {};
+
+        console.log(`  📊 Deck #${deckId} data:`, {
+            ownedCards: Object.keys(ownedCardsObj).length,
+            removedCards: removedCardsArr.length,
+            customCards: Object.keys(customCardsObj).length
+        });
 
         return await this.saveDeckProgress(deckId, ownedCardsObj, removedCardsArr, customCardsObj);
     }
@@ -127,7 +142,7 @@ class DeckSync {
     // Pull all deck progress from Supabase to localStorage
     async pullFromSupabase() {
         if (!isAuthenticated()) {
-            console.log('Not authenticated - skipping pull');
+            console.log('❌ Not authenticated - skipping pull');
             return;
         }
 
@@ -135,6 +150,7 @@ class DeckSync {
 
         try {
             const user = getCurrentUser();
+            console.log(`👤 Fetching data for user: ${user.email}`);
 
             const { data, error } = await supabaseClient
                 .from('user_deck_progress')
@@ -143,9 +159,14 @@ class DeckSync {
 
             if (error) throw error;
 
+            console.log(`📦 Received ${data?.length || 0} deck records from Supabase`);
+
             let loaded = 0;
 
             data.forEach(progress => {
+                const ownedCount = Object.keys(progress.owned_cards || {}).length;
+                console.log(`  📥 Deck #${progress.deck_id}: ${ownedCount} owned cards`);
+
                 // Update localStorage with Supabase data
                 localStorage.setItem(`ownedCards_${progress.deck_id}`, JSON.stringify(progress.owned_cards));
                 localStorage.setItem(`removedCards_${progress.deck_id}`, JSON.stringify(progress.removed_cards));
@@ -153,7 +174,7 @@ class DeckSync {
                 loaded++;
             });
 
-            console.log(`✅ Pulled ${loaded} decks from Supabase`);
+            console.log(`✅ Pulled ${loaded} decks from Supabase and updated localStorage`);
 
             // Trigger UI update without reloading page
             if (loaded > 0 && window.tracker && typeof window.tracker.renderDecks === 'function') {
@@ -167,17 +188,41 @@ class DeckSync {
 
     // Debounced auto-sync when data changes
     scheduleSyncDeck(deckId) {
-        if (!this.autoSyncEnabled || !isAuthenticated()) return;
+        if (!this.autoSyncEnabled || !isAuthenticated()) {
+            console.log('⏸️ Sync skipped:', !this.autoSyncEnabled ? 'disabled' : 'not authenticated');
+            return;
+        }
+
+        // Track pending sync
+        this.pendingSyncDeckId = deckId;
 
         // Clear existing timer
         if (this.syncDebounceTimer) {
             clearTimeout(this.syncDebounceTimer);
         }
 
-        // Schedule sync after 2 seconds of no changes
-        this.syncDebounceTimer = setTimeout(() => {
-            this.syncDeck(deckId);
-        }, 2000);
+        console.log(`⏱️ Scheduled sync for deck #${deckId} in 500ms...`);
+
+        // Schedule sync after 500ms of no changes (reduced from 2s to prevent data loss)
+        this.syncDebounceTimer = setTimeout(async () => {
+            await this.syncDeck(deckId);
+            this.pendingSyncDeckId = null;
+        }, 500);
+    }
+
+    // Immediately sync pending changes (called on page unload)
+    async syncPendingChanges() {
+        if (this.pendingSyncDeckId && isAuthenticated()) {
+            console.log(`🚨 Page unloading - immediately syncing deck #${this.pendingSyncDeckId}`);
+
+            // Clear the debounce timer
+            if (this.syncDebounceTimer) {
+                clearTimeout(this.syncDebounceTimer);
+            }
+
+            await this.syncDeck(this.pendingSyncDeckId);
+            this.pendingSyncDeckId = null;
+        }
     }
 
     // Get sync status
@@ -203,5 +248,29 @@ document.addEventListener('DOMContentLoaded', async () => {
         await window.deckSync.pullFromSupabase();
     } else {
         console.log('ℹ️ Not authenticated - using localStorage only');
+    }
+});
+
+// Sync pending changes when page visibility changes (tab hidden/closed)
+document.addEventListener('visibilitychange', async () => {
+    if (document.hidden && window.deckSync && window.deckSync.pendingSyncDeckId) {
+        console.log('👁️ Page hidden - syncing pending changes...');
+        await window.deckSync.syncPendingChanges();
+    }
+});
+
+// Sync pending changes before page unload (fallback)
+window.addEventListener('beforeunload', async (event) => {
+    if (window.deckSync && window.deckSync.pendingSyncDeckId) {
+        console.log('🚪 Page unloading - syncing pending changes...');
+        await window.deckSync.syncPendingChanges();
+    }
+});
+
+// iOS Safari doesn't always fire beforeunload, use pagehide as well
+window.addEventListener('pagehide', async (event) => {
+    if (window.deckSync && window.deckSync.pendingSyncDeckId) {
+        console.log('📴 Page hiding - syncing pending changes...');
+        await window.deckSync.syncPendingChanges();
     }
 });

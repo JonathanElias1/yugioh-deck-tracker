@@ -169,11 +169,12 @@ class DeckTracker {
     }
 
     updateStats() {
-        const activeDecks = this.decks.filter(d => d.status === 'active');
-        const completed = activeDecks.filter(d => this.completedDecks[d.id]).length;
-        const inProgress = activeDecks.length - completed;
+        // Count all decks regardless of status
+        const allDecks = this.decks;
+        const completed = allDecks.filter(d => this.completedDecks[d.id]).length;
+        const inProgress = allDecks.length - completed;
 
-        document.getElementById('totalDecks').textContent = activeDecks.length;
+        document.getElementById('totalDecks').textContent = allDecks.length;
         document.getElementById('completedDecks').textContent = completed;
         document.getElementById('inProgressDecks').textContent = inProgress;
     }

@@ -75,6 +75,15 @@ class SpellTrapOrganizer {
                 standard: [
                     'Foolish Burial'
                 ]
+            },
+            equip: {
+                tooPowerful: [],
+                standard: [
+                    'United We Stand', 'Mage Power', 'Axe of Despair',
+                    'Horn of the Unicorn', 'Big Bang Shot', 'Black Pendant',
+                    'Fairy Meteor Crush', 'Megamorph', 'Malevolent Nuzzler',
+                    'Sword of Deep-Seated', 'Smoke Grenade of the Thief'
+                ]
             }
         };
 
@@ -100,6 +109,7 @@ class SpellTrapOrganizer {
         this.renderCategory('handTrap', 'handTrapGrid');
         this.renderCategory('stall', 'stallGrid');
         this.renderCategory('graveyard', 'graveyardGrid');
+        this.renderCategory('equip', 'equipGrid');
 
         // Setup event listeners
         this.setupEventListeners();
@@ -318,7 +328,8 @@ class SpellTrapOrganizer {
             negation: 'Negation',
             handTrap: 'Hand Traps',
             stall: 'Stall/Defense',
-            graveyard: 'Graveyard'
+            graveyard: 'Graveyard',
+            equip: 'Equip Cards'
         };
         return names[categoryKey] || 'Other';
     }

@@ -44,13 +44,45 @@
             border: 2px solid rgba(255,255,255,0.1);
             border-radius: 8px;
             padding: 12px;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
+            display: flex;
+            gap: 15px;
+        }
+        .card-image-container {
+            flex-shrink: 0;
+            width: 100px;
+            height: 146px;
+            border-radius: 6px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .card-image-placeholder {
+            color: rgba(255,255,255,0.3);
+            font-size: 0.8rem;
+            text-align: center;
+            padding: 10px;
+        }
+        .card-info-container {
+            flex: 1;
+            min-width: 0;
         }
         .card-name-header {
             font-weight: bold;
             font-size: 1.1rem;
             color: #4ECDC4;
             margin-bottom: 8px;
+            cursor: pointer;
+        }
+        .card-name-header:hover {
+            color: #6EEEE4;
         }
         .allocation-info {
             margin-left: 10px;
@@ -278,6 +310,7 @@
     <script src="decks.js"></script>
     <script src="toolkit-data.js"></script>
     <script src="supabase-client.js"></script>
+    <script src="card-lightbox.js"></script>
     <script src="spells-traps.js"></script>
 </body>
 </html>

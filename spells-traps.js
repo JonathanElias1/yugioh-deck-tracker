@@ -382,35 +382,83 @@ class SpellTrapOrganizer {
 
             return `
                 <div class="card-allocation">
-                    <div class="card-name-header">${cardName}</div>
-                    <div class="allocation-info">
-                        ${cardData.isToolkit ?
-                            `<span class="toolkit-badge">🛠️ Toolkit: ${cardData.toolkitCategory}</span>` :
-                            '<span class="toolkit-badge" style="background: rgba(255,107,107,0.3); border-color: rgba(255,107,107,0.6); color: #FF6B6B;">📦 Deck-Specific</span>'
-                        }
-                        ${needsToBuy ?
-                            '<span class="toolkit-badge" style="background: rgba(234,67,53,0.3); border-color: rgba(234,67,53,0.6); color: #EA4335;">⚠️ Need to Buy</span>' :
-                            `<span class="toolkit-badge" style="background: rgba(76,175,80,0.3); border-color: rgba(76,175,80,0.6); color: #4CAF50;">✓ Owned: ${cardData.owned}</span>`
-                        }
+                    <div class="card-image-container" id="img-${this.sanitizeId(cardName)}">
+                        <div class="card-image-placeholder">Loading...</div>
+                    </div>
+                    <div class="card-info-container">
+                        <div class="card-name-header" onclick="cardLightbox.open('${cardName.replace(/'/g, "\\'")}', '${cardName.replace(/'/g, "\\'")}')">${cardName}</div>
+                        <div class="allocation-info">
+                            ${cardData.isToolkit ?
+                                `<span class="toolkit-badge">🛠️ Toolkit: ${cardData.toolkitCategory}</span>` :
+                                '<span class="toolkit-badge" style="background: rgba(255,107,107,0.3); border-color: rgba(255,107,107,0.6); color: #FF6B6B;">📦 Deck-Specific</span>'
+                            }
+                            ${needsToBuy ?
+                                '<span class="toolkit-badge" style="background: rgba(234,67,53,0.3); border-color: rgba(234,67,53,0.6); color: #EA4335;">⚠️ Need to Buy</span>' :
+                                `<span class="toolkit-badge" style="background: rgba(76,175,80,0.3); border-color: rgba(76,175,80,0.6); color: #4CAF50;">✓ Owned: ${cardData.owned}</span>`
+                            }
 
-                        ${cardData.deckAllocations.length > 0 ? `
-                            <div style="margin-top: 10px;">
-                                <strong>Used in ${cardData.deckAllocations.length} deck(s):</strong>
-                                ${cardData.deckAllocations.map(alloc => `
-                                    <div class="deck-allocation">
-                                        <span class="deck-name">Deck #${alloc.deckId}: ${alloc.deckName} (${alloc.tier} Tier)</span>
-                                        <span class="deck-quantity">${alloc.quantity}x needed</span>
+                            ${cardData.deckAllocations.length > 0 ? `
+                                <div style="margin-top: 10px;">
+                                    <strong style="color: #4ECDC4;">📋 Used in ${cardData.deckAllocations.length} deck(s):</strong>
+                                    ${cardData.deckAllocations.map(alloc => `
+                                        <div class="deck-allocation">
+                                            <span class="deck-name">Deck #${alloc.deckId}: ${alloc.deckName} (${alloc.tier} Tier)</span>
+                                            <span class="deck-quantity">${alloc.quantity}x needed</span>
+                                        </div>
+                                    `).join('')}
+                                    <div style="margin-top: 8px; color: #4ECDC4; font-weight: bold;">
+                                        📊 Total Needed: ${totalNeeded}x | Owned: ${cardData.owned}x | Still Need: ${Math.max(0, totalNeeded - cardData.owned)}x
                                     </div>
-                                `).join('')}
-                                <div style="margin-top: 8px; color: #4ECDC4; font-weight: bold;">
-                                    Total Needed: ${totalNeeded}x | Owned: ${cardData.owned}x | Still Need: ${Math.max(0, totalNeeded - cardData.owned)}x
                                 </div>
-                            </div>
-                        ` : ''}
+                            ` : cardData.isToolkit ? `
+                                <div style="margin-top: 10px; color: rgba(255,255,255,0.7);">
+                                    <strong>Generic Toolkit Card</strong> - Pick before each match
+                                </div>
+                            ` : ''}
+                        </div>
                     </div>
                 </div>
             `;
         }).join('');
+
+        // Load images after rendering
+        filteredCards.forEach(([cardName, cardData]) => {
+            this.loadCardImage(cardName);
+        });
+    }
+
+    sanitizeId(cardName) {
+        return cardName.replace(/[^a-zA-Z0-9]/g, '-');
+    }
+
+    async loadCardImage(cardName) {
+        const container = document.getElementById(`img-${this.sanitizeId(cardName)}`);
+        if (!container) return;
+
+        try {
+            let response = await fetch(`https://db.ygoprodeck.com/api/v7/cardinfo.php?name=${encodeURIComponent(cardName)}`);
+
+            if (response.status === 400) {
+                const cleanedName = cardName.replace(/[^\w\s'-]/g, '').replace(/\s+/g, ' ').trim();
+                response = await fetch(`https://db.ygoprodeck.com/api/v7/cardinfo.php?name=${encodeURIComponent(cleanedName)}`);
+            }
+
+            if (!response.ok) {
+                container.innerHTML = '<div class="card-image-placeholder">No image</div>';
+                return;
+            }
+
+            const data = await response.json();
+
+            if (data.data && data.data[0] && data.data[0].card_images) {
+                const imageUrl = data.data[0].card_images[0].image_url_small || data.data[0].card_images[0].image_url;
+                container.innerHTML = `<img src="${imageUrl}" alt="${cardName}">`;
+            } else {
+                container.innerHTML = '<div class="card-image-placeholder">No image</div>';
+            }
+        } catch (error) {
+            container.innerHTML = '<div class="card-image-placeholder">No image</div>';
+        }
     }
 
     getFilteredCards() {

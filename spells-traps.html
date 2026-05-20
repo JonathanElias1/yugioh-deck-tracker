@@ -5,6 +5,130 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spell & Trap Organizer - Yu-Gi-Oh Collection</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .search-bar {
+            margin: 20px 0;
+            width: 100%;
+        }
+        .search-input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.3);
+            color: white;
+        }
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        .filter-tab {
+            padding: 8px 16px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .filter-tab.active {
+            background: rgba(78, 205, 196, 0.5);
+            border-color: rgba(78, 205, 196, 0.8);
+        }
+        .card-allocation {
+            background: rgba(0,0,0,0.4);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+        .card-name-header {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #4ECDC4;
+            margin-bottom: 8px;
+        }
+        .allocation-info {
+            margin-left: 10px;
+            font-size: 0.9rem;
+        }
+        .deck-allocation {
+            background: rgba(255,255,255,0.05);
+            padding: 6px 10px;
+            margin: 4px 0;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .deck-name {
+            color: #FF6B6B;
+            font-weight: 500;
+        }
+        .deck-quantity {
+            color: #4ECDC4;
+            font-weight: bold;
+        }
+        .toolkit-badge {
+            background: rgba(251, 188, 4, 0.3);
+            border: 1px solid rgba(251, 188, 4, 0.6);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #FBBC04;
+        }
+        .category-section {
+            margin-bottom: 20px;
+        }
+        .collapsible-header {
+            cursor: pointer;
+            user-select: none;
+            padding: 12px;
+            background: rgba(78, 205, 196, 0.2);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .collapsible-header:hover {
+            background: rgba(78, 205, 196, 0.3);
+        }
+        .collapse-icon {
+            font-size: 1.2rem;
+        }
+        .collapsible-content {
+            display: block;
+        }
+        .collapsible-content.collapsed {
+            display: none;
+        }
+        .quick-stats {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .stat-item {
+            flex: 1;
+            min-width: 150px;
+        }
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4ECDC4;
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.7);
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -15,65 +139,144 @@
                 <a href="inventory.html" class="nav-btn">📦 Card Inventory</a>
             </div>
             <h1>📋 Spell & Trap Organizer</h1>
-            <p class="subtitle">Browse generic spells and traps by function</p>
+            <p class="subtitle">See where each spell/trap goes - deck-specific or toolkit</p>
         </header>
+
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search spell/trap cards...">
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <div class="filter-tab active" data-filter="all">All Cards</div>
+            <div class="filter-tab" data-filter="toolkit">Toolkit Only</div>
+            <div class="filter-tab" data-filter="deck-specific">Deck-Specific</div>
+            <div class="filter-tab" data-filter="need-buy">Need to Buy</div>
+            <div class="filter-tab" data-filter="owned">Already Owned</div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="quick-stats" id="quickStats">
+            <!-- Populated by JS -->
+        </div>
+
+        <!-- Master List Section -->
+        <div class="category-section">
+            <div class="collapsible-header" onclick="toggleSection('masterList')">
+                <span><strong>📝 Master Card List</strong> (All Spells & Traps with Allocations)</span>
+                <span class="collapse-icon" id="masterListIcon">▼</span>
+            </div>
+            <div class="collapsible-content" id="masterListContent">
+                <div id="masterCardList">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
 
         <!-- Board Wipes -->
         <div class="category-section">
-            <h2 class="category-header">💥 Board Wipes / Mass Removal</h2>
-            <div class="category-grid" id="boardWipesGrid"></div>
+            <div class="collapsible-header" onclick="toggleSection('boardWipes')">
+                <span><strong>💥 Board Wipes / Mass Removal</strong></span>
+                <span class="collapse-icon" id="boardWipesIcon">▼</span>
+            </div>
+            <div class="collapsible-content" id="boardWipesContent">
+                <div class="category-grid" id="boardWipesGrid"></div>
+            </div>
         </div>
 
         <!-- Draw/Search -->
         <div class="category-section">
-            <h2 class="category-header">🎴 Draw / Search Cards</h2>
-            <div class="category-grid" id="drawSearchGrid"></div>
+            <div class="collapsible-header" onclick="toggleSection('drawSearch')">
+                <span><strong>🎴 Draw / Search Cards</strong></span>
+                <span class="collapse-icon" id="drawSearchIcon">▼</span>
+            </div>
+            <div class="collapsible-content" id="drawSearchContent">
+                <div class="category-grid" id="drawSearchGrid"></div>
+            </div>
         </div>
 
         <!-- Single Target Removal -->
         <div class="category-section">
-            <h2 class="category-header">🎯 Single Target Removal</h2>
-            <div class="category-grid" id="removalGrid"></div>
+            <div class="collapsible-header" onclick="toggleSection('removal')">
+                <span><strong>🎯 Single Target Removal</strong></span>
+                <span class="collapse-icon" id="removalIcon">▼</span>
+            </div>
+            <div class="collapsible-content" id="removalContent">
+                <div class="category-grid" id="removalGrid"></div>
+            </div>
         </div>
 
         <!-- Control/Steal -->
         <div class="category-section">
-            <h2 class="category-header">🎮 Control / Steal Effects</h2>
-            <div class="category-grid" id="controlGrid"></div>
+            <div class="collapsible-header" onclick="toggleSection('control')">
+                <span><strong>🎮 Control / Steal Effects</strong></span>
+                <span class="collapse-icon" id="controlIcon">▼</span>
+            </div>
+            <div class="collapsible-content" id="controlContent">
+                <div class="category-grid" id="controlGrid"></div>
+            </div>
         </div>
 
         <!-- Revival/Recursion -->
         <div class="category-section">
-            <h2 class="category-header">♻️ Revival / Recursion</h2>
-            <div class="category-grid" id="revivalGrid"></div>
+            <div class="collapsible-header" onclick="toggleSection('revival')">
+                <span><strong>♻️ Revival / Recursion</strong></span>
+                <span class="collapse-icon" id="revivalIcon">▼</span>
+            </div>
+            <div class="collapsible-content" id="revivalContent">
+                <div class="category-grid" id="revivalGrid"></div>
+            </div>
         </div>
 
         <!-- Negation -->
         <div class="category-section">
-            <h2 class="category-header">🚫 Negation / Counter</h2>
-            <div class="category-grid" id="negationGrid"></div>
+            <div class="collapsible-header" onclick="toggleSection('negation')">
+                <span><strong>🚫 Negation / Counter</strong></span>
+                <span class="collapse-icon" id="negationIcon">▼</span>
+            </div>
+            <div class="collapsible-content" id="negationContent">
+                <div class="category-grid" id="negationGrid"></div>
+            </div>
         </div>
 
         <!-- Hand Traps -->
         <div class="category-section">
-            <h2 class="category-header">✋ Hand Traps</h2>
-            <div class="category-grid" id="handTrapGrid"></div>
+            <div class="collapsible-header" onclick="toggleSection('handTrap')">
+                <span><strong>✋ Hand Traps</strong></span>
+                <span class="collapse-icon" id="handTrapIcon">▼</span>
+            </div>
+            <div class="collapsible-content" id="handTrapContent">
+                <div class="category-grid" id="handTrapGrid"></div>
+            </div>
         </div>
 
         <!-- Stall/Defense -->
         <div class="category-section">
-            <h2 class="category-header">🛡️ Stall / Defense</h2>
-            <div class="category-grid" id="stallGrid"></div>
+            <div class="collapsible-header" onclick="toggleSection('stall')">
+                <span><strong>🛡️ Stall / Defense</strong></span>
+                <span class="collapse-icon" id="stallIcon">▼</span>
+            </div>
+            <div class="collapsible-content" id="stallContent">
+                <div class="category-grid" id="stallGrid"></div>
+            </div>
         </div>
 
         <!-- Graveyard Setup -->
         <div class="category-section">
-            <h2 class="category-header">⚰️ Graveyard Setup</h2>
-            <div class="category-grid" id="graveyardGrid"></div>
+            <div class="collapsible-header" onclick="toggleSection('graveyard')">
+                <span><strong>⚰️ Graveyard Setup</strong></span>
+                <span class="collapse-icon" id="graveyardIcon">▼</span>
+            </div>
+            <div class="collapsible-content" id="graveyardContent">
+                <div class="category-grid" id="graveyardGrid"></div>
+            </div>
         </div>
     </div>
 
+    <script src="decks.js"></script>
     <script src="toolkit-data.js"></script>
+    <script src="supabase-client.js"></script>
     <script src="spells-traps.js"></script>
 </body>
 </html>

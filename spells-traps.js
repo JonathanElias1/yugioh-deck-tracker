@@ -230,43 +230,94 @@ class SpellTrapOrganizer {
     }
 
     isMonster(cardName) {
-        // List of known monster patterns
-        const monsterPatterns = [
-            'Dragon', 'Warrior', 'Beast-Warrior', 'Beast', 'Fiend', 'Zombie',
-            'Spellcaster', 'Machine', 'Aqua', 'Pyro', 'Rock', 'Winged Beast',
-            'Plant', 'Insect', 'Thunder', 'Dinosaur', 'Reptile', 'Fish', 'Fairy',
-            'Black Luster Soldier', 'Chaos Sorcerer', 'Blue-Eyes', 'Red-Eyes',
-            'Dark Magician Girl', 'Kuriboh', 'Slifer', 'Obelisk', 'Ra', 'Exodia',
-            'HERO', 'Cyber Dragon', 'Harpie', 'Summoned Skull', 'Gaia',
-            'Celtic Guardian', 'Magician Girl', 'Six Samurai', 'Agent of',
-            'Crystal Beast', 'Ancient Gear', 'Aromage', 'Sphinx', 'Frog',
-            'Batteryman', 'Volcanic', 'Archfiend', 'Monarch'
-        ];
-
-        const specificMonsters = [
-            'Spirit Reaper', 'Morphing Jar', 'Hero Kid', 'Ryu Kokki',
-            'Luster Dragon', 'Hydrogeddon', 'Night Assailant', 'Witch of the Black Forest',
-            'Sangan', 'Mystic Tomato', 'Giant Germ', 'Peten', 'Kaiser Glider'
-        ];
-
-        // Check specific monsters first
-        if (specificMonsters.includes(cardName)) {
-            return true;
-        }
-
-        // Check if it has spell/trap keywords (these override monster patterns)
+        // EXPANDED spell/trap keywords - if a card has ANY of these, it's definitely a spell/trap
         const spellTrapKeywords = [
-            'Pot of', 'Jar of', 'Hole', 'Storm', 'Force', 'Tribute', 'Mirror',
-            'Reborn', 'Burial', 'Steal', 'Control', 'Ritual', 'Fusion', 'Spell',
-            'Magic', 'Trap', 'Horn of', 'Axe of', 'Sword of', 'Book of', 'Swords of'
+            // Draw/Search
+            'Pot of', 'Jar of', 'Greed', 'Charity', 'Reckless', 'Reload', 'Upstart',
+            'Allure of', 'Trade-In', 'Cards of', 'Card of',
+            // Removal
+            'Hole', 'Storm', 'Typhoon', 'Vortex', 'Fissure', 'Smashing',
+            'Raigeki', 'Dark Hole', 'Lightning', 'Mystical Space',
+            // Negation/Counter
+            'Solemn', 'Seven Tools', 'Jammer', 'Drain', 'Divine Wrath',
+            'Skill Drain', 'Mind Crush', 'Horn of Heaven', 'Black Horn',
+            // Traps
+            'Trap', 'Mirror Force', 'Torrential', 'Compulsory', 'Bottomless',
+            'Sakuretsu', 'Dimensional Prison', 'Threatening', 'Waboku',
+            'Magic Cylinder', 'Mirror Wall', 'Call of the Haunted',
+            // Revival/Recursion
+            'Reborn', 'Burial', 'Soul Charge', 'Return from', 'Beckoning',
+            'Premature', 'Call of',
+            // Control/Steal
+            'Snatch Steal', 'Change of Heart', 'Brain Control', 'Enemy Controller',
+            'Creature Swap', 'Soul Exchange', 'Mind Control',
+            // Equipment
+            'Equip', 'Horn of', 'Axe of', 'Sword of', 'Mage Power', 'United We Stand',
+            'Big Bang Shot', 'Black Pendant', 'Fairy Meteor', 'Megamorph',
+            // Field/Continuous
+            'Field Barrier', 'Continuous', 'Spell', 'Magic', 'Toon World',
+            'Fusion Gate', 'Necrovalley', 'Citadel', 'Sanctuary',
+            // Fusion/Ritual
+            'Polymerization', 'Fusion', 'Ritual', 'Chaos Form', 'Power Bond',
+            'Future Fusion', 'Miracle Fusion', 'Overload', 'Dragon\'s Mirror',
+            // Special mechanics
+            'Tribute', 'Control', 'Book of', 'Swords of', 'Shield', 'Ring of',
+            'De-Spell', 'Nobleman', 'Scapegoat', 'Token', 'Cost Down',
+            'Limiter Removal', 'Dimension', 'Banish', 'Macro Cosmos',
+            'Soul Absorption', 'Different Dimension', 'Foolish Burial',
+            'Card Destruction', 'Painful Choice', 'Graceful',
+            // Specific patterns
+            'Reinforcement of', 'Salvage', 'Terraforming', 'Polymerization',
+            'Metamorphosis', 'Messenger of Peace', 'Gravity Bind', 'Level Limit',
+            'Ceasefire', 'Secret Barrel', 'Nightmare Wheel', 'Wave-Motion',
+            'Royal Decree', 'Imperial Order', 'Anti-', 'Prohibition',
+            // Dark Magician support
+            'Dark Magic', 'Eternal Soul', 'Navigation', 'Eye of Timaeus',
+            'Illusion Magic', 'Thousand Knives', 'Bond Between',
+            // Toon support
+            'Toon Table', 'Magic Planter',
+            // Spellcaster support
+            'Spell Power', 'Pitch-Black Power Stone', 'Magical Blast',
+            'Magical Dimension', 'Magical Citadel',
+            // Life Points
+             'Cylinder', 'Barrel', 'Gift Card', 'Upstart', 'One Day of Peace',
+            // Misc
+            'Backup', 'A Rival Appears', 'Emergency Provisions', 'Statue',
+            'Gravity Bind', 'Pole Position', 'Stumbling', 'Stamping',
+            'Dust Tornado', 'Twister', 'Bribe', 'Judgment', 'Warning', 'Strike'
         ];
 
+        // Check if it has spell/trap keywords FIRST (most inclusive)
         const hasSpellTrapKeyword = spellTrapKeywords.some(kw => cardName.includes(kw));
         if (hasSpellTrapKeyword) {
             return false; // It's a spell/trap
         }
 
-        // Check monster patterns
+        // Specific monsters to exclude (ONLY add cards you're CERTAIN are monsters)
+        const specificMonsters = [
+            'Spirit Reaper', 'Morphing Jar', 'Hero Kid', 'Ryu Kokki',
+            'Luster Dragon', 'Hydrogeddon', 'Night Assailant', 'Witch of the Black Forest',
+            'Sangan', 'Mystic Tomato', 'Giant Germ', 'Peten', 'Kaiser Glider',
+            'Breaker the Magical Warrior', 'Skilled Dark Magician', 'Skilled White Magician',
+            'Apprentice Magician', 'Old Vindictive Magician', 'Magical Marionette',
+            'Royal Magical Library', 'Endymion', 'Defender the Magical Knight'
+        ];
+
+        if (specificMonsters.some(monster => cardName.includes(monster))) {
+            return true; // It's a monster
+        }
+
+        // Monster type patterns (ONLY as last resort)
+        const monsterPatterns = [
+            'Blue-Eyes', 'Red-Eyes', 'Black Luster Soldier', 'Chaos Sorcerer',
+            'Kuriboh', 'Slifer', 'Obelisk', 'Ra', 'Exodia',
+            'HERO', 'Harpie', 'Summoned Skull', 'Gaia the Fierce Knight',
+            'Celtic Guardian', 'Magician Girl', 'Six Samurai',
+            'Crystal Beast', 'Aromage', 'Sphinx',
+            'Batteryman', 'Volcanic', 'Archfiend', 'Monarch'
+        ];
+
+        // Only return true if it matches specific monster patterns
         return monsterPatterns.some(pattern => cardName.includes(pattern));
     }
 

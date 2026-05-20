@@ -130,44 +130,79 @@ class SpellTrapOrganizer {
                 console.error('Error loading inventory:', error);
             }
         }
+
+        console.log(`📦 Loaded inventory: ${Object.keys(this.inventory).length} cards`);
     }
 
     buildCardAllocations() {
         this.allCards = {};
 
-        // First, scan all toolkit cards
-        this.toolkitPool.tooPowerful.forEach(card => {
-            this.allCards[card.name] = {
-                isToolkit: true,
-                toolkitCategory: this.findToolkitCategory(card.name),
-                isTooPowerful: true,
+        // FIRST: Add ALL spell/trap cards from inventory
+        Object.keys(this.inventory).forEach(cardName => {
+            const ownedQty = this.inventory[cardName]?.owned || this.inventory[cardName] || 0;
+
+            // Skip if it's a monster
+            if (this.isMonster(cardName)) {
+                return;
+            }
+
+            this.allCards[cardName] = {
+                isToolkit: false,
+                toolkitCategory: null,
+                isTooPowerful: false,
                 deckAllocations: [],
-                owned: this.inventory[card.name]?.owned || 0
+                owned: ownedQty
             };
+        });
+
+        console.log(`📋 Found ${Object.keys(this.allCards).length} spell/trap cards in inventory`);
+
+        // SECOND: Mark toolkit cards
+        this.toolkitPool.tooPowerful.forEach(card => {
+            if (!this.allCards[card.name]) {
+                this.allCards[card.name] = {
+                    isToolkit: true,
+                    toolkitCategory: this.findToolkitCategory(card.name),
+                    isTooPowerful: true,
+                    deckAllocations: [],
+                    owned: 0
+                };
+            } else {
+                this.allCards[card.name].isToolkit = true;
+                this.allCards[card.name].toolkitCategory = this.findToolkitCategory(card.name);
+                this.allCards[card.name].isTooPowerful = true;
+            }
         });
 
         this.toolkitPool.standard.forEach(card => {
-            this.allCards[card.name] = {
-                isToolkit: true,
-                toolkitCategory: this.findToolkitCategory(card.name),
-                isTooPowerful: false,
-                deckAllocations: [],
-                owned: this.inventory[card.name]?.owned || 0
-            };
+            if (!this.allCards[card.name]) {
+                this.allCards[card.name] = {
+                    isToolkit: true,
+                    toolkitCategory: this.findToolkitCategory(card.name),
+                    isTooPowerful: false,
+                    deckAllocations: [],
+                    owned: 0
+                };
+            } else {
+                this.allCards[card.name].isToolkit = true;
+                this.allCards[card.name].toolkitCategory = this.findToolkitCategory(card.name);
+                this.allCards[card.name].isTooPowerful = false;
+            }
         });
 
-        // Then, scan all decks for spell/trap cards
+        // THIRD: Scan decks for spell/trap usage
         this.decks.forEach(deck => {
             const spellTraps = this.extractSpellTraps(deck);
 
             spellTraps.forEach(({ cardName, quantity }) => {
                 if (!this.allCards[cardName]) {
+                    // Card is in deck but not in inventory
                     this.allCards[cardName] = {
                         isToolkit: false,
                         toolkitCategory: null,
                         isTooPowerful: false,
                         deckAllocations: [],
-                        owned: this.inventory[cardName]?.owned || 0
+                        owned: 0
                     };
                 }
 
@@ -180,6 +215,49 @@ class SpellTrapOrganizer {
                 });
             });
         });
+
+        console.log(`📦 Total spell/trap cards: ${Object.keys(this.allCards).length}`);
+    }
+
+    isMonster(cardName) {
+        // List of known monster patterns
+        const monsterPatterns = [
+            'Dragon', 'Warrior', 'Beast-Warrior', 'Beast', 'Fiend', 'Zombie',
+            'Spellcaster', 'Machine', 'Aqua', 'Pyro', 'Rock', 'Winged Beast',
+            'Plant', 'Insect', 'Thunder', 'Dinosaur', 'Reptile', 'Fish', 'Fairy',
+            'Black Luster Soldier', 'Chaos Sorcerer', 'Blue-Eyes', 'Red-Eyes',
+            'Dark Magician Girl', 'Kuriboh', 'Slifer', 'Obelisk', 'Ra', 'Exodia',
+            'HERO', 'Cyber Dragon', 'Harpie', 'Summoned Skull', 'Gaia',
+            'Celtic Guardian', 'Magician Girl', 'Six Samurai', 'Agent of',
+            'Crystal Beast', 'Ancient Gear', 'Aromage', 'Sphinx', 'Frog',
+            'Batteryman', 'Volcanic', 'Archfiend', 'Monarch'
+        ];
+
+        const specificMonsters = [
+            'Spirit Reaper', 'Morphing Jar', 'Hero Kid', 'Ryu Kokki',
+            'Luster Dragon', 'Hydrogeddon', 'Night Assailant', 'Witch of the Black Forest',
+            'Sangan', 'Mystic Tomato', 'Giant Germ', 'Peten', 'Kaiser Glider'
+        ];
+
+        // Check specific monsters first
+        if (specificMonsters.includes(cardName)) {
+            return true;
+        }
+
+        // Check if it has spell/trap keywords (these override monster patterns)
+        const spellTrapKeywords = [
+            'Pot of', 'Jar of', 'Hole', 'Storm', 'Force', 'Tribute', 'Mirror',
+            'Reborn', 'Burial', 'Steal', 'Control', 'Ritual', 'Fusion', 'Spell',
+            'Magic', 'Trap', 'Horn of', 'Axe of', 'Sword of', 'Book of', 'Swords of'
+        ];
+
+        const hasSpellTrapKeyword = spellTrapKeywords.some(kw => cardName.includes(kw));
+        if (hasSpellTrapKeyword) {
+            return false; // It's a spell/trap
+        }
+
+        // Check monster patterns
+        return monsterPatterns.some(pattern => cardName.includes(pattern));
     }
 
     extractSpellTraps(deck) {

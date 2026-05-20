@@ -263,73 +263,6 @@ class SpellTrapOrganizer {
     extractSpellTraps(deck) {
         const spellTraps = [];
 
-        // Comprehensive list of MONSTER-ONLY name patterns (cards to EXCLUDE)
-        // These are specific monster names/patterns that should never be considered spells/traps
-        const knownMonsters = [
-            'Black Luster Soldier', 'Chaos Sorcerer', 'Chaos Emperor Dragon',
-            'Dark Magician Girl', 'Dark Magician', 'Blue-Eyes', 'Red-Eyes',
-            'Kuriboh', 'Jinzo', 'Cyber Dragon', 'Elemental HERO', 'Destiny HERO',
-            'Harpie', 'Goblin', 'Celtic Guardian', 'Gaia', 'Summoned Skull',
-            'Buster Blader', 'Valkyrion', 'Alpha', 'Beta', 'Gamma', 'Magnet Warrior',
-            'Silent Swordsman', 'Silent Magician', 'Apprentice', 'Valkyria',
-            'D.D. Warrior', 'D.D. Survivor', 'Mystic Tomato', 'Giant Germ',
-            'Peten', 'Sangan', 'Witch of the Black Forest', 'Mask of Darkness',
-            'Cyber Jar', 'Morphing Jar', 'Fiber Jar',
-            'Apple Magician Girl', 'Lemon Magician Girl', 'Chocolate Magician Girl',
-            'Berry Magician Girl', 'Kiwi Magician Girl', 'Magician Girl the',
-            'Magician\'s Valkyria', 'Magician of Dark Illusion', 'Apprentice Illusion Magician',
-            'Royal Magical Library', 'Endymion the Master Magician', 'Magical Exemplar',
-            'Breaker the Magical Warrior', 'Defender the Magical Knight',
-            'Crusader of Endymion', 'Frequency Magician',
-            'Manju of the Ten Thousand Hands', 'Senju of the Thousand Hands',
-            'Thunder Dragon', 'Honest', 'Spirit Reaper', 'Don Zaloog',
-            'Exiled Force', 'Exodia', 'Necro Gardna', 'Dandylion',
-            'Lonefire Blossom', 'Spore', 'Glow-Up Bulb', 'Debris Dragon',
-            'Card Trooper', 'Ryko', 'Lumina', 'Ehren', 'Garoth', 'Jain',
-            'Lyla', 'Wulf', 'Celestia', 'Gragonith',
-            'Tribe-Infecting Virus', 'Dark Dust Spirit', 'D.D.M.', 'Magician of Chaos',
-            'Castel', 'Tornado Dragon', 'Utopia', 'Number', 'Constellar',
-            'Photon Strike Bounzer', 'Ebon', 'Norito', 'Big Eye', 'Dracossack',
-            'Flare Metal Dragon', 'Tempest Magician', 'Arcanite Magician',
-            'Stardust Dragon', 'Goyo Guardian', 'Black Rose Dragon', 'Ancient Fairy Dragon',
-            'Toon Dark Magician', 'Toon Summoned Skull', 'Toon Gemini Elf',
-            'Skilled Dark Magician', 'Skilled White Magician', 'Polymerization',
-            'XYZ-Dragon Cannon', 'VWXYZ', 'ABC-Dragon Buster', 'VW-Tiger'
-        ];
-
-        // Spell/Trap keywords - if card has these, it's LIKELY a spell/trap
-        const spellTrapIndicators = [
-            'Pot of', 'Jar of', 'Trap Hole', 'Hole', 'Storm', 'Mirror Force', 'Tribute',
-            'Cylinder', 'Drain', 'Judgment', 'Typhoon', 'Vortex', 'Lightning Vortex',
-            'Reborn', 'Burial', 'Snatch Steal', 'Change of Heart', 'Brain Control',
-            'Soul Exchange', 'Creature Swap', 'Enemy Controller', 'Book of',
-            'Greed', 'Charity', 'Card Destruction', 'Painful Choice',
-            'Navigation', 'Circle', 'Eternal Soul', 'Soul Charge', 'Call of the Haunted',
-            'Premature Burial', 'Monster Reborn', 'Heavy Storm', 'Mystical Space Typhoon',
-            'Dark Magic Attack', 'Dark Magic Expanded', 'Eye of Timaeus', 'Illusion Magic',
-            'Spell Power Grasp', 'Upstart Goblin', 'Magical Citadel', 'Pitch-Black Power Stone',
-            'Magical Blast', 'Magical Dimension', 'Terraforming', 'One Day of Peace',
-            'Toon Table of Contents', 'Toon World', 'Magic Planter',
-            'De-Spell', 'Fissure', 'Compulsory', 'Nobleman', 'Sakuretsu', 'Bottomless',
-            'Scapegoat', 'Reload', 'Reckless Greed', 'Magical Mallet',
-            'Solemn', 'Seven Tools', 'Magic Jammer', 'Magic Drain', 'Spell Shield',
-            'Divine Wrath', 'Skill Drain', 'Mind Crush', 'Trap Dustshoot', 'Black Horn',
-            'Ash Blossom', 'Effect Veiler', 'Infinite Impermanence', 'Ghost Belle',
-            'Magic Cylinder', 'Mirror Wall', 'Threatening Roar', 'Waboku',
-            'Foolish Burial', 'Dust Tornado', 'Stamping Destruction', 'Giant Trunade',
-            'Raigeki', 'Dark Hole', 'Torrential Tribute', 'Lightning Storm',
-            'Solemn Warning', 'Solemn Strike', 'Dimensional Prison', 'Ring of Destruction',
-            'Ceasefire', 'Royal Decree', 'Imperial Order', 'Macro Cosmos',
-            'Dimensional Fissure', 'Banisher of the Radiance', 'Soul Absorption',
-            'Return from the Different Dimension', 'Allure of Darkness', 'Trade-In',
-            'Cards of Consonance', 'Future Fusion', 'Overload Fusion', 'Miracle Fusion',
-            'Parallel World Fusion', 'Chain Material', 'Fusion Gate', 'Polymerization',
-            'Power Bond', 'Limiter Removal', 'Megamorph', 'United We Stand',
-            'Mage Power', 'Axe of Despair', 'Fairy Meteor Crush', 'Stamping Destruction',
-            'Pole Position', 'Gravity Bind', 'Messenger of Peace', 'Swords of Revealing Light',
-            'Level Limit', 'Nightmare Wheel', 'Dark Room of Nightmare', 'Secret Barrel'
-        ];
-
         const processCardList = (cardList) => {
             if (!cardList || !Array.isArray(cardList)) return;
 
@@ -337,30 +270,8 @@ class SpellTrapOrganizer {
                 const parsed = this.parseCardEntry(cardEntry);
                 const cardName = parsed.name;
 
-                // Check if it's a known monster (EXCLUDE these)
-                const isKnownMonster = knownMonsters.some(monsterPattern =>
-                    cardName.includes(monsterPattern)
-                );
-
-                // Check if it has spell/trap indicators (INCLUDE these)
-                const hasSpellTrapIndicator = spellTrapIndicators.some(indicator =>
-                    cardName.includes(indicator)
-                );
-
-                // Check if it's in toolkit (INCLUDE these)
-                const isInToolkit = this.toolkitPool.tooPowerful.some(c => c.name === cardName) ||
-                                   this.toolkitPool.standard.some(c => c.name === cardName);
-
-                // INCLUDE if: (has spell/trap indicator OR in toolkit) AND NOT a known monster
-                // OR: default to INCLUDE unless it's a known monster (very inclusive approach)
-                if (!isKnownMonster && (hasSpellTrapIndicator || isInToolkit)) {
-                    spellTraps.push({
-                        cardName: cardName,
-                        quantity: parsed.quantity
-                    });
-                } else if (!isKnownMonster && !hasSpellTrapIndicator && !isInToolkit) {
-                    // For ambiguous cases, default to INCLUDING (better to show extra than miss cards)
-                    // This catches cards like "Pole Position" that don't match patterns
+                // Use the same isMonster() function for consistency
+                if (!this.isMonster(cardName)) {
                     spellTraps.push({
                         cardName: cardName,
                         quantity: parsed.quantity

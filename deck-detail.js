@@ -414,19 +414,40 @@ class DeckDetail {
             const isInMain = [...deckList.mainDeck, ...this.customCards.main].some(c => c === card || c.includes(cardName));
             const deckType = isInMain ? 'main' : 'extra';
 
-            // Add 1 more copy to custom cards
-            const newCardEntry = `1 ${cardName}`;
-            this.customCards[deckType].push(newCardEntry);
+            const newQuantity = totalQuantity + 1;
+            const newCardEntry = `${newQuantity} ${cardName}`;
 
-            // Auto-mark the new copy as owned
-            this.ownedCards[newCardEntry] = 1;
+            // Check if this card is from the original deck or custom cards
+            const isOriginalCard = deckList[deckType === 'main' ? 'mainDeck' : 'extraDeck'].includes(card);
+            const isCustomCard = this.customCards[deckType].includes(card);
+
+            if (isOriginalCard) {
+                // Remove from original deck (add to removedCards)
+                if (!this.removedCards.includes(card)) {
+                    this.removedCards.push(card);
+                    this.saveRemovedCards(this.removedCards);
+                }
+                // Delete old ownership data
+                delete this.ownedCards[card];
+            } else if (isCustomCard) {
+                // Remove from custom cards
+                const index = this.customCards[deckType].indexOf(card);
+                if (index > -1) {
+                    this.customCards[deckType].splice(index, 1);
+                }
+                // Delete old ownership data
+                delete this.ownedCards[card];
+            }
+
+            // Add new card entry with increased quantity
+            this.customCards[deckType].push(newCardEntry);
+            this.ownedCards[newCardEntry] = newQuantity; // Auto-mark as fully owned
 
             this.saveCustomCards();
             this.saveOwnedCards();
             this.renderCards();
 
-            // Show notification
-            console.log(`✅ Added 1 more copy of "${cardName}" to ${deckType} deck (now ${totalQuantity + 1} total)`);
+            console.log(`✅ Increased "${cardName}" from ${totalQuantity} to ${newQuantity} copies`);
         }
     }
 

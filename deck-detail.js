@@ -132,31 +132,40 @@ class DeckDetail {
 
         const detailsSection = document.getElementById('deckDetails');
 
-        // Render tags
-        const tagsHTML = this.deckMetadata.tags.length > 0
-            ? this.deckMetadata.tags.map(tag => `<span class="deck-tag">${tag} <button class="tag-remove" onclick="deckDetail.removeTag('${tag}')">×</button></span>`).join('')
-            : '<span style="color: rgba(255,255,255,0.6);">No tags</span>';
+        // Calculate current deck sizes
+        const deckList = this.getCurrentDeckList();
+        const allMainCards = [...deckList.mainDeck, ...this.customCards.main];
+        const allExtraCards = [...deckList.extraDeck, ...this.customCards.extra];
+        const mainDeckCount = this.calculateDeckCardCount(allMainCards);
+        const extraDeckCount = this.calculateDeckCardCount(allExtraCards);
+
+        // Determine status for main deck
+        let mainDeckStatus = '';
+        if (mainDeckCount < 40) {
+            mainDeckStatus = `<span style="color: #fbc02d;">⚠️ ${mainDeckCount}/40-60 (Need ${40 - mainDeckCount} more)</span>`;
+        } else if (mainDeckCount > 60) {
+            mainDeckStatus = `<span style="color: #ea4335;">⚠️ ${mainDeckCount}/40-60 (${mainDeckCount - 60} too many)</span>`;
+        } else {
+            mainDeckStatus = `<span style="color: #4caf50;">✅ ${mainDeckCount}/40-60 (Legal)</span>`;
+        }
+
+        // Determine status for extra deck
+        let extraDeckStatus = '';
+        if (extraDeckCount > 15) {
+            extraDeckStatus = `<span style="color: #ea4335;">⚠️ ${extraDeckCount}/0-15 (${extraDeckCount - 15} too many)</span>`;
+        } else {
+            extraDeckStatus = `<span style="color: #4caf50;">✅ ${extraDeckCount}/0-15 (Legal)</span>`;
+        }
 
         let detailsHTML = `
-            <div class="deck-metadata-section">
-                <div class="metadata-item">
-                    <strong>Tags:</strong>
-                    <div class="tags-container">
-                        ${tagsHTML}
-                        <button class="add-tag-btn" onclick="deckDetail.showAddTagModal()">+ Add Tag</button>
-                    </div>
+            <div class="deck-card-count-section">
+                <div class="count-item">
+                    <strong>Main Deck:</strong>
+                    <div style="font-size: 1.2rem; margin-top: 5px;">${mainDeckStatus}</div>
                 </div>
-
-                <div class="metadata-item">
-                    <strong>Custom Notes:</strong>
-                    <textarea id="customNotes" placeholder="Add your notes, combo explanations, sideboard strategy, etc..." rows="4">${this.deckMetadata.customNotes}</textarea>
-                    <button class="save-notes-btn" onclick="deckDetail.saveNotes()">Save Notes</button>
-                </div>
-
-                <div class="metadata-item">
-                    <strong>Storage Location:</strong>
-                    <input type="text" id="storageLocation" placeholder="e.g., Binder 1, Deck Box A, etc." value="${this.deckMetadata.storageLocation}">
-                    <button class="save-storage-btn" onclick="deckDetail.saveStorage()">Save Location</button>
+                <div class="count-item">
+                    <strong>Extra Deck:</strong>
+                    <div style="font-size: 1.2rem; margin-top: 5px;">${extraDeckStatus}</div>
                 </div>
             </div>
 
@@ -293,10 +302,6 @@ class DeckDetail {
             return this.renderCard(card, isOwned, isCustom, 'main');
         }).join('');
 
-        // Calculate and display Main Deck count
-        const mainDeckCount = this.calculateDeckCardCount(allMainCards);
-        this.updateDeckCountDisplay('mainDeckCount', mainDeckCount, 40, 60);
-
         // Render Extra Deck
         const extraDeckEl = document.getElementById('extraDeck');
         const allExtraCards = [...deckList.extraDeck, ...this.customCards.extra];
@@ -308,9 +313,8 @@ class DeckDetail {
             }).join('')
             : '<p style="color: rgba(255,255,255,0.6);">No Extra Deck cards</p>';
 
-        // Calculate and display Extra Deck count
-        const extraDeckCount = this.calculateDeckCardCount(allExtraCards);
-        this.updateDeckCountDisplay('extraDeckCount', extraDeckCount, 0, 15);
+        // Update deck info section (includes card counts)
+        this.renderDeckInfo();
 
         // Fetch images for all cards
         [...allMainCards, ...allExtraCards].forEach(async (card) => {
@@ -340,29 +344,6 @@ class DeckDetail {
             const quantity = parseInt(parsed[1]);
             return total + quantity;
         }, 0);
-    }
-
-    updateDeckCountDisplay(elementId, count, minCards, maxCards) {
-        const element = document.getElementById(elementId);
-        if (!element) return;
-
-        // Determine status color
-        let statusClass = '';
-        let statusText = '';
-
-        if (count < minCards) {
-            statusClass = 'deck-count-low';
-            statusText = `⚠️ ${count}/${minCards}-${maxCards}`;
-        } else if (count > maxCards) {
-            statusClass = 'deck-count-high';
-            statusText = `⚠️ ${count}/${minCards}-${maxCards}`;
-        } else {
-            statusClass = 'deck-count-good';
-            statusText = `✅ ${count}/${minCards}-${maxCards}`;
-        }
-
-        element.className = `deck-count ${statusClass}`;
-        element.textContent = statusText;
     }
 
     renderCard(card, isOwned, isCustom, deckType) {
@@ -412,15 +393,40 @@ class DeckDetail {
         this.saveCardConditions();
     }
 
-    incrementQuantity(card) {
+    incrementQuantity(card, maxLimit = 3) {
         const parsed = card.match(/^(\d+)\s+(.+)$/) || [null, 1, card];
         const totalQuantity = parseInt(parsed[1]);
+        const cardName = parsed[2];
         const currentQuantity = typeof this.ownedCards[card] === 'number' ? this.ownedCards[card] : (this.ownedCards[card] ? totalQuantity : 0);
 
+        // If not at max owned, just increment owned count
         if (currentQuantity < totalQuantity) {
             this.ownedCards[card] = currentQuantity + 1;
             this.saveOwnedCards();
             this.renderCards();
+            return;
+        }
+
+        // If at max owned and can add more copies to deck (up to 3 total)
+        if (currentQuantity >= totalQuantity && totalQuantity < maxLimit) {
+            // Determine which deck type this card is in
+            const deckList = this.getCurrentDeckList();
+            const isInMain = [...deckList.mainDeck, ...this.customCards.main].some(c => c === card || c.includes(cardName));
+            const deckType = isInMain ? 'main' : 'extra';
+
+            // Add 1 more copy to custom cards
+            const newCardEntry = `1 ${cardName}`;
+            this.customCards[deckType].push(newCardEntry);
+
+            // Auto-mark the new copy as owned
+            this.ownedCards[newCardEntry] = 1;
+
+            this.saveCustomCards();
+            this.saveOwnedCards();
+            this.renderCards();
+
+            // Show notification
+            console.log(`✅ Added 1 more copy of "${cardName}" to ${deckType} deck (now ${totalQuantity + 1} total)`);
         }
     }
 

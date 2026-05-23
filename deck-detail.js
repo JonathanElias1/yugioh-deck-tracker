@@ -293,6 +293,10 @@ class DeckDetail {
             return this.renderCard(card, isOwned, isCustom, 'main');
         }).join('');
 
+        // Calculate and display Main Deck count
+        const mainDeckCount = this.calculateDeckCardCount(allMainCards);
+        this.updateDeckCountDisplay('mainDeckCount', mainDeckCount, 40, 60);
+
         // Render Extra Deck
         const extraDeckEl = document.getElementById('extraDeck');
         const allExtraCards = [...deckList.extraDeck, ...this.customCards.extra];
@@ -303,6 +307,10 @@ class DeckDetail {
                 return this.renderCard(card, isOwned, isCustom, 'extra');
             }).join('')
             : '<p style="color: rgba(255,255,255,0.6);">No Extra Deck cards</p>';
+
+        // Calculate and display Extra Deck count
+        const extraDeckCount = this.calculateDeckCardCount(allExtraCards);
+        this.updateDeckCountDisplay('extraDeckCount', extraDeckCount, 0, 15);
 
         // Fetch images for all cards
         [...allMainCards, ...allExtraCards].forEach(async (card) => {
@@ -323,6 +331,38 @@ class DeckDetail {
                 }
             });
         });
+    }
+
+    calculateDeckCardCount(cardList) {
+        // Sum up all quantities from card entries like "3 Blue-Eyes White Dragon"
+        return cardList.reduce((total, cardEntry) => {
+            const parsed = cardEntry.match(/^(\d+)\s+(.+)$/) || [null, 1, cardEntry];
+            const quantity = parseInt(parsed[1]);
+            return total + quantity;
+        }, 0);
+    }
+
+    updateDeckCountDisplay(elementId, count, minCards, maxCards) {
+        const element = document.getElementById(elementId);
+        if (!element) return;
+
+        // Determine status color
+        let statusClass = '';
+        let statusText = '';
+
+        if (count < minCards) {
+            statusClass = 'deck-count-low';
+            statusText = `⚠️ ${count}/${minCards}-${maxCards}`;
+        } else if (count > maxCards) {
+            statusClass = 'deck-count-high';
+            statusText = `⚠️ ${count}/${minCards}-${maxCards}`;
+        } else {
+            statusClass = 'deck-count-good';
+            statusText = `✅ ${count}/${minCards}-${maxCards}`;
+        }
+
+        element.className = `deck-count ${statusClass}`;
+        element.textContent = statusText;
     }
 
     renderCard(card, isOwned, isCustom, deckType) {

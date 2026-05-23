@@ -974,6 +974,34 @@ h1 {
     width: 100%;
 }
 
+/* Deck Card Count Styles */
+.deck-count {
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 2px solid;
+    transition: all 0.3s ease;
+}
+
+.deck-count-good {
+    background: rgba(76, 175, 80, 0.2);
+    border-color: rgba(76, 175, 80, 0.6);
+    color: #4caf50;
+}
+
+.deck-count-low {
+    background: rgba(251, 188, 4, 0.2);
+    border-color: rgba(251, 188, 4, 0.6);
+    color: #fbc02d;
+}
+
+.deck-count-high {
+    background: rgba(234, 67, 53, 0.2);
+    border-color: rgba(234, 67, 53, 0.6);
+    color: #ea4335;
+}
+
 /* Modal textarea */
 .modal-content textarea {
     width: 100%;

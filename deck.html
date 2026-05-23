@@ -21,6 +21,7 @@
                 <button onclick="deckDetail.showImportModal()" class="back-btn" style="margin-bottom: 0; cursor: pointer;">📥 Import Deck</button>
                 <button onclick="deckDetail.exportToPDF()" class="back-btn" style="margin-bottom: 0; cursor: pointer;">📑 Export PDF</button>
                 <button onclick="deckDetail.forceRefreshFromCloud()" class="back-btn" style="margin-bottom: 0; cursor: pointer; background: rgba(78, 205, 196, 0.8);">☁️ Refresh from Cloud</button>
+                <button onclick="backupService.showBackupModal()" class="back-btn" style="margin-bottom: 0; cursor: pointer; background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);">💾 Backup</button>
                 <div id="syncStatus" style="margin-bottom: 0; padding: 8px 12px; border-radius: 8px; font-size: 0.85rem; display: none; background: rgba(255,255,255,0.1); color: white;"></div>
                 <div id="lastSyncTime" style="margin-bottom: 0; padding: 8px 12px; border-radius: 8px; font-size: 0.75rem; background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.6);"></div>
             </div>
@@ -112,6 +113,7 @@
     <script src="owned-cards-data.js"></script>
     <script src="supabase-client.js"></script>
     <script src="deck-sync.js"></script>
+    <script src="backup-service.js"></script>
     <script src="deck-detail.js"></script>
     <script src="card-lightbox.js"></script>
 </body>

@@ -161,18 +161,30 @@ class CardInventory {
             const ownedCardsObj = ownedCards ? JSON.parse(ownedCards) : {};
 
             // Find matching entries in owned cards (with or without quantity prefix)
-            const isOwned = Object.keys(ownedCardsObj).some(key => {
+            // FIXED: Now supports both old format (boolean true) and new format (numeric quantities)
+            let ownedQuantity = 0;
+            Object.keys(ownedCardsObj).forEach(key => {
                 const parsed = this.parseCardEntry(key);
-                return parsed.name === cardName && ownedCardsObj[key] === true;
+                if (parsed.name === cardName) {
+                    const value = ownedCardsObj[key];
+                    if (typeof value === 'number') {
+                        // New format: numeric quantity (e.g., 2 out of 3)
+                        ownedQuantity = value;
+                    } else if (value === true) {
+                        // Old format: boolean true means all copies owned
+                        ownedQuantity = parsed.quantity;
+                    }
+                }
             });
 
-            if (isOwned) {
+            if (ownedQuantity > 0) {
                 const quantity = decksWithCard[deckKey].quantity;
                 usage[deckKey] = {
                     deckName: decksWithCard[deckKey].deckName,
-                    quantity: quantity
+                    quantity: quantity,
+                    owned: ownedQuantity
                 };
-                totalUsed += quantity;
+                totalUsed += ownedQuantity; // Count actual owned quantity, not deck requirement
             }
         });
 
@@ -541,7 +553,7 @@ class CardInventory {
                     <a href="deck.html?id=${deckId}" target="_blank">
                         <strong>Deck #${deckId}</strong> <span style="opacity: 0.6; font-size: 0.9em;">(${deck.deckTier || '?'} Tier)</span> - ${deck.deckName}
                     </a>
-                    <span class="usage-quantity">×${deck.quantity}</span>
+                    <span class="usage-quantity">×${deck.owned || deck.quantity} owned</span>
                 </div>`;
             }).join('');
 

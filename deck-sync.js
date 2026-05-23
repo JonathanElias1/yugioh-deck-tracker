@@ -240,10 +240,64 @@ class DeckSync {
                     lastUpdated: progress.updated_at
                 });
 
-                // Update localStorage with Supabase data
-                localStorage.setItem(`ownedCards_${progress.deck_id}`, JSON.stringify(progress.owned_cards || {}));
-                localStorage.setItem(`removedCards_${progress.deck_id}`, JSON.stringify(progress.removed_cards || []));
-                localStorage.setItem(`customCards_${progress.deck_id}`, JSON.stringify(progress.custom_cards || {}));
+                // SAFETY: Merge with local data instead of blindly overwriting
+                // This prevents data loss if local has newer changes
+                const localOwned = localStorage.getItem(`ownedCards_${progress.deck_id}`);
+                const localRemoved = localStorage.getItem(`removedCards_${progress.deck_id}`);
+                const localCustom = localStorage.getItem(`customCards_${progress.deck_id}`);
+
+                let finalOwned = progress.owned_cards || {};
+                let finalRemoved = progress.removed_cards || [];
+                let finalCustom = progress.custom_cards || {};
+
+                // If local data exists, merge intelligently (union of cards)
+                if (localOwned) {
+                    try {
+                        const localOwnedObj = JSON.parse(localOwned);
+                        // Merge: keep higher ownership quantities
+                        Object.keys(localOwnedObj).forEach(card => {
+                            const localQty = typeof localOwnedObj[card] === 'number' ? localOwnedObj[card] : (localOwnedObj[card] ? 999 : 0);
+                            const cloudQty = typeof finalOwned[card] === 'number' ? finalOwned[card] : (finalOwned[card] ? 999 : 0);
+                            // Keep the higher value (never lose ownership)
+                            if (localQty > cloudQty) {
+                                finalOwned[card] = localOwnedObj[card];
+                                console.log(`  🔄 Merged: ${card} - keeping local ownership (${localQty} vs cloud ${cloudQty})`);
+                            }
+                        });
+                    } catch (e) {
+                        console.error('Error merging local owned cards:', e);
+                    }
+                }
+
+                if (localRemoved) {
+                    try {
+                        const localRemovedArr = JSON.parse(localRemoved);
+                        // Union: keep all removed cards from both sources
+                        finalRemoved = [...new Set([...finalRemoved, ...localRemovedArr])];
+                    } catch (e) {
+                        console.error('Error merging local removed cards:', e);
+                    }
+                }
+
+                if (localCustom) {
+                    try {
+                        const localCustomObj = JSON.parse(localCustom);
+                        // Union: merge custom cards
+                        if (localCustomObj.main) {
+                            finalCustom.main = [...new Set([...(finalCustom.main || []), ...localCustomObj.main])];
+                        }
+                        if (localCustomObj.extra) {
+                            finalCustom.extra = [...new Set([...(finalCustom.extra || []), ...localCustomObj.extra])];
+                        }
+                    } catch (e) {
+                        console.error('Error merging local custom cards:', e);
+                    }
+                }
+
+                // Update localStorage with merged data
+                localStorage.setItem(`ownedCards_${progress.deck_id}`, JSON.stringify(finalOwned));
+                localStorage.setItem(`removedCards_${progress.deck_id}`, JSON.stringify(finalRemoved));
+                localStorage.setItem(`customCards_${progress.deck_id}`, JSON.stringify(finalCustom));
                 loaded++;
             });
 

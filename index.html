@@ -19,6 +19,7 @@
                 <a href="compare.html" class="nav-btn">⚖️ Compare</a>
                 <a href="stats.html" class="nav-btn">📊 Stats</a>
                 <button id="authButton" class="nav-btn" style="cursor: pointer;">🔐 Login</button>
+                <button onclick="backupService.showBackupModal()" class="nav-btn" style="cursor: pointer; background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);">💾 Backup</button>
             </div>
             <h1>⚡ Yu-Gi-Oh Deck Collection</h1>
             <p class="subtitle">Complete Collection - 47 Active Decks with Toolkit System</p>
@@ -94,6 +95,7 @@
     <script src="owned-cards-data.js"></script>
     <script src="supabase-client.js"></script>
     <script src="deck-sync.js"></script>
+    <script src="backup-service.js"></script>
     <script src="auth-ui.js"></script>
     <script src="app.js"></script>
 </body>

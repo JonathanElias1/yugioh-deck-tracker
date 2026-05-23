@@ -380,7 +380,7 @@ class DeckDetail {
                             <span class="qty-separator">/</span>
                             <span class="total-qty">${totalQuantity}</span>
                         </div>
-                        <button class="qty-btn" onclick="deckDetail.incrementQuantity('${card.replace(/'/g, "\\'")}', ${totalQuantity})">+</button>
+                        <button class="qty-btn" onclick="deckDetail.incrementQuantity('${card.replace(/'/g, "\\'")}')">+</button>
                     </div>
                     ${deleteBtn}
                 </div>

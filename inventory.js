@@ -390,8 +390,8 @@ class CardInventory {
             return;
         }
 
-        // Split by newlines or commas
-        const lines = input.split(/[\n,]/).map(l => l.trim()).filter(l => l);
+        // Split by newlines ONLY (not commas - cards can have commas in their names!)
+        const lines = input.split(/\n/).map(l => l.trim()).filter(l => l);
         let added = 0;
 
         lines.forEach(line => {
@@ -543,21 +543,54 @@ class CardInventory {
             const owned = this.inventory[cardName].owned;
             const { usage, totalUsed } = this.getCardUsage(cardName);
             const available = owned - totalUsed;
-            const isUnused = totalUsed === 0;
 
-            // Build deck list
-            const deckList = Object.keys(usage).map(deckKey => {
-                const deck = usage[deckKey];
-                const deckId = deckKey.split('-')[0];
-                return `<div class="deck-usage-item">
-                    <a href="deck.html?id=${deckId}" target="_blank">
-                        <strong>Deck #${deckId}</strong> <span style="opacity: 0.6; font-size: 0.9em;">(${deck.deckTier || '?'} Tier)</span> - ${deck.deckName}
+            // Get ALL decks this card appears in (not just owned ones)
+            const decksWithCard = this.cardDatabase[cardName] || {};
+            const allDeckAssignments = Object.keys(decksWithCard).map(deckKey => {
+                const deckId = parseInt(deckKey.split('-')[0]);
+                const deck = this.decks.find(d => d.id === deckId);
+                if (!deck) return null;
+
+                // Check if marked as owned in this deck
+                const isAllocated = usage[deckKey] !== undefined;
+                const allocatedQty = isAllocated ? usage[deckKey].owned : 0;
+
+                return {
+                    deckKey,
+                    deckId,
+                    deckName: decksWithCard[deckKey].deckName,
+                    deckTier: decksWithCard[deckKey].deckTier,
+                    required: decksWithCard[deckKey].quantity,
+                    allocated: allocatedQty,
+                    isAllocated
+                };
+            }).filter(d => d !== null);
+
+            const hasDecks = allDeckAssignments.length > 0;
+
+            // Build deck assignment list
+            const deckAssignmentList = allDeckAssignments.map(deck => {
+                const checkmark = deck.isAllocated ? '✅' : '⬜';
+                const allocationText = deck.isAllocated
+                    ? `<span style="color: #4ecdc4;">${deck.allocated}/${deck.required} allocated</span>`
+                    : `<span style="opacity: 0.6;">${deck.required} needed</span>`;
+
+                return `<div class="deck-assignment-item">
+                    <a href="deck.html?id=${deck.deckId}" target="_blank" style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 1.1em;">${checkmark}</span>
+                        <div style="flex: 1;">
+                            <strong>Deck #${deck.deckId}</strong>
+                            <span style="opacity: 0.6; font-size: 0.9em;">(${deck.deckTier || '?'} Tier)</span>
+                            - ${deck.deckName}
+                        </div>
+                        <div style="font-size: 0.9em;">
+                            ${allocationText}
+                        </div>
                     </a>
-                    <span class="usage-quantity">×${deck.owned || deck.quantity} owned</span>
                 </div>`;
             }).join('');
 
-            const statusClass = isUnused ? 'status-unused' : (available > 0 ? 'status-available' : 'status-used');
+            const statusClass = totalUsed === 0 ? 'status-unused' : (available > 0 ? 'status-available' : 'status-used');
 
             return `
                 <div class="inventory-card ${statusClass}" data-card-name="${cardName.replace(/"/g, '&quot;')}">
@@ -575,15 +608,15 @@ class CardInventory {
                         </div>
                         <div class="inventory-card-stats">
                             <div class="stat-badge owned">Owned: ${owned}</div>
-                            <div class="stat-badge used">Used: ${totalUsed}</div>
+                            <div class="stat-badge used">Allocated: ${totalUsed}</div>
                             <div class="stat-badge available ${available > 0 ? 'positive' : ''}">
                                 Available: ${available}
                             </div>
                         </div>
-                        ${deckList ? `
-                            <div class="deck-usage-list">
-                                <div class="deck-usage-label">Used in:</div>
-                                ${deckList}
+                        ${hasDecks ? `
+                            <div class="deck-assignment-list">
+                                <div class="deck-assignment-label">Appears in ${allDeckAssignments.length} deck(s):</div>
+                                ${deckAssignmentList}
                             </div>
                         ` : '<div class="unused-notice">⚠️ Not used in any deck</div>'}
                     </div>

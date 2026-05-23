@@ -940,6 +940,40 @@ h1 {
     text-align: center;
 }
 
+/* Deck Assignment Styles */
+.deck-assignment-list {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.deck-assignment-label {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 8px;
+}
+
+.deck-assignment-item {
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    margin-bottom: 6px;
+    border-left: 3px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.deck-assignment-item:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-left-color: var(--tier-a);
+}
+
+.deck-assignment-item a {
+    color: white;
+    text-decoration: none;
+    width: 100%;
+}
+
 /* Modal textarea */
 .modal-content textarea {
     width: 100%;

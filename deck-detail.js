@@ -139,33 +139,45 @@ class DeckDetail {
         const mainDeckCount = this.calculateDeckCardCount(allMainCards);
         const extraDeckCount = this.calculateDeckCardCount(allExtraCards);
 
-        // Determine status for main deck
+        // Calculate total cards needed for deck
+        const totalMainNeeded = this.calculateTotalDeckSize(allMainCards);
+        const totalExtraNeeded = this.calculateTotalDeckSize(allExtraCards);
+
+        // Determine status for main deck (based on confirmed cards)
         let mainDeckStatus = '';
-        if (mainDeckCount < 40) {
-            mainDeckStatus = `<span style="color: #fbc02d;">⚠️ ${mainDeckCount}/40-60 (Need ${40 - mainDeckCount} more)</span>`;
-        } else if (mainDeckCount > 60) {
-            mainDeckStatus = `<span style="color: #ea4335;">⚠️ ${mainDeckCount}/40-60 (${mainDeckCount - 60} too many)</span>`;
+        const mainProgress = totalMainNeeded > 0 ? Math.round((mainDeckCount / totalMainNeeded) * 100) : 0;
+        if (mainDeckCount === 0) {
+            mainDeckStatus = `<span style="color: #fbc02d;">⚠️ ${mainDeckCount} cards confirmed (0%)</span>`;
+        } else if (mainDeckCount < totalMainNeeded) {
+            mainDeckStatus = `<span style="color: #4ecdc4;">📝 ${mainDeckCount}/${totalMainNeeded} cards confirmed (${mainProgress}%)</span>`;
         } else {
-            mainDeckStatus = `<span style="color: #4caf50;">✅ ${mainDeckCount}/40-60 (Legal)</span>`;
+            mainDeckStatus = `<span style="color: #4caf50;">✅ ${mainDeckCount}/${totalMainNeeded} cards confirmed (100%)</span>`;
         }
 
         // Determine status for extra deck
         let extraDeckStatus = '';
-        if (extraDeckCount > 15) {
-            extraDeckStatus = `<span style="color: #ea4335;">⚠️ ${extraDeckCount}/0-15 (${extraDeckCount - 15} too many)</span>`;
+        const extraProgress = totalExtraNeeded > 0 ? Math.round((extraDeckCount / totalExtraNeeded) * 100) : 0;
+        if (totalExtraNeeded === 0) {
+            extraDeckStatus = `<span style="color: rgba(255,255,255,0.6);">No extra deck</span>`;
+        } else if (extraDeckCount === 0) {
+            extraDeckStatus = `<span style="color: #fbc02d;">⚠️ ${extraDeckCount} cards confirmed (0%)</span>`;
+        } else if (extraDeckCount < totalExtraNeeded) {
+            extraDeckStatus = `<span style="color: #4ecdc4;">📝 ${extraDeckCount}/${totalExtraNeeded} cards confirmed (${extraProgress}%)</span>`;
         } else {
-            extraDeckStatus = `<span style="color: #4caf50;">✅ ${extraDeckCount}/0-15 (Legal)</span>`;
+            extraDeckStatus = `<span style="color: #4caf50;">✅ ${extraDeckCount}/${totalExtraNeeded} cards confirmed (100%)</span>`;
         }
 
         let detailsHTML = `
             <div class="deck-card-count-section">
                 <div class="count-item">
-                    <strong>Main Deck:</strong>
+                    <strong>Main Deck Cards:</strong>
                     <div style="font-size: 1.2rem; margin-top: 5px;">${mainDeckStatus}</div>
+                    <div style="font-size: 0.85rem; margin-top: 8px; opacity: 0.7;">Mark cards with + to confirm in deck</div>
                 </div>
                 <div class="count-item">
-                    <strong>Extra Deck:</strong>
+                    <strong>Extra Deck Cards:</strong>
                     <div style="font-size: 1.2rem; margin-top: 5px;">${extraDeckStatus}</div>
+                    <div style="font-size: 0.85rem; margin-top: 8px; opacity: 0.7;">Fusion/Synchro/Xyz/Link cards</div>
                 </div>
             </div>
 
@@ -338,7 +350,27 @@ class DeckDetail {
     }
 
     calculateDeckCardCount(cardList) {
-        // Sum up all quantities from card entries like "3 Blue-Eyes White Dragon"
+        // Sum up only OWNED quantities (cards marked as confirmed in this deck)
+        return cardList.reduce((total, cardEntry) => {
+            const parsed = cardEntry.match(/^(\d+)\s+(.+)$/) || [null, 1, cardEntry];
+            const totalQuantity = parseInt(parsed[1]);
+
+            // Check how many of this card are marked as owned
+            const ownedValue = this.ownedCards[cardEntry];
+            let ownedQuantity = 0;
+
+            if (typeof ownedValue === 'number') {
+                ownedQuantity = ownedValue;
+            } else if (ownedValue === true) {
+                ownedQuantity = totalQuantity; // Old format: true means all owned
+            }
+
+            return total + ownedQuantity;
+        }, 0);
+    }
+
+    calculateTotalDeckSize(cardList) {
+        // Sum up ALL card quantities (total deck size)
         return cardList.reduce((total, cardEntry) => {
             const parsed = cardEntry.match(/^(\d+)\s+(.+)$/) || [null, 1, cardEntry];
             const quantity = parseInt(parsed[1]);
